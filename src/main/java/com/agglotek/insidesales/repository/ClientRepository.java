@@ -1,6 +1,6 @@
 package com.agglotek.insidesales.repository;
 
-import com.agglotek.insidesales.model.Client;
+import com.agglotek.insidesales.dao.entity.Client;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

@@ -1,6 +1,6 @@
-package com.agglotek.insidesales.service;
+package com.agglotek.insidesales.service.api;
 
-import com.agglotek.insidesales.model.Client;
+import com.agglotek.insidesales.dao.entity.Client;
 import java.util.List;
 public interface IClientService {
 

@@ -1,4 +1,4 @@
-package com.agglotek.insidesales.model;
+package com.agglotek.insidesales.dao.entity;
 
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;

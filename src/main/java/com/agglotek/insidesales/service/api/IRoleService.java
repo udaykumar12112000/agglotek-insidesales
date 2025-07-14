@@ -1,6 +1,6 @@
-package com.agglotek.insidesales.service;
+package com.agglotek.insidesales.service.api;
 
-import com.agglotek.insidesales.model.Role;
+import com.agglotek.insidesales.dao.entity.Role;
 
 import java.util.List;
 

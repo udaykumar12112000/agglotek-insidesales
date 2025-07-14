@@ -1,8 +1,8 @@
-package com.agglotek.insidesales.impl;
+package com.agglotek.insidesales.service.impl;
 
-import com.agglotek.insidesales.model.Client;
+import com.agglotek.insidesales.dao.entity.Client;
 import com.agglotek.insidesales.repository.ClientRepository;
-import com.agglotek.insidesales.service.IClientService;
+import com.agglotek.insidesales.service.api.IClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
