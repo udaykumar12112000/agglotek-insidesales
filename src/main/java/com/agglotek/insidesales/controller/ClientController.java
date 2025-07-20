@@ -5,6 +5,8 @@ import com.agglotek.insidesales.dao.entity.Client;
 import com.agglotek.insidesales.service.api.IClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.sql.Timestamp;
 import java.util.List;
 
 import static com.agglotek.insidesales.constants.ApiConstants.*;
@@ -18,13 +20,14 @@ public class ClientController {
 
     @PostMapping(ADD_CLIENTS)
     public Client saveClient(@RequestBody Client client) {
+        client.setInsertTime(new Timestamp(System.currentTimeMillis()));
         return clientService.saveClient(client);
     }
 
     @GetMapping(GET_CLIENTS)
-    public List<Client> getClients(@RequestParam(required = false) Integer employeeId) {
-        if (employeeId != null) {
-            return clientService.getClientsByEmployeeId(employeeId);
+    public List<Client> getClients(@RequestParam(required = false) Integer userId) {
+        if (userId != null) {
+            return clientService.getClientsByUserId(userId);
         } else {
             return clientService.getAllClients();
         }

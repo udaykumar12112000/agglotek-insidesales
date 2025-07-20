@@ -21,8 +21,8 @@ public class ClientServiceImpl implements IClientService {
         return clientRepository.findAll();
     }
 
-    public List<Client> getClientsByEmployeeId(Integer employeeId) {
-        return clientRepository.findByEmployeeId(employeeId);
+    public List<Client> getClientsByUserId(Integer userId) {
+        return clientRepository.findByUserId(userId);
     }
 }
 

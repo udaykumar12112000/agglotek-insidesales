@@ -8,5 +8,5 @@ public interface IClientService {
 
     public List<Client> getAllClients();
 
-    public List<Client> getClientsByEmployeeId(Integer employeeId);
+    public List<Client> getClientsByUserId(Integer userId);
 }

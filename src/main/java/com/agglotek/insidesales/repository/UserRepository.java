@@ -1,7 +1,13 @@
 package com.agglotek.insidesales.repository;
 
-import com.agglotek.insidesales.dao.entity.Users;
+import com.agglotek.insidesales.dao.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<Users, Integer> {
+import java.util.List;
+
+public interface UserRepository extends JpaRepository<User, Integer> {
+
+    List<User> findByUserId(Integer userId);
+
+    List<User> findByRoleId(Integer roleId);
 }

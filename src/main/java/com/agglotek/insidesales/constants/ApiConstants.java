@@ -16,6 +16,7 @@ public class ApiConstants {
     public static final String USER_APIS = "/api/users";
 
     public static final String CREATE_USER = "/createUser";
+    public static final String GET_USER = "/getUser";
 
     //roles
     public static final String ROLES_APIS = "/api/roles";

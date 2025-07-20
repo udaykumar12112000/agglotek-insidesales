@@ -6,18 +6,24 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "users")
 @NoArgsConstructor
-public class Users {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "employee_id")
-    private Integer employeeId;
+    @Column(name = "user_id")
+    private Integer userId;
+
+    @Column(name = "agglo_user_id")
+    private String aggloUserId;
 
     @Column(name = "name", nullable = false, length = 100)
     private String name;
 
     @Column(name = "designation", length = 100)
     private String designation;
+
+    @Column(name = "department", length = 100)
+    private String department;
 
     @Column(name = "email", nullable = false, length = 100)
     private String email;
@@ -31,14 +37,30 @@ public class Users {
     @Column(name = "sup_user_id")
     private Integer supUserId;
 
-    // --- Getters and Setters ---
-
-    public Integer getEmployeeId() {
-        return employeeId;
+    public String getAggloUserId() {
+        return aggloUserId;
     }
 
-    public void setEmployeeId(Integer employeeId) {
-        this.employeeId = employeeId;
+    public void setAggloUserId(String aggloUserId) {
+        this.aggloUserId = aggloUserId;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    // --- Getters and Setters ---
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public String getName() {
@@ -87,5 +109,20 @@ public class Users {
 
     public void setSupUserId(Integer subUserId) {
         this.supUserId = subUserId;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId=" + userId +
+                ", aggloUserId=" + aggloUserId +
+                ", name='" + name + '\'' +
+                ", designation='" + designation + '\'' +
+                ", department='" + department + '\'' +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", roleId=" + roleId +
+                ", supUserId=" + supUserId +
+                '}';
     }
 }

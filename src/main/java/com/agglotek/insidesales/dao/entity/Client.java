@@ -3,7 +3,7 @@ package com.agglotek.insidesales.dao.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "clients")
@@ -17,8 +17,8 @@ public class Client {
     @Column(name = "client_id")
     private Integer clientId;
 
-    @Column(name = "employee_id")
-    private Integer employeeId;
+    @Column(name = "user_id")
+    private Integer userId;
 
     @Column(name = "name", length = 100)
     private String name;
@@ -32,6 +32,9 @@ public class Client {
     @Column(name = "alter_phone_number", length = 20)
     private String alterPhoneNumber;
 
+    @Column(name = "client_type", length = 100)
+    private String clientType;
+
     @Column(name = "time_zone", length = 50)
     private String timeZone;
 
@@ -41,17 +44,58 @@ public class Client {
     @Column(name = "our_time", length = 100)
     private String ourTime;
 
+    @Column(name = "country", length = 50)
+    private String country;
+
     @Column(name = "address", columnDefinition = "text")
     private String address;
 
     @Column(name = "details", columnDefinition = "text")
     private String details;
 
-    @Column(updatable = false, insertable = false, columnDefinition = "timestamp default current_timestamp")
-    private LocalDateTime insertTime;
+    @Column(name = "stake_holders", columnDefinition = "text")
+    private String stakeHolders;
 
-    @Column(insertable = false, columnDefinition = "timestamp default current_timestamp")
-    private LocalDateTime updateTime;
+    @Column(name = "date_of_entry")
+    private String dateOfEntry;
+
+    @Column(name = "update_time", insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private Timestamp updatedTime;
+
+    @Column(name = "insert_time", insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private Timestamp insertedTime;
+
+    public String getClientType() {
+        return clientType;
+    }
+
+    public void setClientType(String clientType) {
+        this.clientType = clientType;
+    }
+
+    public String getStakeHolders() {
+        return stakeHolders;
+    }
+
+    public void setStakeHolders(String stakeHolders) {
+        this.stakeHolders = stakeHolders;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getDateOfEntry() {
+        return dateOfEntry;
+    }
+
+    public void setDateOfEntry(String dateOfEntry) {
+        this.dateOfEntry = dateOfEntry;
+    }
 
     public Integer getClientId() {
         return clientId;
@@ -61,12 +105,12 @@ public class Client {
         this.clientId = clientId;
     }
 
-    public Integer getEmployeeId() {
-        return employeeId;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setEmployeeId(Integer employeeId) {
-        this.employeeId = employeeId;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public String getName() {
@@ -141,38 +185,42 @@ public class Client {
         this.details = details;
     }
 
-    public LocalDateTime getInsertTime() {
-        return insertTime;
+    public Timestamp getInsertTime() {
+        return insertedTime;
     }
 
-    public void setInsertTime(LocalDateTime insertTime) {
-        this.insertTime = insertTime;
+    public void setInsertTime(Timestamp insertedTime) {
+        this.insertedTime = insertedTime;
     }
 
-    public LocalDateTime getUpdateTime() {
-        return updateTime;
+    public Timestamp getUpdateTime() {
+        return updatedTime;
     }
 
-    public void setUpdateTime(LocalDateTime updateTime) {
-        this.updateTime = updateTime;
+    public void setUpdateTime(Timestamp updatedTime) {
+        this.updatedTime = updatedTime;
     }
 
     @Override
     public String toString() {
         return "Client{" +
                 "clientId=" + clientId +
-                ", employeeId=" + employeeId +
+                ", userId=" + userId +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", alterPhoneNumber='" + alterPhoneNumber + '\'' +
+                ", clientType='" + clientType + '\'' +
                 ", timeZone='" + timeZone + '\'' +
                 ", availableHrs='" + availableHrs + '\'' +
                 ", ourTime='" + ourTime + '\'' +
+                ", country='" + country + '\'' +
                 ", address='" + address + '\'' +
                 ", details='" + details + '\'' +
-                ", insertTime=" + insertTime +
-                ", updateTime=" + updateTime +
+                ", stakeHolders='" + stakeHolders + '\'' +
+                ", dateOfEntry='" + dateOfEntry + '\'' +
+                ", updatedTime=" + updatedTime +
+                ", createdTime=" + insertedTime +
                 '}';
     }
 
