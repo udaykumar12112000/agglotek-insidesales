@@ -34,4 +34,8 @@ public class UserServiceImpl implements IUserService {
         return usersRepository.findAll();
     }
 
+    public User findByEmail(String email){
+        return usersRepository.findByEmail(email);
+    }
+
 }

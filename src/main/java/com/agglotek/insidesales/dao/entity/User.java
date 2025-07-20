@@ -1,5 +1,6 @@
 package com.agglotek.insidesales.dao.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 
@@ -13,7 +14,10 @@ public class User {
     @Column(name = "user_id")
     private Integer userId;
 
-    @Column(name = "agglo_user_id")
+    @Column(name = "password", nullable = false)
+    private String password;
+
+    @Column(name = "agglo_user_id", unique = true)
     private String aggloUserId;
 
     @Column(name = "name", nullable = false, length = 100)
@@ -36,6 +40,26 @@ public class User {
 
     @Column(name = "sup_user_id")
     private Integer supUserId;
+
+    @Transient
+    @JsonProperty("editorRoleName")
+    private String editorRoleName;
+
+    public String getEditorRoleName() {
+        return editorRoleName;
+    }
+
+    public void setEditorRoleName(String editorRoleName) {
+        this.editorRoleName = editorRoleName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public String getAggloUserId() {
         return aggloUserId;
@@ -115,7 +139,8 @@ public class User {
     public String toString() {
         return "User{" +
                 "userId=" + userId +
-                ", aggloUserId=" + aggloUserId +
+                ", password='" + password + '\'' +
+                ", aggloUserId='" + aggloUserId + '\'' +
                 ", name='" + name + '\'' +
                 ", designation='" + designation + '\'' +
                 ", department='" + department + '\'' +
@@ -123,6 +148,7 @@ public class User {
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", roleId=" + roleId +
                 ", supUserId=" + supUserId +
+                ", editorRoleName='" + editorRoleName + '\'' +
                 '}';
     }
 }

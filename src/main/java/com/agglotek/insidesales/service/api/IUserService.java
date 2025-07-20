@@ -9,4 +9,5 @@ public interface IUserService {
     List<User> getUserByUserId(Integer userId);
     List<User> getUsersByRoleId(Integer roleId);
     List<User> getAllUsers();
+    User findByEmail(String email);
 }
