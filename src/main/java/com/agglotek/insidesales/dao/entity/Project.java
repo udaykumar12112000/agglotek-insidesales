@@ -43,7 +43,18 @@ public class Project {
     @Column(name = "ifa_submission_date")
     private LocalDate ifaSubmissionDate;
 
+    @Column(name = "project_number")
+    private String projectNumber;
+
     // Getters and Setters
+
+    public String getProjectNumber() {
+        return projectNumber;
+    }
+
+    public void setProjectNumber(String projectNumber) {
+        this.projectNumber = projectNumber;
+    }
 
     public Integer getQuotationId() {
         return quotationId;
