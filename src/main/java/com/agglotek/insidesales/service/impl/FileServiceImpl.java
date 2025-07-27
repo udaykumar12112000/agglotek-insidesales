@@ -29,8 +29,7 @@ public class FileServiceImpl implements IFileService {
     @Autowired
     private ClientRepository clientRepository;
 
-    public ResponseEntity<ApiResponse> uploadPDF(MultipartFile file, Integer clientId, String projectNumber, String projectName) throws IOException {
-        Optional<Client> client = clientRepository.findById(clientId);
+    public ResponseEntity<ApiResponse> uploadPDF(MultipartFile file, Integer clientId, String referenceNumber, String projectName, String type) throws IOException {
         try {
             Optional<Client> clientOpt = clientRepository.findById(clientId);
             if (clientOpt.isEmpty()) {
@@ -39,13 +38,27 @@ public class FileServiceImpl implements IFileService {
             }
 
             String clientName = clientOpt.get().getName().replaceAll("\\s+", "_");
+            String safeProjectName = projectName.replaceAll("\\s+", "_");
 
-            Path targetDir = Paths.get(AppConstants.BASE_DIRECTORY, clientName, projectNumber + "_" + projectName.replaceAll("\\s+", "_"));
+            String baseDir;
+            String suffix;
+            if ("po".equalsIgnoreCase(type)) {
+                baseDir = AppConstants.PROJECT_BASE_DIRECTORY;
+                suffix = "_PO.pdf";
+            } else if ("scope_of_work".equalsIgnoreCase(type)) {
+                baseDir = AppConstants.QUOTATION_BASE_DIRECTORY;
+                suffix = "_scope_of_work.pdf";
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new ApiResponse(false, "Invalid type! Use 'po' or 'scope_of_work'"));
+            }
+
+
+            Path targetDir = Paths.get(baseDir, clientName, referenceNumber + "_" + safeProjectName);
             Files.createDirectories(targetDir);
 
             // Rename the file
-            String safeProjectName = projectName.replaceAll("\\s+", "_");
-            String renamedFile = projectNumber + "_" + safeProjectName + "_PO.pdf";
+            String renamedFile = referenceNumber + "_" + safeProjectName + suffix;
             Path targetPath = targetDir.resolve(renamedFile);
 
             Files.copy(file.getInputStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
@@ -54,21 +67,35 @@ public class FileServiceImpl implements IFileService {
 
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse(false, "Upload failed! " + e.getMessage()));
+                    .body(new ApiResponse(false, "Upload failed!"));
         }
     }
 
-    public ResponseEntity<Resource> downloadPDF(Integer clientId, String projectNumber, String projectName) throws IOException {
+    public ResponseEntity<Resource> downloadPDF(Integer clientId, String referenceNumber, String projectName, String type) throws IOException {
         Optional<Client> client = clientRepository.findById(clientId);
         if (client.isEmpty()) {
             throw new IllegalArgumentException("Invalid client ID");
         }
 
         String clientName = client.get().getName().replaceAll("\\s+", "_");
-        String projectFolder = projectNumber + "_" + projectName.replaceAll("\\s+", "_");
-        String filename = projectFolder + "_PO.pdf";
+        String safeProjectName = projectName.replaceAll("\\s+", "_");
 
-        Path filePath = Paths.get(AppConstants.BASE_DIRECTORY, clientName, projectFolder, filename);
+        String baseDir;
+        String suffix;
+        if ("po".equalsIgnoreCase(type)) {
+            baseDir = AppConstants.PROJECT_BASE_DIRECTORY;
+            suffix = "_PO.pdf";
+        } else if ("scope_of_work".equalsIgnoreCase(type)) {
+            baseDir = AppConstants.QUOTATION_BASE_DIRECTORY;
+            suffix = "_scope_of_work.pdf";
+        } else {
+            throw new IllegalArgumentException("Invalid type! Use 'po' or 'scope_of_work'");
+        }
+
+        String folderName = referenceNumber + "_" + safeProjectName;
+        String filename = folderName + suffix;
+
+        Path filePath = Paths.get(baseDir, clientName, folderName, filename);
         if (!Files.exists(filePath)) {
             throw new FileNotFoundException("PDF not found");
         }

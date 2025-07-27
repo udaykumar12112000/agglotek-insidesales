@@ -20,11 +20,12 @@ public class FileController {
     public ResponseEntity<ApiResponse> upload(
             @RequestParam("file") MultipartFile file,
             @RequestParam("clientId") Integer clientId,
-            @RequestParam("projectNumber") String projectNumber,
-            @RequestParam("projectName") String projectName) {
+            @RequestParam("referenceNumber") String referenceNumber,
+            @RequestParam("projectName") String projectName,
+            @RequestParam("type") String type) {
 
         try {
-            return fileService.uploadPDF(file, clientId, projectNumber, projectName);
+            return fileService.uploadPDF(file, clientId, referenceNumber, projectName, type);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(false, "Upload failed!"));
 
@@ -34,11 +35,12 @@ public class FileController {
     @GetMapping(ApiConstants.PROJECT_PO_DOWNLOAD)
     public ResponseEntity<?> download(
             @RequestParam("clientId") Integer clientId,
-            @RequestParam("projectNumber") String projectNumber,
-            @RequestParam("projectName") String projectName) {
+            @RequestParam("referenceNumber") String referenceNumber,
+            @RequestParam("projectName") String projectName,
+            @RequestParam("type") String type) {
 
         try {
-            return fileService.downloadPDF(clientId, projectNumber, projectName);
+            return fileService.downloadPDF(clientId, referenceNumber, projectName, type);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(false, "Download failed!"));
         }

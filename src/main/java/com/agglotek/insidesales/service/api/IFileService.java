@@ -8,7 +8,7 @@ import org.springframework.core.io.Resource;
 import java.io.IOException;
 
 public interface IFileService {
-    public ResponseEntity<ApiResponse> uploadPDF(MultipartFile file, Integer clientId, String projectNumber, String projectName) throws IOException;
+    public ResponseEntity<ApiResponse> uploadPDF(MultipartFile file, Integer clientId, String referenceNumber, String projectName, String type) throws IOException;
 
-    public ResponseEntity<Resource> downloadPDF(Integer clientId, String projectNumber, String projectName) throws IOException;
+    public ResponseEntity<Resource> downloadPDF(Integer clientId, String referenceNumber, String projectName, String type) throws IOException;
 }
