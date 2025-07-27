@@ -37,6 +37,10 @@ public class ApiConstants {
 
     public static final String ADD_QUOTATION = "/addQuotation";
 
+    public static final String FILTER_QUOTATIONS = "/filterByStatus";
+
+    public static final String UPDATE_QUOTATION = "/update";
+
     //projects
     public static final String PROJECT_APIS = "/api/projects";
 

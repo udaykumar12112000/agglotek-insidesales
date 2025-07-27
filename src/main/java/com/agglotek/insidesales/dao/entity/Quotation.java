@@ -23,6 +23,15 @@ public class Quotation {
     @Column(name = "date_of_quotation")
     private LocalDate dateOfQuotation;
 
+    @Column(name = "quotation_due_date")
+    private LocalDate quotationDueDate;
+
+    @Column(name = "lead_time", length = 100)
+    private String leadTime;
+
+    @Column(name = "scope_of_work", columnDefinition = "TEXT")
+    private String scopeOfWork;
+
     @Column(name = "date_of_proposal")
     private LocalDate dateOfProposal;
 
@@ -102,6 +111,30 @@ public class Quotation {
 
     public void setDateOfQuotation(LocalDate dateOfQuotation) {
         this.dateOfQuotation = dateOfQuotation;
+    }
+
+    public LocalDate getQuotationDueDate() {
+        return quotationDueDate;
+    }
+
+    public void setQuotationDueDate(LocalDate quotationDueDate) {
+        this.quotationDueDate = quotationDueDate;
+    }
+
+    public String getLeadTime() {
+        return leadTime;
+    }
+
+    public void setLeadTime(String leadTime) {
+        this.leadTime = leadTime;
+    }
+
+    public String getScopeOfWork() {
+        return scopeOfWork;
+    }
+
+    public void setScopeOfWork(String scopeOfWork) {
+        this.scopeOfWork = scopeOfWork;
     }
 
     public BigDecimal getQuotationValue() {
