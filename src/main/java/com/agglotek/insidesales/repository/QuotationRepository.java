@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import java.util.List;
+
 @Repository
 public interface QuotationRepository extends JpaRepository<Quotation, Integer> {
     boolean existsByClientId(Integer clientId);
@@ -27,5 +29,12 @@ public interface QuotationRepository extends JpaRepository<Quotation, Integer> {
     @Modifying
     @Query("UPDATE Quotation q SET q.quotationStatus = :status WHERE q.quotationId = :quotationId")
     void updateQuotationStatus(@Param("status")String status, @Param("quotationId")Integer quotationId);
+  
+    List<Quotation> findByUserId(Integer userId);
+
+    List<Quotation> findByUserIdAndQuotationStatusIsNull(Integer userId);
+
+    List<Quotation> findByUserIdAndQuotationStatus(Integer userId, String quotationStatus);
+
 }
 

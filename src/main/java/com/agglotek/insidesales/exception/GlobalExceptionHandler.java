@@ -43,6 +43,8 @@ public class GlobalExceptionHandler {
                 message = "Email already exists.";
             } else if (causeMsg.contains("not-null")) {
                 message = "Required fields are missing.";
+            } else if(causeMsg.contains("unique_role_name")){
+                message = "Role Already exists.";
             }
         }
 

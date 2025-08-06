@@ -43,7 +43,29 @@ public class Project {
     @Column(name = "ifa_submission_date")
     private LocalDate ifaSubmissionDate;
 
+    @Column(name = "project_number")
+    private String projectNumber;
+
+    @Column(name = "client_job_number", length = 100)
+    private String clientProjectNumber;
+
     // Getters and Setters
+
+    public String getProjectNumber() {
+        return projectNumber;
+    }
+
+    public void setProjectNumber(String projectNumber) {
+        this.projectNumber = projectNumber;
+    }
+
+    public String getClientProjectNumber() {
+        return clientProjectNumber;
+    }
+
+    public void setClientProjectNumber(String clientProjectNumber) {
+        this.clientProjectNumber = clientProjectNumber;
+    }
 
     public Integer getQuotationId() {
         return quotationId;
@@ -147,6 +169,8 @@ public class Project {
                 ", plannedSubmittedDate=" + plannedSubmittedDate +
                 ", ifcSubmissionDate=" + ifcSubmissionDate +
                 ", ifaSubmissionDate=" + ifaSubmissionDate +
+                ", projectNumber='" + projectNumber + '\'' +
+                ", clientProjectNumber='" + clientProjectNumber + '\'' +
                 '}';
     }
 }

@@ -36,20 +36,30 @@ public class UserController {
             return ResponseEntity.ok(new ApiResponse(false, "User don't have permission"));
         user.setPassword(AppConstants.DEFAULT_PASSWORD);
         userService.addUser(user);
-        return ResponseEntity.ok(new ApiResponse(true, "Created user successfully"));
+        String hashedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(hashedPassword);
+        return ResponseEntity.ok(new ApiResponse(true, "Created user successfully", user));
 
     }
 
     @GetMapping(ApiConstants.GET_USER)
     public List<User> getUsers(@RequestParam(required = false) Integer userId,
                                @RequestParam(required = false) Integer roleId) {
+
+        List<User> users;
         if (userId != null) {
-            return userService.getUserByUserId(userId);
+            users = userService.getUserByUserId(userId);
         } else if (roleId != null) {
-            return userService.getUsersByRoleId(roleId);
+            users = userService.getUsersByRoleId(roleId);
         } else {
-            return userService.getAllUsers();
+            users = userService.getAllUsers();
         }
+        users.forEach(user -> {
+                String hashedPassword = passwordEncoder.encode(user.getPassword());
+                user.setPassword(hashedPassword);
+        });
+
+        return users;
     }
 
     @PostMapping(ApiConstants.EDIT_USER)
@@ -79,7 +89,9 @@ public class UserController {
         }
 
         userService.addUser(user);
-        return ResponseEntity.ok(new ApiResponse(true, "Edit user successful"));
+        String hashedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(hashedPassword);
+        return ResponseEntity.ok(new ApiResponse(true, "Edit user successful", user));
     }
 
     @PostMapping(ApiConstants.USER_LOGIN)

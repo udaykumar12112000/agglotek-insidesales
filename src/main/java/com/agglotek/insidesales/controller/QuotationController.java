@@ -3,16 +3,16 @@ package com.agglotek.insidesales.controller;
 import com.agglotek.insidesales.ApiResponse;
 import com.agglotek.insidesales.constants.ApiConstants;
 import com.agglotek.insidesales.dao.entity.Quotation;
+import com.agglotek.insidesales.dto.QuotationInfoDTO;
 import com.agglotek.insidesales.repository.QuotationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.agglotek.insidesales.service.api.IQuotationService;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequestMapping(ApiConstants.QUOTATION_APIS)
@@ -25,7 +25,7 @@ public class QuotationController {
     private QuotationRepository quotationRepository;
 
     @PostMapping(ApiConstants.ADD_QUOTATION)
-    public ResponseEntity<ApiResponse> addQuotation(@RequestBody Quotation request) {
+    public ResponseEntity<ApiResponse> addQuotation(@RequestBody Quotation request, @RequestHeader("User-Id") Integer userId) {
         // Check if client_id exists in previous quotations
         boolean isNewClient = quotationService.existsByClientId(request.getClientId()) ? false : true;
 
@@ -39,7 +39,7 @@ public class QuotationController {
         quotation.setProjectName(request.getProjectName());
         quotation.setConnectionEngineering(request.getConnectionEngineering());
         quotation.setComments(request.getComments());
-        quotation.setUserId(request.getUserId());
+        quotation.setUserId(userId);
         quotation.setClientId(request.getClientId());
         quotation.setNewClient(isNewClient);
 
@@ -76,6 +76,32 @@ public class QuotationController {
         String formattedNumber = String.format("%04d", nextNumber);
 
         return prefix + formattedNumber;
+    }
+
+    @GetMapping(ApiConstants.FILTER_QUOTATIONS)
+    public ResponseEntity<List<QuotationInfoDTO>> getQuotationsByUserIdAndStatus(
+            @RequestHeader("User-Id") Integer userId,
+            @RequestParam(value = "status", required = false) String quotationStatus) {
+
+        List<QuotationInfoDTO> quotations;
+
+        if (quotationStatus == null) {
+            quotations = quotationService.getAllQuotationsByUserId(userId);
+        } else {
+            quotations = quotationService.getQuotationsByUserIdAndStatus(userId, quotationStatus);
+        }
+        return ResponseEntity.ok(quotations);
+    }
+
+    @PostMapping(ApiConstants.UPDATE_QUOTATION)
+    public ResponseEntity<ApiResponse> updateQuotation(@RequestBody QuotationInfoDTO dto) {
+        try {
+            quotationService.updateQuotation(dto);
+            return ResponseEntity.ok(new ApiResponse(true,"Quotation updated successfully"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse(false, "Failed to update quotation"));
+        }
     }
 
 

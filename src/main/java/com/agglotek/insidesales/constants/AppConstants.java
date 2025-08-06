@@ -3,4 +3,6 @@ package com.agglotek.insidesales.constants;
 public class AppConstants {
     public static final String ADMIN="ADMIN";
     public static final String DEFAULT_PASSWORD="Agglo@123";
+    public static final String PROJECT_BASE_DIRECTORY="/home/agglotek/projects";
+    public static final String QUOTATION_BASE_DIRECTORY="/home/agglotek/quotations";
 }

@@ -109,7 +109,7 @@ CREATE TABLE SALES_TARGETS (
 
 
 
-ALTER TABLE users
+ ALTER TABLE users
 ADD UNIQUE (agglo_user_id);
 
 ALTER TABLE users
@@ -133,4 +133,27 @@ ADD COLUMN dec integer;
 alter table projects add column client_job_number varchar(30);
 
 alter table projects add column project_number varchar(50);
+
+
+CREATE TABLE client_convo (
+    client_convo_id SERIAL PRIMARY KEY,
+    client_id INT NOT NULL,
+    user_id INT NOT NULL,
+    call_convo TEXT,
+    status_update TEXT,
+    remarks TEXT,
+    FOREIGN KEY (client_id) REFERENCES clients(client_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+ CREATE TABLE work_status (
+    work_status_id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    date DATE NOT NULL,
+    no_of_calls INT DEFAULT 0,
+    samples_send INT DEFAULT 0,
+    bids_received INT DEFAULT 0,
+    projects_received INT DEFAULT 0,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
 

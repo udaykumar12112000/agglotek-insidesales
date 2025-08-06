@@ -26,6 +26,12 @@ public class Quotation {
     @Column(name = "quotation_due_date")
     private LocalDate quotationDueDate;
 
+    @Column(name = "lead_time", length = 100)
+    private String leadTime;
+
+    @Column(name = "scope_of_work", columnDefinition = "TEXT")
+    private String scopeOfWork;
+
     @Column(name = "date_of_proposal")
     private LocalDate dateOfProposal;
 
@@ -65,12 +71,6 @@ public class Quotation {
     @Column(name = "created_time")
     private LocalDateTime createdTime;
 
-    @Column(name = "client_project_number", length = 100)
-    private String clientProjectNumber;
-
-    @Column(name = "client_purchase_number", length = 100)
-    private String clientPurchaseNumber;
-
     @Column(name = "currency", length = 10)
     private String currency;
 
@@ -105,6 +105,30 @@ public class Quotation {
 
     public void setDateOfQuotation(LocalDate dateOfQuotation) {
         this.dateOfQuotation = dateOfQuotation;
+    }
+
+    public LocalDate getQuotationDueDate() {
+        return quotationDueDate;
+    }
+
+    public void setQuotationDueDate(LocalDate quotationDueDate) {
+        this.quotationDueDate = quotationDueDate;
+    }
+
+    public String getLeadTime() {
+        return leadTime;
+    }
+
+    public void setLeadTime(String leadTime) {
+        this.leadTime = leadTime;
+    }
+
+    public String getScopeOfWork() {
+        return scopeOfWork;
+    }
+
+    public void setScopeOfWork(String scopeOfWork) {
+        this.scopeOfWork = scopeOfWork;
     }
 
     public BigDecimal getQuotationValue() {
@@ -211,22 +235,6 @@ public class Quotation {
         this.createdTime = createdTime;
     }
 
-    public String getClientProjectNumber() {
-        return clientProjectNumber;
-    }
-
-    public void setClientProjectNumber(String clientProjectNumber) {
-        this.clientProjectNumber = clientProjectNumber;
-    }
-
-    public String getClientPurchaseNumber() {
-        return clientPurchaseNumber;
-    }
-
-    public void setClientPurchaseNumber(String clientPurchaseNumber) {
-        this.clientPurchaseNumber = clientPurchaseNumber;
-    }
-
     public String getCurrency() {
         return currency;
     }
@@ -279,8 +287,6 @@ public class Quotation {
                 ", projectValue=" + projectValue +
                 ", updatedTime=" + updatedTime +
                 ", createdTime=" + createdTime +
-                ", clientProjectNumber='" + clientProjectNumber + '\'' +
-                ", clientPurchaseNumber='" + clientPurchaseNumber + '\'' +
                 ", currency='" + currency + '\'' +
                 ", connectionEngineering=" + connectionEngineering +
                 ", connectionEngineeringDescription='" + connectionEngineeringDescription + '\'' +
