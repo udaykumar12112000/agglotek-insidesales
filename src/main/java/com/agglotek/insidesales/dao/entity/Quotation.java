@@ -23,6 +23,9 @@ public class Quotation {
     @Column(name = "date_of_quotation")
     private LocalDate dateOfQuotation;
 
+    @Column(name = "quotation_due_date")
+    private LocalDate quotationDueDate;
+
     @Column(name = "date_of_proposal")
     private LocalDate dateOfProposal;
 
@@ -248,12 +251,21 @@ public class Quotation {
         this.connectionEngineeringDescription = connectionEngineeringDescription;
     }
 
+    public LocalDate getQuotationDueDate() {
+        return quotationDueDate;
+    }
+
+    public void setQuotationDueDate(LocalDate quotationDueDate) {
+        this.quotationDueDate = quotationDueDate;
+    }
+
     @Override
     public String toString() {
         return "Quotation{" +
                 "quotationId=" + quotationId +
                 ", quotationNumber='" + quotationNumber + '\'' +
                 ", dateOfQuotation=" + dateOfQuotation +
+                ", quotationDueDate=" + quotationDueDate +
                 ", dateOfProposal=" + dateOfProposal +
                 ", projectName='" + projectName + '\'' +
                 ", userId=" + userId +

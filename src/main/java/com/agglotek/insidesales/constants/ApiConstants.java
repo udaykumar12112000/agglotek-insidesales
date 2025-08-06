@@ -21,6 +21,12 @@ public class ApiConstants {
 
     public static final String USER_LOGIN = "/login";
 
+    public static final String GET_USER_SUMMARY = "/user_summary";
+
+    public static final String GET_USER_NOTIFICATIONS = "/user_notifications";
+
+    public static final String UPDATE_BID_STATUS_FROM_CLIENT = "/update_bid_status";
+
     //roles
     public static final String ROLES_APIS = "/api/roles";
 

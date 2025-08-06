@@ -105,3 +105,32 @@ CREATE TABLE SALES_TARGETS (
     YEAR NUMERIC(15,2),
     MONTH VARCHAR(10)
 );
+
+
+
+
+ALTER TABLE users
+ADD UNIQUE (agglo_user_id);
+
+ALTER TABLE users
+ADD COLUMN password VARCHAR(255) NOT NULL;
+
+ALTER TABLE sales_targets
+DROP COLUMN month,
+ADD COLUMN jan integer,
+ADD COLUMN feb integer,
+ADD COLUMN mar integer,
+ADD COLUMN apr integer,
+ADD COLUMN may integer,
+ADD COLUMN jun integer,
+ADD COLUMN jul integer,
+ADD COLUMN aug integer,
+ADD COLUMN sep integer,
+ADD COLUMN oct integer,
+ADD COLUMN nov integer,
+ADD COLUMN dec integer;
+
+alter table projects add column client_job_number varchar(30);
+
+alter table projects add column project_number varchar(50);
+
