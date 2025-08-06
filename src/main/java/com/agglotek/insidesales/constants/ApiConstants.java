@@ -12,7 +12,7 @@ public class ApiConstants {
 
     public static final String ADD_CLIENT_CONVO = "/addClientConvo";
 
-    public static final String GET_CLIENT_CONVO = "/getClientConvoData/{clientId}";
+    public static final String GET_CLIENT_CONVO = "/getClientConvoData";
 
     //users
     public static final String USER_APIS = "/api/users";

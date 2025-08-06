@@ -45,8 +45,9 @@ public class ClientController {
     }
 
     @GetMapping(ApiConstants.GET_CLIENT_CONVO)
-    public ResponseEntity<List<ClientConvoDTO>> getConvos(@PathVariable Integer clientId) {
-        return ResponseEntity.ok(clientConvoService.getByClientId(clientId));
+    public ResponseEntity<List<ClientConvoDTO>> getConvos(@RequestHeader("User-Id") Integer userId) {
+        List<ClientConvoDTO> result = clientConvoService.getClientConvoDataByUserId(userId);
+        return ResponseEntity.ok(result);
     }
 
 }

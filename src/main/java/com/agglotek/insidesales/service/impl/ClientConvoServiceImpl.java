@@ -1,8 +1,10 @@
 package com.agglotek.insidesales.service.impl;
 
+import com.agglotek.insidesales.dao.entity.Client;
 import com.agglotek.insidesales.dao.entity.ClientConvo;
 import com.agglotek.insidesales.dto.ClientConvoDTO;
 import com.agglotek.insidesales.repository.ClientConvoRepository;
+import com.agglotek.insidesales.repository.ClientRepository;
 import com.agglotek.insidesales.service.api.IClientConvoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +18,10 @@ import java.util.Map;
 public class ClientConvoServiceImpl implements IClientConvoService {
 
     @Autowired
-    private ClientConvoRepository repository;
+    private ClientConvoRepository clientConvoRepository;
+
+    @Autowired
+    private ClientRepository clientRepository;
 
     private final ObjectMapper mapper = new ObjectMapper();
 
@@ -33,11 +38,11 @@ public class ClientConvoServiceImpl implements IClientConvoService {
             throw new RuntimeException("JSON conversion error", e);
         }
 
-        return repository.save(convo);
+        return clientConvoRepository.save(convo);
     }
 
     public List<ClientConvoDTO> getByClientId(Integer clientId) {
-        List<ClientConvo> convos = repository.findByClientId(clientId);
+        List<ClientConvo> convos = clientConvoRepository.findByClientId(clientId);
         List<ClientConvoDTO> result = new ArrayList<>();
 
         for (ClientConvo convo : convos) {
@@ -57,4 +62,39 @@ public class ClientConvoServiceImpl implements IClientConvoService {
 
         return result;
     }
+
+    public List<ClientConvoDTO> getClientConvoDataByUserId(Integer userId) {
+        List<Client> clients = clientRepository.findByUserId(userId); // userId filter
+        List<ClientConvoDTO> result = new ArrayList<>();
+
+        for (Client client : clients) {
+            List<ClientConvo> convos = clientConvoRepository.findByClientId(client.getClientId());
+            for (ClientConvo convo : convos) {
+                ClientConvoDTO dto = new ClientConvoDTO();
+                dto.setClientId(convo.getClientId());
+                dto.setUserId(convo.getUserId());
+                dto.setName(client.getName());
+                dto.setCountry(client.getCountry());
+                dto.setStakeHolders(client.getStakeHolders());
+                dto.setAddress(client.getAddress());
+                dto.setTimeZone(client.getTimeZone());
+                dto.setClientType(client.getClientType());
+                dto.setEmail(client.getEmail());
+                dto.setPhoneNumber(client.getPhoneNumber());
+                dto.setAvailableHrs(client.getAvailableHrs());
+                try {
+                    dto.setCallConvo(mapper.readValue(convo.getCallConvo(), Map.class));
+                    dto.setStatusUpdate(mapper.readValue(convo.getStatusUpdate(), Map.class));
+                } catch (Exception e) {
+                    throw new RuntimeException("JSON parsing error", e);
+                }
+                dto.setRemarks(convo.getRemarks());
+
+                result.add(dto);
+            }
+        }
+
+        return result;
+    }
+
 }

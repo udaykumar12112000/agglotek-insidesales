@@ -16,11 +16,9 @@ public class UserRoleController {
     @Autowired
     private IRoleService roleService;
 
-    @GetMapping(ADD_ROLE)
-    public Role addRole(@RequestParam String roleName) {
-        Role role = new Role();
-        role.setRoleName(roleName);
-        return roleService.addRole(role);
+    @PostMapping(ADD_ROLE)
+    public Role addRole(@RequestBody Role roleData) {
+        return roleService.addRole(roleData);
     }
 
     @GetMapping(GET_ALL_ROLES)

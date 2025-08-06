@@ -71,12 +71,6 @@ public class Quotation {
     @Column(name = "created_time")
     private LocalDateTime createdTime;
 
-    @Column(name = "client_project_number", length = 100)
-    private String clientProjectNumber;
-
-    @Column(name = "client_purchase_number", length = 100)
-    private String clientPurchaseNumber;
-
     @Column(name = "currency", length = 10)
     private String currency;
 
@@ -241,22 +235,6 @@ public class Quotation {
         this.createdTime = createdTime;
     }
 
-    public String getClientProjectNumber() {
-        return clientProjectNumber;
-    }
-
-    public void setClientProjectNumber(String clientProjectNumber) {
-        this.clientProjectNumber = clientProjectNumber;
-    }
-
-    public String getClientPurchaseNumber() {
-        return clientPurchaseNumber;
-    }
-
-    public void setClientPurchaseNumber(String clientPurchaseNumber) {
-        this.clientPurchaseNumber = clientPurchaseNumber;
-    }
-
     public String getCurrency() {
         return currency;
     }
@@ -300,8 +278,6 @@ public class Quotation {
                 ", projectValue=" + projectValue +
                 ", updatedTime=" + updatedTime +
                 ", createdTime=" + createdTime +
-                ", clientProjectNumber='" + clientProjectNumber + '\'' +
-                ", clientPurchaseNumber='" + clientPurchaseNumber + '\'' +
                 ", currency='" + currency + '\'' +
                 ", connectionEngineering=" + connectionEngineering +
                 ", connectionEngineeringDescription='" + connectionEngineeringDescription + '\'' +

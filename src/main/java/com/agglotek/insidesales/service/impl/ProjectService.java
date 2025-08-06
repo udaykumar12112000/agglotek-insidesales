@@ -45,7 +45,7 @@ public class ProjectService implements IProjectService {
         Optional<Project> optionalProject = projectRepository.findById(projectId);
         if (optionalProject.isPresent()) {
             Project project = optionalProject.get();
-            project.setProjectNumber(clientProjectNumber);
+            project.setClientProjectNumber(clientProjectNumber);
             projectRepository.save(project);
             return true;
         }

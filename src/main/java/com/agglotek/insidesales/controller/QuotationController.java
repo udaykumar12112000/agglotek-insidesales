@@ -25,7 +25,7 @@ public class QuotationController {
     private QuotationRepository quotationRepository;
 
     @PostMapping(ApiConstants.ADD_QUOTATION)
-    public ResponseEntity<ApiResponse> addQuotation(@RequestBody Quotation request) {
+    public ResponseEntity<ApiResponse> addQuotation(@RequestBody Quotation request, @RequestHeader("User-Id") Integer userId) {
         // Check if client_id exists in previous quotations
         boolean isNewClient = quotationService.existsByClientId(request.getClientId()) ? false : true;
 
@@ -39,7 +39,7 @@ public class QuotationController {
         quotation.setProjectName(request.getProjectName());
         quotation.setConnectionEngineering(request.getConnectionEngineering());
         quotation.setComments(request.getComments());
-        quotation.setUserId(request.getUserId());
+        quotation.setUserId(userId);
         quotation.setClientId(request.getClientId());
         quotation.setNewClient(isNewClient);
 
@@ -80,7 +80,7 @@ public class QuotationController {
 
     @GetMapping(ApiConstants.FILTER_QUOTATIONS)
     public ResponseEntity<List<QuotationInfoDTO>> getQuotationsByUserIdAndStatus(
-            @RequestParam("userId") Integer userId,
+            @RequestHeader("User-Id") Integer userId,
             @RequestParam(value = "status", required = false) String quotationStatus) {
 
         List<QuotationInfoDTO> quotations;
