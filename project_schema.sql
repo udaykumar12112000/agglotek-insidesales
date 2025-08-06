@@ -108,6 +108,7 @@ CREATE TABLE SALES_TARGETS (
 
 
 
+
  ALTER TABLE users
 ADD UNIQUE (agglo_user_id);
 

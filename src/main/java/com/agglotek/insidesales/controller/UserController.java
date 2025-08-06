@@ -5,14 +5,19 @@ import com.agglotek.insidesales.constants.ApiConstants;
 import com.agglotek.insidesales.constants.AppConstants;
 import com.agglotek.insidesales.dao.entity.User;
 import com.agglotek.insidesales.service.api.IUserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+@Slf4j
 @RestController
 @RequestMapping(ApiConstants.USER_APIS)
 public class UserController {
@@ -27,7 +32,7 @@ public class UserController {
         if (user.getName() == null || user.getName().isEmpty())
             return ResponseEntity.status(500).body(new ApiResponse(false, "User name must not be empty"));
 
-        if(!user.getEditorRoleName().equals(AppConstants.ADMIN))
+        if (!user.getEditorRoleName().equals(AppConstants.ADMIN))
             return ResponseEntity.ok(new ApiResponse(false, "User don't have permission"));
         user.setPassword(AppConstants.DEFAULT_PASSWORD);
         userService.addUser(user);
@@ -60,7 +65,7 @@ public class UserController {
     @PostMapping(ApiConstants.EDIT_USER)
     public ResponseEntity<ApiResponse> editUser(@RequestBody User request) {
         List<User> users = userService.getUserByUserId(request.getUserId());
-        if(users.isEmpty()){
+        if (users.isEmpty()) {
             return ResponseEntity.ok(new ApiResponse(false, "User not Found"));
         }
         User user = users.get(0);
@@ -107,5 +112,40 @@ public class UserController {
         return ResponseEntity.ok(new ApiResponse(true, "Login successful", user));
     }
 
+    @GetMapping(ApiConstants.GET_USER_SUMMARY)
+    public Map<String, Integer> getUserSummaryDetaials(@RequestParam(required = true) Integer userId,
+                                                      @RequestParam(required = true) Integer roleId) {
 
+        if (userId == null || roleId == null) {
+            log.error("User Id and role Id must not be null");
+        } else if (roleId == 2) {
+            return userService.getUserSummaryDetaialsForSales(userId);
+//        } else if (roleId == 3) {
+//            return userService.getUserSummaryDetaialsForSalesManager(userId);
+//        }
+        }
+        return new HashMap<>();
+    }
+
+    @GetMapping(ApiConstants.GET_USER_NOTIFICATIONS)
+    public List<String> getUserNotifications(@RequestParam(required = true) Integer userId) {
+
+        if (userId == null) {
+            log.error("User Id must not be null");
+            return new ArrayList<>();
+        } else {
+            return userService.getUserNotifications(userId);
+        }
+    }
+
+    @PostMapping(ApiConstants.UPDATE_BID_STATUS_FROM_CLIENT)
+    public void updateBidStatudFromClient(@RequestParam(required = true) String status, @RequestParam(required = true)Integer quotationId) {
+
+        if (status == null || status.isEmpty() || quotationId == null) {
+            log.error("status must not be null or Empty");
+            return;
+        } else {
+            userService.updateQuotationStatus(status, quotationId);
+        }
+    }
 }
