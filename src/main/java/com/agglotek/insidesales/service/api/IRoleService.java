@@ -5,7 +5,10 @@ import com.agglotek.insidesales.dao.entity.Role;
 import java.util.List;
 
 public interface IRoleService {
-    public Role addRole(Role role);
-    public List<Role> getAllRoles();
+    Role addRole(Role role);
+    List<Role> getAllRoles();
 
+    Role editRole(Role roleData);
+
+    boolean deleteRoleById(Integer roleId);
 }

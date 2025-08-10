@@ -24,7 +24,8 @@ public class ClientController {
     private IClientConvoService clientConvoService;
 
     @PostMapping(ApiConstants.ADD_CLIENTS)
-    public Client saveClient(@RequestBody Client client) {
+    public Client saveClient(@RequestBody Client client, @RequestHeader("User-Id") Integer userId) {
+        client.setUserId(userId);
         client.setInsertTime(new Timestamp(System.currentTimeMillis()));
         return clientService.saveClient(client);
     }
@@ -41,7 +42,8 @@ public class ClientController {
     @PostMapping(ApiConstants.ADD_CLIENT_CONVO)
     public ResponseEntity<ApiResponse> addClientConvo(@RequestBody ClientConvoDTO dto) {
         clientConvoService.insertClientConvoData(dto);
-        return ResponseEntity.ok(new ApiResponse(true,"Client Convo saved!"));
+        List<ClientConvoDTO> result = clientConvoService.getClientConvoDataByUserId(dto.getUserId());
+        return ResponseEntity.ok(new ApiResponse(true,"Client Convo saved!", result));
     }
 
     @GetMapping(ApiConstants.GET_CLIENT_CONVO)

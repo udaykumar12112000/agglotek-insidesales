@@ -78,4 +78,5 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             ")",
             nativeQuery = true)
     int getTotalNumberOfProjectsAllotedThisMonth(Integer userId, String allotted);
+    List<User> findBySupUserId(Integer supUserId);
 }

@@ -31,12 +31,18 @@ public class ApiConstants {
 
     public static final String UPDATE_BID_STATUS_FROM_CLIENT = "/update_bid_status";
 
+    public static final String GET_USER_REPORTEES = "/reportees";
+
     //roles
     public static final String ROLES_APIS = "/api/roles";
 
     public static final String ADD_ROLE = "/addRole";
 
     public static final String GET_ALL_ROLES = "/getAllRoles";
+
+    public static final String EDIT_ROLE = "/editRole";
+
+    public static final String DELETE_ROLE = "/deleteRole/{roleId}";
 
     //quotations
     public static final String QUOTATION_APIS = "/api/quotations";

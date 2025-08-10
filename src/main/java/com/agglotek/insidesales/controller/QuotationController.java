@@ -36,6 +36,7 @@ public class QuotationController {
         Quotation quotation = new Quotation();
         quotation.setQuotationNumber(newQuotationNumber);
         quotation.setDateOfQuotation(request.getDateOfQuotation());
+        quotation.setQuotationDueDate(request.getQuotationDueDate());
         quotation.setProjectName(request.getProjectName());
         quotation.setConnectionEngineering(request.getConnectionEngineering());
         quotation.setComments(request.getComments());

@@ -17,4 +17,5 @@ public interface IUserService {
     List<String> getUserNotifications(Integer userId);
 
     void updateQuotationStatus(String status, Integer quotationId);
+    List<User> getUserReportees(Integer supUserId);
 }

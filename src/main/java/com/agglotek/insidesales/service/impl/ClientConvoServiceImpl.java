@@ -69,32 +69,51 @@ public class ClientConvoServiceImpl implements IClientConvoService {
 
         for (Client client : clients) {
             List<ClientConvo> convos = clientConvoRepository.findByClientId(client.getClientId());
-            for (ClientConvo convo : convos) {
-                ClientConvoDTO dto = new ClientConvoDTO();
-                dto.setClientId(convo.getClientId());
-                dto.setUserId(convo.getUserId());
-                dto.setName(client.getName());
-                dto.setCountry(client.getCountry());
-                dto.setStakeHolders(client.getStakeHolders());
-                dto.setAddress(client.getAddress());
-                dto.setTimeZone(client.getTimeZone());
-                dto.setClientType(client.getClientType());
-                dto.setEmail(client.getEmail());
-                dto.setPhoneNumber(client.getPhoneNumber());
-                dto.setAvailableHrs(client.getAvailableHrs());
-                try {
-                    dto.setCallConvo(mapper.readValue(convo.getCallConvo(), Map.class));
-                    dto.setStatusUpdate(mapper.readValue(convo.getStatusUpdate(), Map.class));
-                } catch (Exception e) {
-                    throw new RuntimeException("JSON parsing error", e);
-                }
-                dto.setRemarks(convo.getRemarks());
 
+            if (convos.isEmpty()) {
+                ClientConvoDTO dto = buildClientConvoDTO(client, userId, null);
                 result.add(dto);
+            } else {
+                for (ClientConvo convo : convos) {
+                    ClientConvoDTO dto = buildClientConvoDTO(client, convo.getUserId(), convo);
+                    result.add(dto);
+                }
             }
         }
 
         return result;
     }
+
+    private ClientConvoDTO buildClientConvoDTO(Client client, Integer userId, ClientConvo convo) {
+        ClientConvoDTO dto = new ClientConvoDTO();
+        dto.setClientId(client.getClientId());
+        dto.setUserId(userId);
+        dto.setName(client.getName());
+        dto.setCountry(client.getCountry());
+        dto.setStakeHolders(client.getStakeHolders());
+        dto.setAddress(client.getAddress());
+        dto.setTimeZone(client.getTimeZone());
+        dto.setClientType(client.getClientType());
+        dto.setEmail(client.getEmail());
+        dto.setPhoneNumber(client.getPhoneNumber());
+        dto.setAvailableHrs(client.getAvailableHrs());
+
+        if (convo != null) {
+            try {
+                dto.setCallConvo(mapper.readValue(convo.getCallConvo(), Map.class));
+                dto.setStatusUpdate(mapper.readValue(convo.getStatusUpdate(), Map.class));
+            } catch (Exception e) {
+                throw new RuntimeException("JSON parsing error", e);
+            }
+            dto.setRemarks(convo.getRemarks());
+        } else {
+            dto.setCallConvo(null);
+            dto.setStatusUpdate(null);
+            dto.setRemarks(null);
+        }
+
+        return dto;
+    }
+
 
 }

@@ -107,14 +107,6 @@ public class Quotation {
         this.dateOfQuotation = dateOfQuotation;
     }
 
-    public LocalDate getQuotationDueDate() {
-        return quotationDueDate;
-    }
-
-    public void setQuotationDueDate(LocalDate quotationDueDate) {
-        this.quotationDueDate = quotationDueDate;
-    }
-
     public String getLeadTime() {
         return leadTime;
     }

@@ -115,4 +115,9 @@ public class UserServiceImpl implements IUserService {
     public void updateQuotationStatus(String status, Integer quotationId) {
         quotationRepository.updateQuotationStatus(status, quotationId);
     }
+
+    public List<User> getUserReportees(Integer supUserId) {
+        List<User> directReports = usersRepository.findBySupUserId(supUserId);
+        return directReports;
+    }
 }
