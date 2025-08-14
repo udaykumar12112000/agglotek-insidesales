@@ -10,6 +10,8 @@ import com.agglotek.insidesales.service.api.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -94,22 +96,42 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public List<String> getUserNotifications(Integer userId) {
+    public List<NotificationDTO> getUserNotifications(Integer userId) {
         List<Quotation> quotationList = userInterfaceDao.getAllNotificationsToTheUser(userId);
-        List<String> notifications = new ArrayList<>();
+        List<NotificationDTO> notifications = new ArrayList<>();
+
+        LocalDate today = LocalDate.now();
 
         for (Quotation q : quotationList) {
-            if (q.getProjectName() != null && q.getQuotationDueDate() != null) {
-                String message = String.format(
-                        "Hi, the project '%s' has a due date on %s. Please look into this.",
-                        q.getProjectName(),
-                        q.getQuotationDueDate().toString()
-                );
-                notifications.add(message);
+            LocalDate dueDate = q.getQuotationDueDate();
+            String project = q.getProjectName();
+
+            if (project != null && dueDate != null) {
+                long daysDiff = ChronoUnit.DAYS.between(today, dueDate);
+                String message;
+                String priority;
+
+                if (daysDiff < 0) {
+                    // Overdue
+                    message = String.format("Project %s from Fabricator Bid status update is overdue by %d days.", project, Math.abs(daysDiff));
+                    priority = "HIGH";
+                } else if (daysDiff <= 2) {
+                    message = String.format("Project %s from Fabricator Bid status update in %d day(s).", project, daysDiff);
+                    priority = "HIGH";
+                } else if (daysDiff <= 4) {
+                    message = String.format("Project %s from Fabricator Bid status update in %d day(s).", project, daysDiff);
+                    priority = "MEDIUM";
+                } else {
+                    message = String.format("Project %s from Fabricator Bid status update in %d day(s).", project, daysDiff);
+                    priority = "LOW";
+                }
+
+                notifications.add(new NotificationDTO(message, priority));
             }
         }
         return notifications;
     }
+
 
     @Override
     public void updateQuotationStatus(String status, Integer quotationId) {

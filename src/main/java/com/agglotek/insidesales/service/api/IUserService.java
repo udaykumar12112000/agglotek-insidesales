@@ -1,6 +1,7 @@
 package com.agglotek.insidesales.service.api;
 
 import com.agglotek.insidesales.dao.entity.User;
+import com.agglotek.insidesales.service.impl.NotificationDTO;
 
 import java.util.List;
 import java.util.Map;
@@ -14,7 +15,7 @@ public interface IUserService {
 
     Map<String, Integer> getUserSummaryDetaialsForSales(Integer userId);
 
-    List<String> getUserNotifications(Integer userId);
+    List<NotificationDTO> getUserNotifications(Integer userId);
 
     void updateQuotationStatus(String status, Integer quotationId);
     List<User> getUserReportees(Integer supUserId);

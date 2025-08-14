@@ -5,9 +5,7 @@ import com.agglotek.insidesales.constants.ApiConstants;
 import com.agglotek.insidesales.constants.AppConstants;
 import com.agglotek.insidesales.dao.entity.User;
 import com.agglotek.insidesales.service.api.IUserService;
-import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.agglotek.insidesales.service.impl.NotificationDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,14 +17,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Slf4j
 @RestController
+@CrossOrigin(
+        origins = {"http://localhost:4200"},
+        allowedHeaders = "*"
+)
 @RequestMapping(ApiConstants.USER_APIS)
 public class UserController {
     @Autowired
     private IUserService userService;
-
-    private static final Logger log = LoggerFactory.getLogger("default");
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -117,44 +116,44 @@ public class UserController {
     }
 
     @GetMapping(ApiConstants.GET_USER_SUMMARY)
-    public Map<String, Integer> getUserSummaryDetaials(@RequestParam(required = true) Integer userId,
+    public ResponseEntity<ApiResponse> getUserSummaryDetails(@RequestParam(required = true) Integer userId,
                                                       @RequestParam(required = true) Integer roleId) {
 
         if (userId == null || roleId == null) {
-            log.error("User Id and role Id must not be null");
+            //log.error("User Id and role Id must not be null");
         } else if (roleId == 2) {
-            return userService.getUserSummaryDetaialsForSales(userId);
+            Map<String, Integer> summaryDetails = userService.getUserSummaryDetaialsForSales(userId);
+            return ResponseEntity.ok(new ApiResponse(true, "Summary Details Fetching successful", summaryDetails));
 //        } else if (roleId == 3) {
 //            return userService.getUserSummaryDetaialsForSalesManager(userId);
 //        }
         }
-        return new HashMap<>();
+        return ResponseEntity.ok(new ApiResponse(false, "get summary details unsuccessful", userId));
     }
 
     @GetMapping(ApiConstants.GET_USER_NOTIFICATIONS)
-    public List<String> getUserNotifications(@RequestParam(required = true) Integer userId) {
-
+    public ResponseEntity<ApiResponse> getUserNotifications(@RequestParam Integer userId) {
         if (userId == null) {
-            log.error("User Id must not be null");
-            return new ArrayList<>();
-        } else {
-            return userService.getUserNotifications(userId);
+            return ResponseEntity.ok(new ApiResponse(false, "User ID must not be null", null));
         }
+
+        List<NotificationDTO> notifications = userService.getUserNotifications(userId);
+
+        if (notifications.isEmpty()) {
+            return ResponseEntity.ok(new ApiResponse(false, "No Notifications", userId));
+        }
+
+        return ResponseEntity.ok(new ApiResponse(true, "Notifications fetched successfully", notifications));
     }
 
     @PostMapping(ApiConstants.UPDATE_BID_STATUS_FROM_CLIENT)
-    public void updateBidStatudFromClient(@RequestParam(required = true) String status, @RequestParam(required = true)Integer quotationId) {
+    public ResponseEntity<ApiResponse> updateBidStatusFromClient(@RequestParam(required = true) String status, @RequestParam(required = true)Integer quotationId) {
 
         if (status == null || status.isEmpty() || quotationId == null) {
-            log.error("status must not be null or Empty");
-            return;
-        } else {
+            //log.error("status must not be null or Empty");
+            return ResponseEntity.ok(new ApiResponse(false, "Status updation failure", status));
+        } else
             userService.updateQuotationStatus(status, quotationId);
+            return ResponseEntity.ok(new ApiResponse(true, "Status updation successful", status));
         }
-    }
-
-    @GetMapping(ApiConstants.GET_USER_REPORTEES)
-    public List<User> getUserReportees(@RequestHeader("User-Id") Integer supUserId) {
-        return userService.getUserReportees(supUserId);
-    }
 }
