@@ -142,4 +142,20 @@ public class UserServiceImpl implements IUserService {
         List<User> directReports = usersRepository.findBySupUserId(supUserId);
         return directReports;
     }
+
+    @Override
+    public Map<String, Integer> getCumulativeSalesSummary(List<Integer> salesPersonIds) {
+        Map<String, Integer> cumulativeSummary = new HashMap<>();
+
+        for (Integer salesPersonId : salesPersonIds) {
+            Map<String, Integer> individualSummary = getUserSummaryDetaialsForSales(salesPersonId);
+
+            // Add values to cumulative map
+            individualSummary.forEach((key, value) ->
+                    cumulativeSummary.merge(key, value, Integer::sum));
+        }
+
+        return cumulativeSummary;
+    }
+
 }

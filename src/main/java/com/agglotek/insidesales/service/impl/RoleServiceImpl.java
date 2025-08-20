@@ -42,4 +42,9 @@ public class RoleServiceImpl implements IRoleService {
         return false;
     }
 
+    @Override
+    public String getRoleNameById(Integer roleId) {
+        return roleRepository.findRoleNameByRoleId(roleId);
+    }
+
 }

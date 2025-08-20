@@ -14,6 +14,10 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @RestController
+@CrossOrigin(
+        origins = {"http://localhost:4200"},
+        allowedHeaders = "*"
+)
 @RequestMapping(ApiConstants.CLIENT_APIS)
 public class ClientController {
 

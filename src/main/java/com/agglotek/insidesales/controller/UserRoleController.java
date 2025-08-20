@@ -14,6 +14,10 @@ import java.util.List;
 import static com.agglotek.insidesales.constants.ApiConstants.*;
 
 @RestController
+@CrossOrigin(
+        origins = {"http://localhost:4200"},
+        allowedHeaders = "*"
+)
 @RequestMapping(ROLES_APIS)
 public class UserRoleController {
 
@@ -65,6 +69,17 @@ public class UserRoleController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse(false, "An error occurred while deleting the role."));
+        }
+    }
+
+    @GetMapping("/name/{roleId}")
+    public ResponseEntity<ApiResponse> getRoleName(@PathVariable Integer roleId) {
+        String roleName = roleService.getRoleNameById(roleId);
+        if (roleName != null) {
+            return ResponseEntity.ok(new ApiResponse(true, "Role name fetched successfully!", roleName));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse(false, "Role not found"));
         }
     }
 

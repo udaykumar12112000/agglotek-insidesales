@@ -12,4 +12,8 @@ public interface IQuotationService {
     List<QuotationInfoDTO> getQuotationsByUserIdAndStatus(Integer userId, String quotationStatus);
 
     void updateQuotation(QuotationInfoDTO dto);
+
+    public List<Quotation> getQuotationsForUser(Integer userId, String roleName);
+
+    public void updateAssignedEstimator(Integer quotationId, Integer newEstimatorId);
 }

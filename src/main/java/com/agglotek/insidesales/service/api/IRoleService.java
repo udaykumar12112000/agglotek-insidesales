@@ -11,4 +11,6 @@ public interface IRoleService {
     Role editRole(Role roleData);
 
     boolean deleteRoleById(Integer roleId);
+
+    String getRoleNameById(Integer roleId);
 }

@@ -4,6 +4,7 @@ import com.agglotek.insidesales.ApiResponse;
 import com.agglotek.insidesales.constants.ApiConstants;
 import com.agglotek.insidesales.constants.AppConstants;
 import com.agglotek.insidesales.dao.entity.User;
+import com.agglotek.insidesales.service.api.IRoleService;
 import com.agglotek.insidesales.service.api.IUserService;
 import com.agglotek.insidesales.service.impl.NotificationDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ import java.util.Map;
 public class UserController {
     @Autowired
     private IUserService userService;
+
+    @Autowired
+    private IRoleService roleService;
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -115,7 +119,7 @@ public class UserController {
         return ResponseEntity.ok(new ApiResponse(true, "Login successful", user));
     }
 
-    @GetMapping(ApiConstants.GET_USER_SUMMARY)
+    //@GetMapping(ApiConstants.GET_USER_SUMMARY)
     public ResponseEntity<ApiResponse> getUserSummaryDetails(@RequestParam(required = true) Integer userId,
                                                       @RequestParam(required = true) Integer roleId) {
 
@@ -130,6 +134,48 @@ public class UserController {
         }
         return ResponseEntity.ok(new ApiResponse(false, "get summary details unsuccessful", userId));
     }
+
+    @GetMapping(ApiConstants.GET_USER_SUMMARY)
+    public ResponseEntity<ApiResponse> getUserSummaryDetailsV(
+            @RequestParam Integer userId,
+            @RequestParam Integer roleId) {
+
+        // Validate inputs
+        if (userId == null || roleId == null) {
+            return ResponseEntity.badRequest()
+                    .body(new ApiResponse(false, "User ID and Role ID must not be null", null));
+        }
+
+        // Get role name from DB
+        String roleName = roleService.getRoleNameById(roleId);
+
+        if (roleName == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse(false, "Role not found for given Role ID", null));
+        }
+
+        Map<String, Integer> summaryDetails;
+
+        if ("SALES".equalsIgnoreCase(roleName)) {
+            // Individual sales data
+            summaryDetails = userService.getUserSummaryDetaialsForSales(userId);
+
+        } else if ("SALES_MANAGER".equalsIgnoreCase(roleName)) {
+            // Get all salespersons under this manager
+            List<Integer> salesPersonIds = userService.getUsersByRoleId(roleId)
+                    .stream()
+                    .map(User::getUserId)
+                    .toList();
+
+            summaryDetails = userService.getCumulativeSalesSummary(salesPersonIds);
+
+        } else {
+            return ResponseEntity.ok(new ApiResponse(false, "Unsupported role for summary", null));
+        }
+        return ResponseEntity.ok(new ApiResponse(true, "Summary Details fetched successfully", summaryDetails));
+    }
+
+
 
     @GetMapping(ApiConstants.GET_USER_NOTIFICATIONS)
     public ResponseEntity<ApiResponse> getUserNotifications(@RequestParam Integer userId) {

@@ -80,6 +80,12 @@ public class Quotation {
     @Column(name = "connection_engineering_description", columnDefinition = "TEXT")
     private String connectionEngineeringDescription;
 
+    @Column(name = "contact_person_name", length = 100)
+    private String contactPersonName;
+
+    @Column(name = "contact_person_number", length = 20)
+    private String contactPersonNumber;
+
     // Getters and Setters
 
 
@@ -259,6 +265,22 @@ public class Quotation {
         this.quotationDueDate = quotationDueDate;
     }
 
+    public String getContactPersonNumber() {
+        return contactPersonNumber;
+    }
+
+    public void setContactPersonNumber(String contactPersonNumber) {
+        this.contactPersonNumber = contactPersonNumber;
+    }
+
+    public String getContactPersonName() {
+        return contactPersonName;
+    }
+
+    public void setContactPersonName(String contactPersonName) {
+        this.contactPersonName = contactPersonName;
+    }
+
     @Override
     public String toString() {
         return "Quotation{" +
@@ -282,6 +304,8 @@ public class Quotation {
                 ", currency='" + currency + '\'' +
                 ", connectionEngineering=" + connectionEngineering +
                 ", connectionEngineeringDescription='" + connectionEngineeringDescription + '\'' +
+                ", contactPersonName='" + contactPersonName + '\'' +
+                ", contactPersonNumber='" + contactPersonNumber + '\'' +
                 '}';
     }
 }

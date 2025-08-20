@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -86,6 +87,27 @@ public class QuotationServiceImpl implements IQuotationService {
         quotation.setDateOfProposal(LocalDate.now());
         quotation.setUpdatedTime(LocalDateTime.now());
 
+        quotationRepository.save(quotation);
+    }
+
+    @Override
+    public List<Quotation> getQuotationsForUser(Integer userId, String roleName) {
+        if ("ESTIMATOR_MANAGER".equalsIgnoreCase(roleName)) {
+            // Manager sees all quotations
+            return quotationRepository.findQuotationsByEstimatorId(userId);
+        } else if ("ESTIMATOR".equalsIgnoreCase(roleName)) {
+            // Estimator sees only assigned to them
+            return quotationRepository.findByAssignedEstimatorId(userId);
+        }
+        // If other role — no quotations
+        return Collections.emptyList();
+    }
+
+    public void updateAssignedEstimator(Integer quotationId, Integer newEstimatorId) {
+        Quotation quotation = quotationRepository.findById(quotationId)
+                .orElseThrow(() -> new RuntimeException("Quotation not found"));
+
+        quotation.setAssignedEstimatorId(newEstimatorId);
         quotationRepository.save(quotation);
     }
 

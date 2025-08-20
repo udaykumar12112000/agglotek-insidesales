@@ -19,4 +19,7 @@ public interface IUserService {
 
     void updateQuotationStatus(String status, Integer quotationId);
     List<User> getUserReportees(Integer supUserId);
+
+    public Map<String, Integer> getCumulativeSalesSummary(List<Integer> salesPersonIds);
+
 }

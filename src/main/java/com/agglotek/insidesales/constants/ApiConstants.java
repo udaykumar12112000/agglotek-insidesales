@@ -71,4 +71,9 @@ public class ApiConstants {
     public static final String ADD_WORK_STATUS = "/addWorkStatus";
 
     public static final String GET_WORK_STATUS = "/getWorkStatus/{userId}";
+
+    //email send
+    public static final String EMAIL_SENDING = "/email";
+
+    public static final String SEND_EMAIL = "/sendEmail";
 }

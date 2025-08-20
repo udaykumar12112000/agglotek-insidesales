@@ -3,8 +3,12 @@ package com.agglotek.insidesales.controller;
 import com.agglotek.insidesales.ApiResponse;
 import com.agglotek.insidesales.constants.ApiConstants;
 import com.agglotek.insidesales.dao.entity.Quotation;
+import com.agglotek.insidesales.dao.entity.Role;
+import com.agglotek.insidesales.dao.entity.User;
 import com.agglotek.insidesales.dto.QuotationInfoDTO;
 import com.agglotek.insidesales.repository.QuotationRepository;
+import com.agglotek.insidesales.service.api.IRoleService;
+import com.agglotek.insidesales.service.api.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,9 +16,14 @@ import org.springframework.web.bind.annotation.*;
 import com.agglotek.insidesales.service.api.IQuotationService;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
+@CrossOrigin(
+        origins = {"http://localhost:4200"},
+        allowedHeaders = "*"
+)
 @RequestMapping(ApiConstants.QUOTATION_APIS)
 public class QuotationController {
 
@@ -23,6 +32,12 @@ public class QuotationController {
 
     @Autowired
     private QuotationRepository quotationRepository;
+
+    @Autowired
+    private IUserService userService;
+
+    @Autowired
+    private IRoleService roleService;
 
     @PostMapping(ApiConstants.ADD_QUOTATION)
     public ResponseEntity<ApiResponse> addQuotation(@RequestBody Quotation request, @RequestHeader("User-Id") Integer userId) {
@@ -43,7 +58,11 @@ public class QuotationController {
         quotation.setUserId(userId);
         quotation.setClientId(request.getClientId());
         quotation.setNewClient(isNewClient);
-
+        quotation.setContactPersonName(request.getContactPersonName());
+        quotation.setContactPersonNumber(request.getContactPersonNumber());
+        quotation.setEstimatorId(request.getEstimatorId());
+        quotation.setCreatedTime(LocalDateTime.now());
+        quotation.setUpdatedTime(LocalDateTime.now());
         quotationService.addQuotation(quotation);
 
         return ResponseEntity.ok(new ApiResponse(true, "Quotation added successfully", quotation));
@@ -103,6 +122,45 @@ public class QuotationController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse(false, "Failed to update quotation"));
         }
+    }
+
+    @GetMapping("/get_quotations_per_estimator")
+    public ResponseEntity<ApiResponse> getQuotationsRelatedToEstimator(
+            @RequestHeader("User-Id") Integer userId) {
+
+        // Get logged-in user
+        List<User> users = userService.getUserByUserId(userId);
+        if (users.isEmpty()) {
+            throw new RuntimeException("User not found");
+        }
+        User user = users.get(0);
+        String roleName = roleService.getRoleNameById(user.getRoleId());
+
+        List<Quotation> quotations = quotationService.getQuotationsForUser(userId, roleName);
+        return ResponseEntity.ok(new ApiResponse(true, "Quotations fetched successfully", quotations));
+    }
+
+    @PutMapping("/assign_quotation")
+    public ResponseEntity<ApiResponse> assignEstimator(
+            @RequestParam Integer quotationId,
+            @RequestParam Integer estimatorId,
+            @RequestHeader("User-Id") Integer userId) {
+
+        // Ensure only manager can reassign
+        List<User> users = userService.getUserByUserId(userId);
+        if (users.isEmpty()) {
+            throw new RuntimeException("User not found");
+        }
+        User user = users.get(0);
+        String roleName = roleService.getRoleNameById(user.getRoleId());
+
+        if (!"ESTIMATOR_MANAGER".equalsIgnoreCase(roleName)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(new ApiResponse(false, "You do not have permission to reassign quotations"));
+        }
+
+        quotationService.updateAssignedEstimator(quotationId, estimatorId);
+        return ResponseEntity.ok(new ApiResponse(true, "Estimator reassigned successfully"));
     }
 
 
