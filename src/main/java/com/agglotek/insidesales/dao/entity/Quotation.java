@@ -86,6 +86,9 @@ public class Quotation {
     @Column(name = "contact_person_number", length = 20)
     private String contactPersonNumber;
 
+    @Column(name = "additional_properties", columnDefinition = "TEXT")
+    private String additionalProperties;
+
     // Getters and Setters
 
 
@@ -281,6 +284,14 @@ public class Quotation {
         this.contactPersonName = contactPersonName;
     }
 
+    public String getAdditionalProperties() {
+        return additionalProperties;
+    }
+
+    public void setAdditionalProperties(String additionalProperties) {
+        this.additionalProperties = additionalProperties;
+    }
+
     @Override
     public String toString() {
         return "Quotation{" +
@@ -288,6 +299,8 @@ public class Quotation {
                 ", quotationNumber='" + quotationNumber + '\'' +
                 ", dateOfQuotation=" + dateOfQuotation +
                 ", quotationDueDate=" + quotationDueDate +
+                ", leadTime='" + leadTime + '\'' +
+                ", scopeOfWork='" + scopeOfWork + '\'' +
                 ", dateOfProposal=" + dateOfProposal +
                 ", projectName='" + projectName + '\'' +
                 ", userId=" + userId +
@@ -306,6 +319,7 @@ public class Quotation {
                 ", connectionEngineeringDescription='" + connectionEngineeringDescription + '\'' +
                 ", contactPersonName='" + contactPersonName + '\'' +
                 ", contactPersonNumber='" + contactPersonNumber + '\'' +
+                ", additionalProperties='" + additionalProperties + '\'' +
                 '}';
     }
 }

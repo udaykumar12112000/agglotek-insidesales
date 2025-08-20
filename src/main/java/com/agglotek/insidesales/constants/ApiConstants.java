@@ -14,6 +14,9 @@ public class ApiConstants {
 
     public static final String GET_CLIENT_CONVO = "/getClientConvoData";
 
+    public static final String EDIT_CLIENT = "/editClient/{clientId}";
+
+
     //users
     public static final String USER_APIS = "/api/users";
 
@@ -32,6 +35,8 @@ public class ApiConstants {
     public static final String UPDATE_BID_STATUS_FROM_CLIENT = "/update_bid_status";
 
     public static final String GET_USER_REPORTEES = "/reportees";
+
+    public static final String CHANGE_PASSWORD = "/changePassword";
 
     //roles
     public static final String ROLES_APIS = "/api/roles";
@@ -61,9 +66,9 @@ public class ApiConstants {
     public static final String UPDATE_PO_NUM = "/update/ClientProjectNumber";
 
     //Files
-    public static final String PROJECT_PO_UPLOAD = "/upload/PO";
+    public static final String PROJECT_PO_UPLOAD = "/upload";
 
-    public static final String PROJECT_PO_DOWNLOAD = "/download/PO";
+    public static final String PROJECT_PO_DOWNLOAD = "/download";
 
     //work status entry
     public static final String WORK_STATUS_APIS = "/api/workStatus";

@@ -1,5 +1,6 @@
 package com.agglotek.insidesales.service.impl;
 
+import com.agglotek.insidesales.ApiResponse;
 import com.agglotek.insidesales.dao.api.ISalesTargetDao;
 import com.agglotek.insidesales.dao.api.IUserInterfaceDao;
 import com.agglotek.insidesales.dao.entity.Quotation;
@@ -12,10 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements IUserService {
@@ -156,6 +154,30 @@ public class UserServiceImpl implements IUserService {
         }
 
         return cumulativeSummary;
+    }
+
+    @Override
+    public ApiResponse changePassword(Integer userId, Map<String, String> request) {
+        Optional<User> optionalUser = usersRepository.findById(userId);
+        if (!optionalUser.isPresent()) {
+            return new ApiResponse(false, "User not found");
+        }
+
+        User user = optionalUser.get();
+
+        // Validate old password
+        if (!user.getPassword().equals(request.get("oldPassword"))) {
+            return new ApiResponse(false, "Old password is incorrect");
+        }
+
+        if(user.getPassword().equals(request.get("newPassword"))){
+            return new ApiResponse(false, "Old password and new password cannot be same");
+        }
+
+        user.setPassword(request.get("newPassword"));
+        usersRepository.save(user);
+
+        return new ApiResponse(true, "Password changed successfully");
     }
 
 }

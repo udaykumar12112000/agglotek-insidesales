@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -56,6 +57,9 @@ public class QuotationServiceImpl implements IQuotationService {
     }
 
     private List<QuotationInfoDTO> convertToDTOList(List<Quotation> quotations) {
+
+        if(quotations.isEmpty() || quotations == null)
+            return new ArrayList<>();
         return quotations.stream().map(quotation -> {
             QuotationInfoDTO dto = new QuotationInfoDTO();
             BeanUtils.copyProperties(quotation, dto);
@@ -78,13 +82,23 @@ public class QuotationServiceImpl implements IQuotationService {
         Quotation quotation = quotationRepository.findById(dto.getQuotationId())
                 .orElseThrow(() -> new RuntimeException("Quotation not found with ID: " + dto.getQuotationId()));
 
-        quotation.setQuotationValue(dto.getQuotationValue());
-        quotation.setQuotationStatus(dto.getQuotationStatus());
-        quotation.setConnectionEngineeringDescription(dto.getConnectionEngineeringDescription());
-        quotation.setScopeOfWork(dto.getScopeOfWork());
-        quotation.setLeadTime(dto.getLeadTime());
+        if(dto.getQuotationValue()!=null)
+            quotation.setQuotationValue(dto.getQuotationValue());
+        if(dto.getQuotationStatus()!=null)
+            quotation.setQuotationStatus(dto.getQuotationStatus());
+        if(dto.getConnectionEngineering()!=null)
+            quotation.setConnectionEngineering(dto.getConnectionEngineering());
+        if(dto.getConnectionEngineeringDescription()!=null)
+            quotation.setConnectionEngineeringDescription(dto.getConnectionEngineeringDescription());
+        if(dto.getScopeOfWork()!=null)
+            quotation.setScopeOfWork(dto.getScopeOfWork());
+        if(dto.getLeadTime()!=null)
+            quotation.setLeadTime(dto.getLeadTime());
+        if(dto.getAdditionalProperties()!=null)
+            quotation.setAdditionalProperties(dto.getAdditionalProperties());
+        if(dto.getDateOfProposal()!=null)
+            quotation.setDateOfProposal(dto.getDateOfProposal());
 
-        quotation.setDateOfProposal(LocalDate.now());
         quotation.setUpdatedTime(LocalDateTime.now());
 
         quotationRepository.save(quotation);

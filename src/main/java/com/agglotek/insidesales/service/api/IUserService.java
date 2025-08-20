@@ -1,5 +1,6 @@
 package com.agglotek.insidesales.service.api;
 
+import com.agglotek.insidesales.ApiResponse;
 import com.agglotek.insidesales.dao.entity.User;
 import com.agglotek.insidesales.service.impl.NotificationDTO;
 
@@ -21,5 +22,7 @@ public interface IUserService {
     List<User> getUserReportees(Integer supUserId);
 
     public Map<String, Integer> getCumulativeSalesSummary(List<Integer> salesPersonIds);
+    
+    public ApiResponse changePassword(Integer userId, Map<String, String> request);
 
 }

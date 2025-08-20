@@ -202,4 +202,19 @@ public class UserController {
             userService.updateQuotationStatus(status, quotationId);
             return ResponseEntity.ok(new ApiResponse(true, "Status updation successful", status));
         }
+
+    @PutMapping(ApiConstants.CHANGE_PASSWORD)
+    public ResponseEntity<ApiResponse> changePassword(
+            @RequestHeader("User-Id") Integer userId,
+            @RequestBody Map<String, String> request) {
+        try {
+            ApiResponse response = userService.changePassword(userId, request);
+            return ResponseEntity.status(response.isStatus() ? HttpStatus.OK : HttpStatus.BAD_REQUEST)
+                    .body(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse(false, "Failed to change password"));
+        }
+    }
 }
