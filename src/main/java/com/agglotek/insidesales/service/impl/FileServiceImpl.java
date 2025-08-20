@@ -48,9 +48,12 @@ public class FileServiceImpl implements IFileService {
             } else if ("scope_of_work".equalsIgnoreCase(type)) {
                 baseDir = AppConstants.QUOTATION_BASE_DIRECTORY;
                 suffix = "_scope_of_work.pdf";
+            } else if ("proposal".equalsIgnoreCase(type)) {
+                baseDir = AppConstants.QUOTATION_BASE_DIRECTORY;
+                suffix = "_proposal.pdf";
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(new ApiResponse(false, "Invalid type! Use 'po' or 'scope_of_work'"));
+                        .body(new ApiResponse(false, "Invalid type! Use 'po' or 'scope_of_work' or 'proposal'"));
             }
 
 
@@ -88,8 +91,11 @@ public class FileServiceImpl implements IFileService {
         } else if ("scope_of_work".equalsIgnoreCase(type)) {
             baseDir = AppConstants.QUOTATION_BASE_DIRECTORY;
             suffix = "_scope_of_work.pdf";
+        } else if ("proposal".equalsIgnoreCase(type)) {
+            baseDir = AppConstants.QUOTATION_BASE_DIRECTORY;
+            suffix = "_proposal.pdf";
         } else {
-            throw new IllegalArgumentException("Invalid type! Use 'po' or 'scope_of_work'");
+            throw new IllegalArgumentException("Invalid type! Use 'po' or 'scope_of_work' or 'proposal'");
         }
 
         String folderName = referenceNumber + "_" + safeProjectName;
