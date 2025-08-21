@@ -38,23 +38,18 @@ public class EmailService {
         this.templateLoader = templateLoader;
     }
 
-    public void sendTemplateEmail(String to, String subject, String templateName, Map<String, String> variables)
+    public void sendTemplateEmail(String to, String subject, String body, Map<String, String> variables)
             throws MessagingException, IOException {
 
-        String htmlContent = templateLoader.loadRemoteTemplate(templateName);
-        htmlContent = processTemplate(htmlContent, variables);
-
-        sendHtmlEmail(to, subject, htmlContent);
+        sendHtmlEmail(to, subject, body);
     }
 
     // New method to send email with attachments
-    public void sendTemplateEmailWithAttachments(String to, String subject, String templateName, Map<String, String> variables, List<File> attachmentFiles)
+    public void sendTemplateEmailWithAttachments(String to, String subject, String body, Map<String, String> variables, List<File> attachmentFiles)
             throws MessagingException, IOException {
 
-        String htmlContent = templateLoader.loadRemoteTemplate(templateName);
-        htmlContent = processTemplate(htmlContent, variables);
 
-        sendHtmlEmailWithAttachments(to, subject, htmlContent, attachmentFiles);
+        sendHtmlEmailWithAttachments(to, subject, body, attachmentFiles);
     }
 
     private void sendHtmlEmail(String to, String subject, String htmlContent) throws MessagingException {

@@ -2,6 +2,8 @@ package com.agglotek.insidesales.emailservice;
 
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,21 +11,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Component
 public class MailSender {
 
-    @Value(("${mailService.smtp.host}"))
     private final String smtpHost;
-
-    @Value(("${mailService.smtp.port}"))
     private final int smtpPort;
-
-    @Value(("${mailService.username}"))
     private final String username;
-
-    @Value(("${mailService.password}"))
     private final String password;
 
-    public MailSender(String smtpHost, int smtpPort, String username, String password) {
+    public MailSender(
+            @Value("${mailService.smtp.host}")
+            String smtpHost,
+            @Value("${mailService.smtp.port}")
+            int smtpPort,
+            @Value("${mailService.username}")
+            String username,
+            @Value("${mailService.password}")
+            String password) {
         this.smtpHost = smtpHost;
         this.smtpPort = smtpPort;
         this.username = username;
@@ -59,22 +63,19 @@ public class MailSender {
         }
     }
 
-    public void sendEmailWithAttachments(String templateBaseUrl, List<String> sendToEmailList, String subject, String templateName, List<File> attachmentFiles) {
+    public void sendEmailWithAttachments(String templateBaseUrl, List<String> sendToEmailList, String subject, String templateName, List<File> attachmentFiles, Map<String, String> variables) {
         TemplateLoader loader = new TemplateLoader(templateBaseUrl);
         EmailService emailService = new EmailService(smtpHost, smtpPort, username, password, loader);
 
-        Map<String, String> variables = new HashMap<>();
-        variables.put("companyName", "Agglotek");
-        variables.put("customerName", "Udhay");
-
         try {
+            String body = loader.getTemplate(templateName, variables);
             // Check if attachment files are provided
             if (attachmentFiles != null && !attachmentFiles.isEmpty()) {
                 System.out.println("Sending email with attachments...");
                 emailService.sendTemplateEmailWithAttachments(
                         String.join(",", sendToEmailList),
                         subject,
-                        templateName,
+                        body,
                         variables,
                         attachmentFiles
                 );
@@ -83,7 +84,7 @@ public class MailSender {
                 emailService.sendTemplateEmail(
                         String.join(",", sendToEmailList),
                         subject,
-                        templateName,
+                        body,
                         variables
                 );
             }

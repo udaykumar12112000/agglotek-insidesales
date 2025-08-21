@@ -37,7 +37,8 @@ public class EmailController {
                                                         @RequestParam Integer fromId,
                                                         @RequestParam Integer sendtoId,
                                                         @RequestParam String status,
-                                                        @RequestParam(required = false) List<MultipartFile> files) {
+                                                        @RequestParam(required = false) List<MultipartFile> files,
+                                                        @RequestParam String number) {
         try {
             // 1. Fetch user details using service
             List<User> fromUsers = userService.getUserByUserId(fromId);
@@ -64,18 +65,32 @@ public class EmailController {
             // 3. Prepare email details
             String templateBaseUrl =  TEMPLATE_BASE_URL;  // adjust to your path
             String subject = "Communication Update: " + status;
-            String templateName = "communication_template.html";
+            String templateName = "quotation_request";
 
             List<String> sendToEmails = Collections.singletonList(toUser.getEmail());
 
             // Add dynamic variables (example)
             Map<String, String> variables = new HashMap<>();
-            variables.put("companyName", "Agglotek");
-            variables.put("customerName", toUser.getName());
-            variables.put("statusMessage", status);
+//            variables.put("companyName", "Agglotek");
+//            variables.put("customerName", toUser.getName());
+//            variables.put("statusMessage", status);
+
+            if("null".equalsIgnoreCase(status)){
+                templateName = "quotation_request";
+                variables.put("estimatorName", toUser.getName());
+                variables.put("salesPersonName", fromUser.getName());
+                variables.put("quotationNumber", number);
+            }
+
+            else if("in_proposal".equalsIgnoreCase(status)){
+                templateName = "quotation_estimated";
+                variables.put("estimatorName", fromUser.getName());
+                variables.put("salesPersonName", toUser.getName());
+                variables.put("quotationNumber", number);
+            }
 
             // 4. Call email service
-            mailSender.sendEmailWithAttachments(templateBaseUrl, sendToEmails, subject, templateName, attachmentFiles);
+            mailSender.sendEmailWithAttachments(templateBaseUrl, sendToEmails, subject, templateName, attachmentFiles, variables);
 
             return ResponseEntity.ok(new ApiResponse(true, "Email sent successfully from "
                     + fromUser.getEmail() + " to " + toUser.getEmail()));

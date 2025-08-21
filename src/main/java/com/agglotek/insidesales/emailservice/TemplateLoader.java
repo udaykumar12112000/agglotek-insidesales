@@ -58,4 +58,31 @@ public class TemplateLoader {
             throw new IOException("Error loading remote template: " + templateName, e);
         }
     }
+
+    public String getTemplate(String templateName, Map<String, String> variables) throws IOException {
+        String template;
+
+        // Check cache first
+        if (templateCache.containsKey(templateName)) {
+            template = templateCache.get(templateName);
+        } else {
+            if (isRemoteTemplates) {
+                template = loadRemoteTemplate(templateName);
+            } else {
+                String path = basePath + "/" + templateName + ".html";
+                template = Files.readString(Paths.get(path));
+            }
+            templateCache.put(templateName, template);
+        }
+
+        // Replace placeholders in template with actual values
+        if (variables != null) {
+            for (Map.Entry<String, String> entry : variables.entrySet()) {
+                template = template.replace("{{" + entry.getKey() + "}}", entry.getValue());
+            }
+        }
+
+        return template;
+    }
+
 }
