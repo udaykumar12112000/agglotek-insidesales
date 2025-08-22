@@ -9,11 +9,11 @@ public interface IQuotationService {
     boolean existsByClientId(Integer clientId);
     void addQuotation(Quotation quotation);
     List<QuotationInfoDTO> getAllQuotationsByUserId(Integer userId);
-    List<QuotationInfoDTO> getQuotationsByUserIdAndStatus(Integer userId, String quotationStatus);
+    List<QuotationInfoDTO> getQuotationsByUserIdAndStatus(Integer userId, List<String> statusList);
 
     void updateQuotation(QuotationInfoDTO dto);
 
-    public List<Quotation> getQuotationsForUser(Integer userId, String roleName);
+    public List<QuotationInfoDTO> getQuotationsForUser(Integer userId, String roleName);
 
     public void updateAssignedEstimator(Integer quotationId, Integer newEstimatorId);
 }

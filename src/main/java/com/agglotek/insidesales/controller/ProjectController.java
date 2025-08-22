@@ -24,20 +24,19 @@ public class ProjectController {
     private IProjectService projectService;
 
     @GetMapping(ApiConstants.PROJECT_DETAILS)
-    public ResponseEntity<List<ProjectInfoDTO>> getProjectDetailsBySalesPerson(@PathVariable Integer salesPersonId) {
+    public ResponseEntity<List<ProjectInfoDTO>> getProjectDetailsBySalesPerson(@RequestHeader("User-Id") Integer salesPersonId) {
         List<ProjectInfoDTO> projectDetails = projectService.getProjectDetailsBySalesPersonId(salesPersonId);
         return ResponseEntity.ok(projectDetails);
     }
 
-    @PutMapping(ApiConstants.UPDATE_PO_NUM)
-    public ResponseEntity<ApiResponse> updateClientProjectNumber(
+    @PutMapping(ApiConstants.UPDATE_PROJECT)
+    public ResponseEntity<ApiResponse> updateProjectDetails(
             @RequestBody ProjectInfoDTO request) {
 
-        boolean success = projectService.updateClientProjectNumber(
-                request.getProjectId(), request.getClientProjectNumber());
+        boolean success = projectService.updateProjectDetails(request);
 
         if (success) {
-            return ResponseEntity.ok(new ApiResponse(true, "Client Project Number updated successfully!"));
+            return ResponseEntity.ok(new ApiResponse(true, "Project Details updated successfully!"));
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ApiResponse(false, "Project not found!"));

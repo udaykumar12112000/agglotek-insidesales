@@ -61,9 +61,9 @@ public class ApiConstants {
     //projects
     public static final String PROJECT_APIS = "/api/projects";
 
-    public static final String PROJECT_DETAILS = "/projectInfo/{salesPersonId}";
+    public static final String PROJECT_DETAILS = "/projectInfo";
 
-    public static final String UPDATE_PO_NUM = "/update/ClientProjectNumber";
+    public static final String UPDATE_PROJECT = "/updateProjectDetails";
 
     //Files
     public static final String PROJECT_PO_UPLOAD = "/upload";
@@ -75,7 +75,7 @@ public class ApiConstants {
 
     public static final String ADD_WORK_STATUS = "/addWorkStatus";
 
-    public static final String GET_WORK_STATUS = "/getWorkStatus/{userId}";
+    public static final String GET_WORK_STATUS = "/getWorkStatusForUser";
 
     //email send
     public static final String EMAIL_SENDING = "/email";

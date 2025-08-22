@@ -29,5 +29,8 @@ public interface ProjectRepository extends JpaRepository<Project, Integer> {
             nativeQuery = true)
     List<Object[]> findProjectDetailsBySalesPersonId(@Param("salesPersonId") Integer salesPersonId);
 
+    @Query(value = "SELECT project_number FROM projects WHERE project_number LIKE :prefix% ORDER BY project_number DESC LIMIT 1", nativeQuery = true)
+    String findLastProjectNumberForYear(@Param("prefix") String prefix);
+
 
 }

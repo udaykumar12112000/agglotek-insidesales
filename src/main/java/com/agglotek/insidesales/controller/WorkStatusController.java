@@ -33,7 +33,7 @@ public class WorkStatusController {
     }
 
     @GetMapping(ApiConstants.GET_WORK_STATUS)
-    public ResponseEntity<List<WorkStatus>> getEntriesByUserId(@PathVariable Integer userId) {
+    public ResponseEntity<List<WorkStatus>> getEntriesByUserId(@RequestHeader("User-Id") Integer userId) {
         List<WorkStatus> entries = service.getWorkStatusByUserId(userId);
         return ResponseEntity.ok(entries);
     }

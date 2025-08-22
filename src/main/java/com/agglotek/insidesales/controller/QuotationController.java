@@ -101,7 +101,7 @@ public class QuotationController {
     @GetMapping(ApiConstants.FILTER_QUOTATIONS)
     public ResponseEntity<List<QuotationInfoDTO>> getQuotationsByUserIdAndStatus(
             @RequestHeader("User-Id") Integer userId,
-            @RequestParam(value = "status", required = false) String quotationStatus) {
+            @RequestParam(value = "status", required = false) List<String> quotationStatus) {
 
         List<QuotationInfoDTO> quotations;
 
@@ -136,7 +136,7 @@ public class QuotationController {
         User user = users.get(0);
         String roleName = roleService.getRoleNameById(user.getRoleId());
 
-        List<Quotation> quotations = quotationService.getQuotationsForUser(userId, roleName);
+        List<QuotationInfoDTO> quotations = quotationService.getQuotationsForUser(userId, roleName);
         return ResponseEntity.ok(new ApiResponse(true, "Quotations fetched successfully", quotations));
     }
 

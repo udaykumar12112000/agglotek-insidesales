@@ -34,7 +34,9 @@ public interface QuotationRepository extends JpaRepository<Quotation, Integer> {
 
     List<Quotation> findByUserIdAndQuotationStatusIsNull(Integer userId);
 
-    List<Quotation> findByUserIdAndQuotationStatus(Integer userId, String quotationStatus);
+    List<Quotation> findByUserIdAndQuotationStatusIn(Integer userId, List<String> statuses);
+
+//    List<Quotation> findByUserIdAndQuotationStatus(Integer userId, String quotationStatus);
 
     // Get all quotations
     @Query("SELECT q FROM Quotation q WHERE q.estimatorId = :estimatorId")

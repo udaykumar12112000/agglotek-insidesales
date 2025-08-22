@@ -5,6 +5,7 @@ import com.agglotek.insidesales.dto.QuotationInfoDTO;
 import com.agglotek.insidesales.repository.ClientRepository;
 import com.agglotek.insidesales.repository.QuotationRepository;
 import com.agglotek.insidesales.repository.UserRepository;
+import com.agglotek.insidesales.service.api.IProjectService;
 import com.agglotek.insidesales.service.api.IQuotationService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,9 @@ public class QuotationServiceImpl implements IQuotationService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private IProjectService projectService;
+
     @Override
     public boolean existsByClientId(Integer clientId) {
         return quotationRepository.existsByClientId(clientId);
@@ -44,13 +48,27 @@ public class QuotationServiceImpl implements IQuotationService {
         return convertToDTOList(quotations);
     }
 
-    public List<QuotationInfoDTO> getQuotationsByUserIdAndStatus(Integer userId, String quotationStatus) {
-        List<Quotation> quotations;
+    public List<QuotationInfoDTO> getQuotationsByUserIdAndStatus(Integer userId, List<String> quotationStatuses) {
+        List<Quotation> quotations = new ArrayList<>();
 
-        if (quotationStatus.equalsIgnoreCase("null")) {
-            quotations = quotationRepository.findByUserIdAndQuotationStatusIsNull(userId);
-        } else {
-            quotations = quotationRepository.findByUserIdAndQuotationStatus(userId, quotationStatus);
+//        if (quotationStatus.equalsIgnoreCase("null")) {
+//            quotations = quotationRepository.findByUserIdAndQuotationStatusIsNull(userId);
+//        } else {
+//            quotations = quotationRepository.findByUserIdAndQuotationStatus(userId, quotationStatus);
+//        }
+
+        if (quotationStatuses != null && !quotationStatuses.isEmpty()) {
+            List<String> filteredStatuses = quotationStatuses.stream()
+                    .filter(status -> !"null".equalsIgnoreCase(status))
+                    .collect(Collectors.toList());
+
+            if (!filteredStatuses.isEmpty()) {
+                quotations.addAll(quotationRepository.findByUserIdAndQuotationStatusIn(userId, filteredStatuses));
+            }
+
+            if (quotationStatuses.stream().anyMatch(s -> "null".equalsIgnoreCase(s))) {
+                quotations.addAll(quotationRepository.findByUserIdAndQuotationStatusIsNull(userId));
+            }
         }
 
         return convertToDTOList(quotations);
@@ -84,8 +102,13 @@ public class QuotationServiceImpl implements IQuotationService {
 
         if(dto.getQuotationValue()!=null)
             quotation.setQuotationValue(dto.getQuotationValue());
-        if(dto.getQuotationStatus()!=null)
+        if(dto.getQuotationStatus()!=null) {
             quotation.setQuotationStatus(dto.getQuotationStatus());
+
+            if ("allotted".equalsIgnoreCase(dto.getQuotationStatus())) {
+                projectService.createProjectFromQuotation(quotation);
+            }
+        }
         if(dto.getConnectionEngineering()!=null)
             quotation.setConnectionEngineering(dto.getConnectionEngineering());
         if(dto.getConnectionEngineeringDescription()!=null)
@@ -99,22 +122,24 @@ public class QuotationServiceImpl implements IQuotationService {
         if(dto.getDateOfProposal()!=null)
             quotation.setDateOfProposal(dto.getDateOfProposal());
 
+        quotation.setDateOfProposal(LocalDate.now());
         quotation.setUpdatedTime(LocalDateTime.now());
 
         quotationRepository.save(quotation);
     }
 
     @Override
-    public List<Quotation> getQuotationsForUser(Integer userId, String roleName) {
+    public List<QuotationInfoDTO> getQuotationsForUser(Integer userId, String roleName) {
+        List<Quotation> quotationList = new ArrayList<>();
         if ("ESTIMATOR_MANAGER".equalsIgnoreCase(roleName)) {
             // Manager sees all quotations
-            return quotationRepository.findQuotationsByEstimatorId(userId);
+            quotationList = quotationRepository.findQuotationsByEstimatorId(userId);
         } else if ("ESTIMATOR".equalsIgnoreCase(roleName)) {
             // Estimator sees only assigned to them
-            return quotationRepository.findByAssignedEstimatorId(userId);
+            quotationList = quotationRepository.findByAssignedEstimatorId(userId);
         }
         // If other role — no quotations
-        return Collections.emptyList();
+        return convertToDTOList(quotationList);
     }
 
     public void updateAssignedEstimator(Integer quotationId, Integer newEstimatorId) {
