@@ -11,12 +11,16 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class QuotationServiceImpl implements IQuotationService {
@@ -148,6 +152,12 @@ public class QuotationServiceImpl implements IQuotationService {
 
         quotation.setAssignedEstimatorId(newEstimatorId);
         quotationRepository.save(quotation);
+    }
+
+    @Override
+    public List<QuotationInfoDTO> getAllQuotations() {
+        List<Quotation> quotations = quotationRepository.getAllQuotations();
+        return convertToDTOList(quotations);
     }
 
 }

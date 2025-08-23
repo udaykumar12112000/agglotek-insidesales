@@ -1,4 +1,4 @@
-package com.agglotek.insidesales.service.impl;
+package com.agglotek.insidesales.dto;
 
 public class NotificationDTO {
 

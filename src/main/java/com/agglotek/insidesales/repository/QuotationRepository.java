@@ -46,5 +46,7 @@ public interface QuotationRepository extends JpaRepository<Quotation, Integer> {
     @Query("SELECT q FROM Quotation q WHERE q.assignedEstimatorId = :estimatorId")
     List<Quotation> findByAssignedEstimatorId(@Param("estimatorId") Integer estimatorId);
 
+    @Query("SELECT q FROM Quotation q")
+    List<Quotation> getAllQuotations();
 }
 

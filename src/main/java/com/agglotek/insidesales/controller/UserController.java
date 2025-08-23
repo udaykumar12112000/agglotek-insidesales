@@ -6,15 +6,13 @@ import com.agglotek.insidesales.constants.AppConstants;
 import com.agglotek.insidesales.dao.entity.User;
 import com.agglotek.insidesales.service.api.IRoleService;
 import com.agglotek.insidesales.service.api.IUserService;
-import com.agglotek.insidesales.service.impl.NotificationDTO;
+import com.agglotek.insidesales.dto.NotificationDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -217,4 +215,5 @@ public class UserController {
                     .body(new ApiResponse(false, "Failed to change password"));
         }
     }
+
 }

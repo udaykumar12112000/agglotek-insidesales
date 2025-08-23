@@ -58,6 +58,8 @@ public class ApiConstants {
 
     public static final String UPDATE_QUOTATION = "/update";
 
+    public static final String GET_FILES_IN_PATH = "/getFilesAndPaths";
+
     //projects
     public static final String PROJECT_APIS = "/api/projects";
 
@@ -69,6 +71,8 @@ public class ApiConstants {
     public static final String PROJECT_PO_UPLOAD = "/upload";
 
     public static final String PROJECT_PO_DOWNLOAD = "/download";
+
+    public static final String DOWNLOAD_FROM_PATH = "/downloadFromPath";
 
     //work status entry
     public static final String WORK_STATUS_APIS = "/api/workStatus";

@@ -5,6 +5,7 @@ import com.agglotek.insidesales.dao.api.ISalesTargetDao;
 import com.agglotek.insidesales.dao.api.IUserInterfaceDao;
 import com.agglotek.insidesales.dao.entity.Quotation;
 import com.agglotek.insidesales.dao.entity.User;
+import com.agglotek.insidesales.dto.NotificationDTO;
 import com.agglotek.insidesales.repository.QuotationRepository;
 import com.agglotek.insidesales.repository.UserRepository;
 import com.agglotek.insidesales.service.api.IUserService;

@@ -2,8 +2,8 @@ package com.agglotek.insidesales.controller;
 
 import com.agglotek.insidesales.ApiResponse;
 import com.agglotek.insidesales.constants.ApiConstants;
+import com.agglotek.insidesales.constants.AppConstants;
 import com.agglotek.insidesales.dao.entity.Quotation;
-import com.agglotek.insidesales.dao.entity.Role;
 import com.agglotek.insidesales.dao.entity.User;
 import com.agglotek.insidesales.dto.QuotationInfoDTO;
 import com.agglotek.insidesales.repository.QuotationRepository;
@@ -107,7 +107,11 @@ public class QuotationController {
 
         if (quotationStatus == null) {
             quotations = quotationService.getAllQuotationsByUserId(userId);
-        } else {
+        }
+        else if ("all".equalsIgnoreCase(quotationStatus.getFirst())){
+            quotations = quotationService.getAllQuotations();
+        }
+        else {
             quotations = quotationService.getQuotationsByUserIdAndStatus(userId, quotationStatus);
         }
         return ResponseEntity.ok(quotations);
@@ -162,6 +166,5 @@ public class QuotationController {
         quotationService.updateAssignedEstimator(quotationId, estimatorId);
         return ResponseEntity.ok(new ApiResponse(true, "Estimator reassigned successfully"));
     }
-
 
 }

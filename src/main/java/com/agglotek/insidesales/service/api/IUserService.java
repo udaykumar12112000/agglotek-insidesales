@@ -2,7 +2,7 @@ package com.agglotek.insidesales.service.api;
 
 import com.agglotek.insidesales.ApiResponse;
 import com.agglotek.insidesales.dao.entity.User;
-import com.agglotek.insidesales.service.impl.NotificationDTO;
+import com.agglotek.insidesales.dto.NotificationDTO;
 
 import java.util.List;
 import java.util.Map;
