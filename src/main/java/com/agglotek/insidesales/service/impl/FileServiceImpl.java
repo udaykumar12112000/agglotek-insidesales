@@ -75,7 +75,7 @@ public class FileServiceImpl implements IFileService {
         }
     }
 
-    public ResponseEntity<Resource> downloadPDF(Integer clientId, String referenceNumber, String projectName, String type) throws IOException {
+    public ResponseEntity<?> downloadPDF(Integer clientId, String referenceNumber, String projectName, String type) throws IOException {
         Optional<Client> client = clientRepository.findById(clientId);
         if (client.isEmpty()) {
             throw new IllegalArgumentException("Invalid client ID");
@@ -96,7 +96,8 @@ public class FileServiceImpl implements IFileService {
             baseDir = AppConstants.QUOTATION_BASE_DIRECTORY;
             suffix = "_proposal.pdf";
         } else {
-            throw new IllegalArgumentException("Invalid type! Use 'po' or 'scope_of_work' or 'proposal'");
+//            throw new IllegalArgumentException("Invalid type! Use 'po' or 'scope_of_work' or 'proposal'");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(false, "Invalid type! Use 'po' or 'scope_of_work' or 'proposal'"));
         }
 
         String folderName = referenceNumber + "_" + safeProjectName;
@@ -104,7 +105,8 @@ public class FileServiceImpl implements IFileService {
 
         Path filePath = Paths.get(baseDir, clientName, folderName, filename);
         if (!Files.exists(filePath)) {
-            throw new FileNotFoundException("PDF not found");
+//            throw new FileNotFoundException("PDF not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(false, "File not found"));
         }
 
         Resource resource = new UrlResource(filePath.toUri());

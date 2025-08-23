@@ -23,7 +23,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             "AND date_of_quotation >= date_trunc('month', CURRENT_DATE) " +
             "AND date_of_quotation < (date_trunc('month', CURRENT_DATE) + INTERVAL '1 month')",
             nativeQuery = true)
-    int getTotalNumberOfBidsRecievedThisMonth(@Param("userId")Integer userId);
+    Integer getTotalNumberOfBidsRecievedThisMonth(@Param("userId")Integer userId);
 
 
     @Query(value = "SELECT COUNT(*) " +
@@ -36,7 +36,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             "  OR (:status IS NOT NULL AND :status <> '' AND quotation_status = :status) " +
             ")",
             nativeQuery = true)
-    int getTotalNumberOfBidsYetToUpdateThisMonth(@Param("userId")Integer userId, @Param("status")String status);
+    Integer getTotalNumberOfBidsYetToUpdateThisMonth(@Param("userId")Integer userId, @Param("status")String status);
 
     @Query(value = "SELECT COUNT(*) " +
             "FROM quotations " +
@@ -44,7 +44,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             "AND date_of_quotation >= date_trunc('year', CURRENT_DATE) " +
             "AND date_of_quotation < (date_trunc('year', CURRENT_DATE) + INTERVAL '1 year')",
             nativeQuery = true)
-    int getTotalNumberOfBidsRecievedThisYear(@Param("userId")Integer userId);
+    Integer getTotalNumberOfBidsRecievedThisYear(@Param("userId")Integer userId);
 
     @Query(value = "SELECT COUNT(DISTINCT c.client_id) " +
             "FROM clients c " +
@@ -53,7 +53,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             "AND date_trunc('year', c.insert_time) = date_trunc('year', CURRENT_DATE) " +
             "AND q.quotation_status = 'Alloted'",
             nativeQuery = true)
-    int getTotalNewClientsAchievedThisYear(@Param("userId")Integer userId);
+    Integer getTotalNewClientsAchievedThisYear(@Param("userId")Integer userId);
 
     @Query(value = "SELECT COUNT(*) " +
             "FROM quotations " +
@@ -65,7 +65,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             "  OR (:allotted IS NOT NULL AND :allotted <> '' AND quotation_status = :allotted) " +
             ")",
             nativeQuery = true)
-    int getTotalNumberOfProjectsAllotedThisYear(@Param("userId")Integer userId, @Param("allotted")String allotted);
+    Integer getTotalNumberOfProjectsAllotedThisYear(@Param("userId")Integer userId, @Param("allotted")String allotted);
 
     @Query(value = "SELECT COUNT(*) " +
             "FROM quotations " +
@@ -77,6 +77,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             "  OR (:allotted IS NOT NULL AND :allotted <> '' AND quotation_status = :allotted) " +
             ")",
             nativeQuery = true)
-    int getTotalNumberOfProjectsAllotedThisMonth(Integer userId, String allotted);
+    Integer getTotalNumberOfProjectsAllotedThisMonth(Integer userId, String allotted);
     List<User> findBySupUserId(Integer supUserId);
 }

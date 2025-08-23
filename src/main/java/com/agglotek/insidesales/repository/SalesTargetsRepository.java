@@ -29,7 +29,7 @@ public interface SalesTargetsRepository extends JpaRepository<SalesTarget, Integ
             "WHERE user_id = :userId " +
             "AND year = CAST(EXTRACT(YEAR FROM CURRENT_DATE) AS numeric)",
             nativeQuery = true)
-    int getMonthlyTarget(@Param("userId") Integer userId);
+    Integer getMonthlyTarget(@Param("userId") Integer userId);
 
     @Query(value =
             "SELECT " +
@@ -40,5 +40,5 @@ public interface SalesTargetsRepository extends JpaRepository<SalesTarget, Integ
             "WHERE user_id = :userId " +
             "AND year = CAST(EXTRACT(YEAR FROM CURRENT_DATE) AS numeric)",
             nativeQuery = true)
-    int getYearlyTarget(@Param("userId") Integer userId);
+    Integer getYearlyTarget(@Param("userId") Integer userId);
 }

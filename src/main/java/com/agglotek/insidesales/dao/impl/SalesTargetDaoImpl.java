@@ -13,12 +13,12 @@ public class SalesTargetDaoImpl implements ISalesTargetDao {
     private SalesTargetsRepository salesTargetsRepository;
 
     @Override
-    public int getMonthlyTarget(Integer userId) {
+    public Integer getMonthlyTarget(Integer userId) {
         return salesTargetsRepository.getMonthlyTarget(userId);
     }
 
     @Override
-    public int getYearlyTarget(Integer userId) {
+    public Integer getYearlyTarget(Integer userId) {
         return salesTargetsRepository.getYearlyTarget(userId);
     }
 }

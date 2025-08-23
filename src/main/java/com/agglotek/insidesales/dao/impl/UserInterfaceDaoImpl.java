@@ -21,42 +21,42 @@ public class UserInterfaceDaoImpl implements IUserInterfaceDao {
     private QuotationRepository quotationRepository;
 
     @Override
-    public int getTotalNumberOfBidsRecievedThisMonth(Integer userId) {
+    public Integer getTotalNumberOfBidsRecievedThisMonth(Integer userId) {
         return userRepository.getTotalNumberOfBidsRecievedThisMonth(userId);
     }
 
     @Override
-    public int getTotalNumberOfBidsYetToUpdateThisMonth(Integer userId, String status) {
+    public Integer getTotalNumberOfBidsYetToUpdateThisMonth(Integer userId, String status) {
         return userRepository.getTotalNumberOfBidsYetToUpdateThisMonth(userId, status);
     }
 
     @Override
-    public int getTotalNumberOfProjectsAllotedThisMonth(Integer userId, String allotted) {
+    public Integer getTotalNumberOfProjectsAllotedThisMonth(Integer userId, String allotted) {
         return userRepository.getTotalNumberOfProjectsAllotedThisMonth(userId, allotted);
     }
 
     @Override
-    public int getTotalNumberOfBidsRecievedThisYear(Integer userId) {
+    public Integer getTotalNumberOfBidsRecievedThisYear(Integer userId) {
         return userRepository.getTotalNumberOfBidsRecievedThisYear(userId);
     }
 
     @Override
-    public int getTotalNewClientsAchievedThisYear(Integer userId) {
+    public Integer getTotalNewClientsAchievedThisYear(Integer userId) {
         return userRepository.getTotalNewClientsAchievedThisYear(userId);
     }
 
     @Override
-    public int getTotalNumberOfProjectsAllotedThisYear(Integer userId, String allotted) {
+    public Integer getTotalNumberOfProjectsAllotedThisYear(Integer userId, String allotted) {
         return userRepository.getTotalNumberOfProjectsAllotedThisYear(userId, allotted);
     }
 
     @Override
-    public int getmonthlyTargetAchieved(Integer userId, String status) {
+    public Integer getmonthlyTargetAchieved(Integer userId, String status) {
         return getTotalNumberOfProjectsAllotedThisMonth(userId, status);
     }
 
     @Override
-    public int yearlyTargetAchieved(Integer userId, String status) {
+    public Integer yearlyTargetAchieved(Integer userId, String status) {
         return getTotalNumberOfProjectsAllotedThisYear(userId, status);
     }
 

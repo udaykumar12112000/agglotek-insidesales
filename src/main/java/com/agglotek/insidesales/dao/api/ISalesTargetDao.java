@@ -2,7 +2,7 @@ package com.agglotek.insidesales.dao.api;
 
 public interface ISalesTargetDao {
 
-    int getMonthlyTarget(Integer userId);
+    Integer getMonthlyTarget(Integer userId);
 
-    int getYearlyTarget(Integer userId);
+    Integer getYearlyTarget(Integer userId);
 }

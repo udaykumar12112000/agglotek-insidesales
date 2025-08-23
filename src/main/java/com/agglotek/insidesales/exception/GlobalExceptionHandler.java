@@ -45,6 +45,10 @@ public class GlobalExceptionHandler {
                 message = "Required fields are missing.";
             } else if(causeMsg.contains("unique_role_name")){
                 message = "Role Already exists.";
+            } else if(causeMsg.contains("unique_project_number")){
+                message = "Project Already exists.";
+            } else if(causeMsg.contains("unique_quotation_number")){
+                message = "Quotation Already exists.";
             }
         }
 

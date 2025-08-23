@@ -1,6 +1,7 @@
 package com.agglotek.insidesales.service.impl;
 
 import com.agglotek.insidesales.ApiResponse;
+import com.agglotek.insidesales.constants.AppConstants;
 import com.agglotek.insidesales.dao.api.ISalesTargetDao;
 import com.agglotek.insidesales.dao.api.IUserInterfaceDao;
 import com.agglotek.insidesales.dao.entity.Quotation;
@@ -58,37 +59,37 @@ public class UserServiceImpl implements IUserService {
     @Override
     public Map<String, Integer> getUserSummaryDetaialsForSales(Integer userId) {
 
-         int numberOfBidsRecievedThisMonth = userInterfaceDao.getTotalNumberOfBidsRecievedThisMonth(userId);
-         int numberOfBidsYetToUpdateThisMonth = userInterfaceDao.getTotalNumberOfBidsYetToUpdateThisMonth(userId, "");
-         int numberOfProjectsAllotedThisMonth = userInterfaceDao.getTotalNumberOfProjectsAllotedThisMonth(userId, "Allotted");
+        Integer numberOfBidsRecievedThisMonth = userInterfaceDao.getTotalNumberOfBidsRecievedThisMonth(userId);
+        Integer numberOfBidsYetToUpdateThisMonth = userInterfaceDao.getTotalNumberOfBidsYetToUpdateThisMonth(userId, "");
+        Integer numberOfProjectsAllotedThisMonth = userInterfaceDao.getTotalNumberOfProjectsAllotedThisMonth(userId, AppConstants.ALLOTTED);
 
-         int numberOfBidsRecievedThisYear = userInterfaceDao.getTotalNumberOfBidsRecievedThisYear(userId);
-         int newClientsAchievedThisYear = userInterfaceDao.getTotalNewClientsAchievedThisYear(userId);
-         int numberOfProjectsAllotedThisYear = userInterfaceDao.getTotalNumberOfProjectsAllotedThisYear(userId, "Allotted");
+        Integer numberOfBidsRecievedThisYear = userInterfaceDao.getTotalNumberOfBidsRecievedThisYear(userId);
+        Integer newClientsAchievedThisYear = userInterfaceDao.getTotalNewClientsAchievedThisYear(userId);
+        Integer numberOfProjectsAllotedThisYear = userInterfaceDao.getTotalNumberOfProjectsAllotedThisYear(userId, AppConstants.ALLOTTED);
 
-         int monthlyTarget = salesTargetDao.getMonthlyTarget(userId);
-         int monthlyTargetAchieved = userInterfaceDao.getmonthlyTargetAchieved(userId, "Allotted");
-         int monthyTargetYetToAchieve = monthlyTarget - monthlyTargetAchieved;
+        Integer monthlyTarget = salesTargetDao.getMonthlyTarget(userId);
+        Integer monthlyTargetAchieved = userInterfaceDao.getmonthlyTargetAchieved(userId, AppConstants.ALLOTTED);
+        Integer monthyTargetYetToAchieve = (monthlyTarget!=null && monthlyTargetAchieved!=null)? monthlyTarget - monthlyTargetAchieved: 0;
 
-         int yearlyTarget = salesTargetDao.getYearlyTarget(userId);
-         int yearlyTargetAchieved = userInterfaceDao.yearlyTargetAchieved(userId, "Allotted");
-         int yearlyYetToAchieveTargets = yearlyTarget - yearlyTargetAchieved;
+        Integer yearlyTarget = salesTargetDao.getYearlyTarget(userId);
+        Integer yearlyTargetAchieved = userInterfaceDao.yearlyTargetAchieved(userId, AppConstants.ALLOTTED);
+        Integer yearlyYetToAchieveTargets = (yearlyTarget!=null && yearlyTargetAchieved!=null)? yearlyTarget - yearlyTargetAchieved : 0;
 
         Map<String, Integer> summary = new HashMap<>();
-        summary.put("numberOfBidsRecievedThisMonth", numberOfBidsRecievedThisMonth);
-        summary.put("numberOfBidsYetToUpdateThisMonth", numberOfBidsYetToUpdateThisMonth);
-        summary.put("numberOfProjectsAllotedThisMonth", numberOfProjectsAllotedThisMonth);
+        summary.put("numberOfBidsRecievedThisMonth", numberOfBidsRecievedThisMonth!=null? numberOfBidsRecievedThisMonth : 0);
+        summary.put("numberOfBidsYetToUpdateThisMonth", numberOfBidsYetToUpdateThisMonth!=null? numberOfBidsYetToUpdateThisMonth : 0);
+        summary.put("numberOfProjectsAllotedThisMonth", numberOfProjectsAllotedThisMonth!=null? numberOfProjectsAllotedThisMonth : 0);
 
-        summary.put("numberOfBidsRecievedThisYear", numberOfBidsRecievedThisYear);
-        summary.put("newClientsAchievedThisYear", newClientsAchievedThisYear);
-        summary.put("numberOfProjectsAllotedThisYear", numberOfProjectsAllotedThisYear);
+        summary.put("numberOfBidsRecievedThisYear", numberOfBidsRecievedThisYear!=null? numberOfBidsRecievedThisYear : 0);
+        summary.put("newClientsAchievedThisYear", newClientsAchievedThisYear!=null? newClientsAchievedThisYear : 0);
+        summary.put("numberOfProjectsAllotedThisYear", numberOfProjectsAllotedThisYear!=null? numberOfProjectsAllotedThisYear : 0);
 
-        summary.put("monthlyTarget", monthlyTarget);
-        summary.put("monthlyTargetAchieved", monthlyTargetAchieved);
+        summary.put("monthlyTarget", monthlyTarget!=null? monthlyTarget : 0);
+        summary.put("monthlyTargetAchieved", monthlyTargetAchieved!=null? monthlyTargetAchieved : 0);
         summary.put("monthyTargetYetToAchieve", monthyTargetYetToAchieve);
 
-        summary.put("yearlyTarget", yearlyTarget);
-        summary.put("yearlyTargetAchieved", yearlyTargetAchieved);
+        summary.put("yearlyTarget", yearlyTarget!=null? yearlyTarget : 0);
+        summary.put("yearlyTargetAchieved", yearlyTargetAchieved!=null? yearlyTargetAchieved : 0);
         summary.put("yearlyYetToAchieveTargets", yearlyYetToAchieveTargets);
 
         return summary;

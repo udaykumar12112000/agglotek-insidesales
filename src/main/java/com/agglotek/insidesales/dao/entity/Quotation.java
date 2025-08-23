@@ -89,6 +89,9 @@ public class Quotation {
     @Column(name = "additional_properties", columnDefinition = "TEXT")
     private String additionalProperties;
 
+    @Column(name = "previous_status", length = 50)
+    private String previousStatus;
+
     // Getters and Setters
 
 
@@ -292,6 +295,14 @@ public class Quotation {
         this.additionalProperties = additionalProperties;
     }
 
+    public String getPreviousStatus() {
+        return previousStatus;
+    }
+
+    public void setPreviousStatus(String previousStatus) {
+        this.previousStatus = previousStatus;
+    }
+
     @Override
     public String toString() {
         return "Quotation{" +
@@ -320,6 +331,7 @@ public class Quotation {
                 ", contactPersonName='" + contactPersonName + '\'' +
                 ", contactPersonNumber='" + contactPersonNumber + '\'' +
                 ", additionalProperties='" + additionalProperties + '\'' +
+                ", previousStatus='" + previousStatus + '\'' +
                 '}';
     }
 }

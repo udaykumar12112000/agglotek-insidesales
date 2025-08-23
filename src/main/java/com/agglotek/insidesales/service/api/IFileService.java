@@ -10,5 +10,5 @@ import java.io.IOException;
 public interface IFileService {
     public ResponseEntity<ApiResponse> uploadPDF(MultipartFile file, Integer clientId, String referenceNumber, String projectName, String type) throws IOException;
 
-    public ResponseEntity<Resource> downloadPDF(Integer clientId, String referenceNumber, String projectName, String type) throws IOException;
+    public ResponseEntity<?> downloadPDF(Integer clientId, String referenceNumber, String projectName, String type) throws IOException;
 }

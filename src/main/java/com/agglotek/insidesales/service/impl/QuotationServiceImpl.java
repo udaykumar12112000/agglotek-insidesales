@@ -1,5 +1,7 @@
 package com.agglotek.insidesales.service.impl;
 
+import com.agglotek.insidesales.constants.ApiConstants;
+import com.agglotek.insidesales.constants.AppConstants;
 import com.agglotek.insidesales.dao.entity.Quotation;
 import com.agglotek.insidesales.dto.QuotationInfoDTO;
 import com.agglotek.insidesales.repository.ClientRepository;
@@ -55,7 +57,7 @@ public class QuotationServiceImpl implements IQuotationService {
     public List<QuotationInfoDTO> getQuotationsByUserIdAndStatus(Integer userId, List<String> quotationStatuses) {
         List<Quotation> quotations = new ArrayList<>();
 
-//        if (quotationStatus.equalsIgnoreCase("null")) {
+//        if (quotationStatus.equalsIgnoreCase(AppConstants.NULL)) {
 //            quotations = quotationRepository.findByUserIdAndQuotationStatusIsNull(userId);
 //        } else {
 //            quotations = quotationRepository.findByUserIdAndQuotationStatus(userId, quotationStatus);
@@ -63,14 +65,14 @@ public class QuotationServiceImpl implements IQuotationService {
 
         if (quotationStatuses != null && !quotationStatuses.isEmpty()) {
             List<String> filteredStatuses = quotationStatuses.stream()
-                    .filter(status -> !"null".equalsIgnoreCase(status))
+                    .filter(status -> !AppConstants.NULL.equalsIgnoreCase(status))
                     .collect(Collectors.toList());
 
             if (!filteredStatuses.isEmpty()) {
                 quotations.addAll(quotationRepository.findByUserIdAndQuotationStatusIn(userId, filteredStatuses));
             }
 
-            if (quotationStatuses.stream().anyMatch(s -> "null".equalsIgnoreCase(s))) {
+            if (quotationStatuses.stream().anyMatch(s -> AppConstants.NULL.equalsIgnoreCase(s))) {
                 quotations.addAll(quotationRepository.findByUserIdAndQuotationStatusIsNull(userId));
             }
         }
@@ -106,10 +108,12 @@ public class QuotationServiceImpl implements IQuotationService {
 
         if(dto.getQuotationValue()!=null)
             quotation.setQuotationValue(dto.getQuotationValue());
+        if(dto.getPreviousStatus()!=null)
+            quotation.setPreviousStatus(dto.getPreviousStatus());
         if(dto.getQuotationStatus()!=null) {
             quotation.setQuotationStatus(dto.getQuotationStatus());
 
-            if ("allotted".equalsIgnoreCase(dto.getQuotationStatus())) {
+            if (AppConstants.ALLOTTED.equalsIgnoreCase(dto.getQuotationStatus())) {
                 projectService.createProjectFromQuotation(quotation);
             }
         }
@@ -135,10 +139,10 @@ public class QuotationServiceImpl implements IQuotationService {
     @Override
     public List<QuotationInfoDTO> getQuotationsForUser(Integer userId, String roleName) {
         List<Quotation> quotationList = new ArrayList<>();
-        if ("ESTIMATOR_MANAGER".equalsIgnoreCase(roleName)) {
+        if (AppConstants.ESTIMATOR_MANAGER.equalsIgnoreCase(roleName)) {
             // Manager sees all quotations
             quotationList = quotationRepository.findQuotationsByEstimatorId(userId);
-        } else if ("ESTIMATOR".equalsIgnoreCase(roleName)) {
+        } else if (AppConstants.ESTIMATOR.equalsIgnoreCase(roleName)) {
             // Estimator sees only assigned to them
             quotationList = quotationRepository.findByAssignedEstimatorId(userId);
         }

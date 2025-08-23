@@ -6,21 +6,21 @@ import java.util.List;
 import java.util.Map;
 
 public interface IUserInterfaceDao {
-    int getTotalNumberOfBidsRecievedThisMonth(Integer userId);
+    Integer getTotalNumberOfBidsRecievedThisMonth(Integer userId);
 
-    int getTotalNumberOfBidsYetToUpdateThisMonth(Integer userId, String status);
+    Integer getTotalNumberOfBidsYetToUpdateThisMonth(Integer userId, String status);
 
-    int getTotalNumberOfProjectsAllotedThisMonth(Integer userId, String allotted);
+    Integer getTotalNumberOfProjectsAllotedThisMonth(Integer userId, String allotted);
 
-    int getTotalNumberOfBidsRecievedThisYear(Integer userId);
+    Integer getTotalNumberOfBidsRecievedThisYear(Integer userId);
 
-    int getTotalNewClientsAchievedThisYear(Integer userId);
+    Integer getTotalNewClientsAchievedThisYear(Integer userId);
 
-    int getTotalNumberOfProjectsAllotedThisYear(Integer userId, String allotted);
+    Integer getTotalNumberOfProjectsAllotedThisYear(Integer userId, String allotted);
 
-    int getmonthlyTargetAchieved(Integer userId, String status);
+    Integer getmonthlyTargetAchieved(Integer userId, String status);
 
-    int yearlyTargetAchieved(Integer userId, String status);
+    Integer yearlyTargetAchieved(Integer userId, String status);
 
     List<Quotation> getAllNotificationsToTheUser(Integer userId);
 }

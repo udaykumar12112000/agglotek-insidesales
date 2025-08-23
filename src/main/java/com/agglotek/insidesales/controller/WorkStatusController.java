@@ -22,9 +22,9 @@ public class WorkStatusController {
     private IWorkStatusService service;
 
     @PostMapping(ApiConstants.ADD_WORK_STATUS)
-    public ResponseEntity<?> addWorkStatus(@RequestBody WorkStatus request) {
+    public ResponseEntity<?> addWorkStatus(@RequestHeader("User-Id") Integer userId, @RequestBody WorkStatus request) {
         try {
-            WorkStatus saved = service.addEntry(request);
+            WorkStatus saved = service.addEntry(request, userId);
             return ResponseEntity.ok().body(saved);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
