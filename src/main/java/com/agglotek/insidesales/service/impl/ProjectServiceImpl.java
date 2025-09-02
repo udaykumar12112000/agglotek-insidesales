@@ -75,6 +75,12 @@ public class ProjectServiceImpl implements IProjectService {
             if (request.getClientProjectNumber() != null)
                 project.setClientProjectNumber(request.getClientProjectNumber());
 
+                if (request.getPurchaseOrder() != null)
+                project.setPurchaseOrder(request.getPurchaseOrder());
+
+            if (request.getConnPO() != null)
+                project.setConnPO(request.getConnPO());
+
             projectRepository.save(project);
             return true;
         }

@@ -13,4 +13,5 @@ public interface IRoleService {
     boolean deleteRoleById(Integer roleId);
 
     String getRoleNameById(Integer roleId);
+    Integer getRoleIdByRoleName(String roleName);
 }

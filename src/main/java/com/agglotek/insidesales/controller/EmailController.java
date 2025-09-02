@@ -7,6 +7,7 @@ import com.agglotek.insidesales.dao.entity.User;
 import com.agglotek.insidesales.dto.QuotationInfoDTO;
 import com.agglotek.insidesales.emailservice.EmailService;
 import com.agglotek.insidesales.emailservice.MailSender;
+import com.agglotek.insidesales.service.api.IRoleService;
 import com.agglotek.insidesales.service.api.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,9 +15,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import jakarta.annotation.PostConstruct;
 
 import java.io.File;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(
@@ -30,9 +33,12 @@ public class EmailController {
     private IUserService userService;
 
     @Autowired
+    private IRoleService roleService;
+
+    @Autowired
     private MailSender mailSender;
 
-    @Value("${mailService.email.Admins}")
+//    @Value("${mailService.email.Admins}")
     public List<String> admins;
 
     public static final String TEMPLATE_BASE_URL = "https://agglotekinc.com/test";
@@ -133,5 +139,14 @@ public class EmailController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse(false, "Failed to send Email: " + e.getMessage()));
         }
+    }
+
+    @PostConstruct
+    public void init() {
+        List<User> adminList = userService.getUsersByRoleId(roleService.getRoleIdByRoleName(AppConstants.ADMIN));
+        admins = adminList.stream()
+                .map(User::getEmail)
+                .collect(Collectors.toList());
+        System.out.println("Loaded admin emails in controller: " + admins);
     }
 }

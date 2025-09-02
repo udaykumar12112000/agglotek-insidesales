@@ -3,6 +3,7 @@ package com.agglotek.insidesales.controller;
 import com.agglotek.insidesales.ApiResponse;
 import com.agglotek.insidesales.constants.ApiConstants;
 import com.agglotek.insidesales.dao.entity.Client;
+import com.agglotek.insidesales.dao.entity.ClientConvo;
 import com.agglotek.insidesales.dto.ClientConvoDTO;
 import com.agglotek.insidesales.repository.ClientRepository;
 import com.agglotek.insidesales.service.api.IClientConvoService;
@@ -42,10 +43,10 @@ public class ClientController {
     }
 
     @PutMapping(ApiConstants.EDIT_CLIENT)
-    public ResponseEntity<ApiResponse> editClientData(@PathVariable Integer clientId,@RequestBody Client clientData){
+    public ResponseEntity<ApiResponse> editClientData(@RequestBody Client clientData){
 
         try {
-            ApiResponse response = clientService.editClient(clientData, clientId);
+            ApiResponse response = clientService.editClient(clientData);
             return ResponseEntity.status(response.isStatus() ? HttpStatus.OK : HttpStatus.BAD_REQUEST)
                     .body(response);
         } catch (Exception e) {
@@ -75,6 +76,15 @@ public class ClientController {
     public ResponseEntity<List<ClientConvoDTO>> getConvos(@RequestHeader("User-Id") Integer userId) {
         List<ClientConvoDTO> result = clientConvoService.getClientConvoDataByUserId(userId);
         return ResponseEntity.ok(result);
+    }
+
+    @PutMapping(ApiConstants.EDIT_CLIENT_CONVO)
+    public ResponseEntity<ApiResponse> editClientConvo(
+            @RequestBody ClientConvoDTO request, @RequestHeader("User-Id") Integer userId) {
+
+        request.setUserId(userId);
+        ApiResponse response = clientConvoService.editClientConvo(request);
+        return ResponseEntity.ok(response);
     }
 
 }

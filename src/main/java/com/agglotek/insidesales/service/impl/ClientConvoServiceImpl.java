@@ -1,5 +1,6 @@
 package com.agglotek.insidesales.service.impl;
 
+import com.agglotek.insidesales.ApiResponse;
 import com.agglotek.insidesales.dao.entity.Client;
 import com.agglotek.insidesales.dao.entity.ClientConvo;
 import com.agglotek.insidesales.dto.ClientConvoDTO;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class ClientConvoServiceImpl implements IClientConvoService {
@@ -102,6 +104,7 @@ public class ClientConvoServiceImpl implements IClientConvoService {
             try {
                 dto.setCallConvo(mapper.readValue(convo.getCallConvo(), Map.class));
                 dto.setStatusUpdate(mapper.readValue(convo.getStatusUpdate(), Map.class));
+                dto.setClientConvoId(convo.getClientConvoId());
             } catch (Exception e) {
                 throw new RuntimeException("JSON parsing error", e);
             }
@@ -113,6 +116,29 @@ public class ClientConvoServiceImpl implements IClientConvoService {
         }
 
         return dto;
+    }
+
+    public ApiResponse editClientConvo(ClientConvoDTO request) {
+        Optional<ClientConvo> convoOpt = clientConvoRepository.findById(request.getClientConvoId());
+
+        if (!convoOpt.isPresent()) {
+            return new ApiResponse(false, "Client conversation not found!");
+        }
+
+        ClientConvo convo = convoOpt.get();
+
+        if (request.getCallConvo() != null)
+            convo.setCallConvo(request.getCallConvo().toString());
+
+        if (request.getStatusUpdate() != null)
+            convo.setStatusUpdate(request.getStatusUpdate().toString());
+
+        if (request.getRemarks() != null)
+            convo.setRemarks(request.getRemarks());
+
+        clientConvoRepository.save(convo);
+
+        return new ApiResponse(true, "Client conversation updated successfully!", convo);
     }
 
 

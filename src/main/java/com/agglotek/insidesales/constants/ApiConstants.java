@@ -14,8 +14,9 @@ public class ApiConstants {
 
     public static final String GET_CLIENT_CONVO = "/getClientConvoData";
 
-    public static final String EDIT_CLIENT = "/editClient/{clientId}";
+    public static final String EDIT_CLIENT = "/editClient";
 
+    public static final String EDIT_CLIENT_CONVO = "editClientConvo";
 
     //users
     public static final String USER_APIS = "/api/users";
@@ -68,9 +69,14 @@ public class ApiConstants {
     public static final String UPDATE_PROJECT = "/updateProjectDetails";
 
     //Files
-    public static final String PROJECT_PO_UPLOAD = "/upload";
+    public static final String FILE_UPLOAD = "/upload";
 
-    public static final String PROJECT_PO_DOWNLOAD = "/download";
+    public static final String FILE_DOWNLOAD = "/download";
+
+    public static final String UPLOAD_FILES_IN_ZIP = "/uploadFilesZip";
+
+    public static final String LIST_FILES = "/listFiles";
+
 
     public static final String DOWNLOAD_FROM_PATH = "/downloadFromPath";
 
@@ -80,6 +86,8 @@ public class ApiConstants {
     public static final String ADD_WORK_STATUS = "/addWorkStatus";
 
     public static final String GET_WORK_STATUS = "/getWorkStatusForUser";
+
+    public static final String EDIT_WORK_STATUS = "/editWorkStatus";
 
     //email send
     public static final String EMAIL_SENDING = "/email";

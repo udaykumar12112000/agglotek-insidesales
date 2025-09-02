@@ -28,6 +28,14 @@ public class ClientConvo {
     // Getters and Setters
 
 
+    public Integer getClientConvoId() {
+        return clientConvoId;
+    }
+
+    public void setClientConvoId(Integer clientConvoId) {
+        this.clientConvoId = clientConvoId;
+    }
+
     public Integer getClientId() {
         return clientId;
     }

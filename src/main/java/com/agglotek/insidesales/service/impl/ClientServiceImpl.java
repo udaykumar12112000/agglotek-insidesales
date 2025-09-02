@@ -27,9 +27,9 @@ public class ClientServiceImpl implements IClientService {
         return clientRepository.findByUserId(userId);
     }
 
-    public ApiResponse editClient(Client clientData, Integer clientId) {
+    public ApiResponse editClient(Client clientData) {
 
-        Optional<Client> optionalClient = clientRepository.findById(clientId);
+        Optional<Client> optionalClient = clientRepository.findById(clientData.getClientId());
         if (!optionalClient.isPresent()) {
             return new ApiResponse(false, "Client not found");
         }

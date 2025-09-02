@@ -1,5 +1,6 @@
 package com.agglotek.insidesales.controller;
 
+import com.agglotek.insidesales.ApiResponse;
 import com.agglotek.insidesales.constants.ApiConstants;
 import com.agglotek.insidesales.dao.entity.WorkStatus;
 import com.agglotek.insidesales.service.api.IWorkStatusService;
@@ -36,5 +37,13 @@ public class WorkStatusController {
     public ResponseEntity<List<WorkStatus>> getEntriesByUserId(@RequestHeader("User-Id") Integer userId) {
         List<WorkStatus> entries = service.getWorkStatusByUserId(userId);
         return ResponseEntity.ok(entries);
+    }
+
+    @PutMapping(ApiConstants.EDIT_WORK_STATUS)
+    public ResponseEntity<ApiResponse> editWorkStatus(@RequestHeader("User-Id") Integer userId, @RequestBody WorkStatus request) {
+
+        ApiResponse response = service.editWorkStatus(request, userId);
+        return ResponseEntity.ok(response);
+
     }
 }

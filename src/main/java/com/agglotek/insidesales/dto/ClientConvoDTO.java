@@ -1,6 +1,7 @@
 package com.agglotek.insidesales.dto;
 
 import com.agglotek.insidesales.dao.entity.Client;
+import com.agglotek.insidesales.dao.entity.ClientConvo;
 
 import java.util.Map;
 
@@ -10,6 +11,16 @@ public class ClientConvoDTO extends Client {
     private Map<String, String> statusUpdate;
 
     private String remarks;
+
+    private Integer clientConvoId;
+
+    public Integer getClientConvoId() {
+        return clientConvoId;
+    }
+
+    public void setClientConvoId(Integer clientConvoId) {
+        this.clientConvoId = clientConvoId;
+    }
 
     public Map<String, String> getCallConvo() {
         return callConvo;

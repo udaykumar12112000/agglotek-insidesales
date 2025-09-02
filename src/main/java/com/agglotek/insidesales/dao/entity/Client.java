@@ -38,7 +38,7 @@ public class Client {
     @Column(name = "time_zone", length = 50)
     private String timeZone;
 
-    @Column(name = "available_hrs", length = 100)
+    @Column(name = "available_hrs", columnDefinition = "text")
     private String availableHrs;
 
     @Column(name = "our_time", length = 100)

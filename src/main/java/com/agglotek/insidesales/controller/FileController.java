@@ -9,6 +9,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+
 @RestController
 @CrossOrigin(
         origins = {"http://localhost:4200"},
@@ -20,7 +28,7 @@ public class FileController {
     @Autowired
     private IFileService fileService;
 
-    @PostMapping(ApiConstants.PROJECT_PO_UPLOAD)
+    @PostMapping(ApiConstants.FILE_UPLOAD)
     public ResponseEntity<ApiResponse> upload(
             @RequestParam("file") MultipartFile file,
             @RequestParam("clientId") Integer clientId,
@@ -36,7 +44,7 @@ public class FileController {
         }
     }
 
-    @GetMapping(ApiConstants.PROJECT_PO_DOWNLOAD)
+    @GetMapping(ApiConstants.FILE_DOWNLOAD)
     public ResponseEntity<?> download(
             @RequestParam("clientId") Integer clientId,
             @RequestParam("referenceNumber") String referenceNumber,
@@ -49,5 +57,39 @@ public class FileController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(false, "Download failed!"));
         }
     }
+
+    @PostMapping(ApiConstants.UPLOAD_FILES_IN_ZIP)
+    public ResponseEntity<ApiResponse> uploadZip(@RequestParam("file") MultipartFile file,
+                                            @RequestParam("clientId") Integer clientId,
+                                            @RequestParam("referenceNumber") String referenceNumber,
+                                            @RequestParam("projectName") String projectName) {
+        try {
+            return fileService.uploadAndExtractZip(file, clientId, referenceNumber, projectName);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(false, "Upload failed!"));
+        }
+    }
+
+    @GetMapping(ApiConstants.LIST_FILES)
+    public ResponseEntity<?> listFiles(
+            @RequestParam String referenceNumber,
+            @RequestParam String projectName,
+            @RequestParam Integer clientId) {
+        try {
+            return fileService.listFiles(referenceNumber, projectName, clientId);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiResponse(false, e.getMessage()));
+        } catch (FileNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse(false, e.getMessage()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse(false, "Error listing files: " + e.getMessage()));
+        }
+    }
+
 }
 

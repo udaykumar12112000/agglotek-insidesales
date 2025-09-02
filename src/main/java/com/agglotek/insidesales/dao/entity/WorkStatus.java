@@ -27,6 +27,14 @@ public class WorkStatus {
 
     // Getters and Setters
 
+    public Integer getWorkStatusId() {
+        return workStatusId;
+    }
+
+    public void setWorkStatusId(Integer workStatusId) {
+        this.workStatusId = workStatusId;
+    }
+
     public Integer getUserId() {
         return userId;
     }

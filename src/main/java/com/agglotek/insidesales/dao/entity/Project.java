@@ -1,6 +1,8 @@
 package com.agglotek.insidesales.dao.entity;
 
 import jakarta.persistence.*;
+
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -48,6 +50,12 @@ public class Project {
 
     @Column(name = "client_job_number", length = 100)
     private String clientProjectNumber;
+
+    @Column(name = "purchase_order", columnDefinition = "TEXT")
+    private String purchaseOrder;
+
+    @Column(name = "conn_po", precision = 15, scale = 2)
+    private BigDecimal connPO;
 
     // Getters and Setters
 
@@ -155,6 +163,22 @@ public class Project {
         this.ifaSubmissionDate = ifaSubmissionDate;
     }
 
+    public String getPurchaseOrder() {
+        return purchaseOrder;
+    }
+
+    public void setPurchaseOrder(String purchaseOrder) {
+        this.purchaseOrder = purchaseOrder;
+    }
+
+    public BigDecimal getConnPO() {
+        return connPO;
+    }
+
+    public void setConnPO(BigDecimal connPO) {
+        this.connPO = connPO;
+    }
+
     @Override
     public String toString() {
         return "Project{" +
@@ -171,6 +195,8 @@ public class Project {
                 ", ifaSubmissionDate=" + ifaSubmissionDate +
                 ", projectNumber='" + projectNumber + '\'' +
                 ", clientProjectNumber='" + clientProjectNumber + '\'' +
+                ", purchaseOrder='" + purchaseOrder + '\'' +
+                ", connPO=" + connPO +
                 '}';
     }
 }
