@@ -208,7 +208,14 @@ public class FileServiceImpl implements IFileService {
         // delete the uploaded ZIP after extraction
         Files.deleteIfExists(tempZipPath);
 
-        return ResponseEntity.ok(new ApiResponse(true, "Files uploaded successfully"));
+        List<String> fileNames = new ArrayList<>();
+        try (Stream<Path> walk = Files.list(targetDir)) {
+            fileNames = walk.filter(Files::isRegularFile)
+                    .map(p -> p.getFileName().toString())
+                    .collect(Collectors.toList());
+        }
+
+        return ResponseEntity.ok(new ApiResponse(true, "Files uploaded successfully", fileNames));
     }
 
     public ResponseEntity<ApiResponse> listFiles(String referenceNumber, String projectName, Integer clientId) throws IOException {
