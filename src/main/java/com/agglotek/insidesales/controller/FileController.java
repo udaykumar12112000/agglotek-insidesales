@@ -72,12 +72,13 @@ public class FileController {
     }
 
     @GetMapping(ApiConstants.LIST_FILES)
-    public ResponseEntity<?> listFiles(
+    public ResponseEntity<ApiResponse> listFiles(
             @RequestParam String referenceNumber,
             @RequestParam String projectName,
             @RequestParam Integer clientId) {
         try {
-            return fileService.listFiles(referenceNumber, projectName, clientId);
+            List<String> fileNames = fileService.listFiles(referenceNumber, projectName, clientId);
+            return ResponseEntity.ok(new ApiResponse(true, "Files listed successfully", fileNames));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(false, e.getMessage()));

@@ -218,13 +218,12 @@ public class FileServiceImpl implements IFileService {
         return ResponseEntity.ok(new ApiResponse(true, "Files uploaded successfully", fileNames));
     }
 
-    public ResponseEntity<ApiResponse> listFiles(String referenceNumber, String projectName, Integer clientId) throws IOException {
+    public List<String> listFiles(String referenceNumber, String projectName, Integer clientId) throws IOException {
 
         List<String> fileNames = new ArrayList<>();
         Optional<Client> clientOpt = clientRepository.findById(clientId);
         if (clientOpt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new ApiResponse(false, "Invalid clientId"));
+            return new ArrayList<>();
         }
 
         String clientName = clientOpt.get().getName().replaceAll("\\s+", "_");        String safeProjectName = projectName.replaceAll("\\s+", "_");
@@ -241,18 +240,19 @@ public class FileServiceImpl implements IFileService {
 
         Path targetDir = Paths.get(baseDir, clientName, folderName);
 
-        if (!Files.exists(targetDir) || !Files.isDirectory(targetDir)) {
-            throw new FileNotFoundException("Folder not found: " + targetDir.toString());
-        }
+//        if (!Files.exists(targetDir) || !Files.isDirectory(targetDir)) {
+//            throw new FileNotFoundException("Folder not found: " + targetDir.toString());
+//        }
 
         // list only files, not directories
-        try (Stream<Path> walk = Files.list(targetDir)) {
-            fileNames = walk.filter(Files::isRegularFile)
-                    .map(p -> p.getFileName().toString())
-                    .collect(Collectors.toList());
+        if(Files.exists(targetDir)) {
+            try (Stream<Path> walk = Files.list(targetDir)) {
+                fileNames = walk.filter(Files::isRegularFile)
+                        .map(p -> p.getFileName().toString())
+                        .collect(Collectors.toList());
+            }
         }
-
-        return ResponseEntity.ok(new ApiResponse(true, "Files listed successfully", fileNames));
+        return fileNames;
     }
 }
 

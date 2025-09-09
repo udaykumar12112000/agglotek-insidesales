@@ -7,6 +7,7 @@ import com.agglotek.insidesales.dao.entity.Quotation;
 import com.agglotek.insidesales.dao.entity.User;
 import com.agglotek.insidesales.dto.QuotationInfoDTO;
 import com.agglotek.insidesales.repository.QuotationRepository;
+import com.agglotek.insidesales.service.api.IFileService;
 import com.agglotek.insidesales.service.api.IRoleService;
 import com.agglotek.insidesales.service.api.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.agglotek.insidesales.service.api.IQuotationService;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -38,6 +40,9 @@ public class QuotationController {
 
     @Autowired
     private IRoleService roleService;
+
+    @Autowired
+    private IFileService fileService;
 
     @PostMapping(ApiConstants.ADD_QUOTATION)
     public ResponseEntity<ApiResponse> addQuotation(@RequestBody Quotation request, @RequestHeader("User-Id") Integer userId) {
@@ -101,7 +106,7 @@ public class QuotationController {
     @GetMapping(ApiConstants.FILTER_QUOTATIONS)
     public ResponseEntity<List<QuotationInfoDTO>> getQuotationsByUserIdAndStatus(
             @RequestHeader("User-Id") Integer userId,
-            @RequestParam(value = "status", required = false) List<String> quotationStatus) {
+            @RequestParam(value = "status", required = false) List<String> quotationStatus) throws IOException {
 
         List<QuotationInfoDTO> quotations;
 
@@ -113,6 +118,10 @@ public class QuotationController {
         }
         else {
             quotations = quotationService.getQuotationsByUserIdAndStatus(userId, quotationStatus);
+        }
+
+        for(QuotationInfoDTO quotation : quotations) {
+             quotation.setFilesList(fileService.listFiles(quotation.getQuotationNumber(), quotation.getProjectName(), quotation.getClientId()));
         }
         return ResponseEntity.ok(quotations);
     }

@@ -1,12 +1,14 @@
 package com.agglotek.insidesales.dto;
 
 import com.agglotek.insidesales.dao.entity.Quotation;
+import java.util.List;
 
 public class QuotationInfoDTO extends Quotation {
 
     private String clientName;
     private String country;
     private String userName;
+    List<String> filesList;
 
     public QuotationInfoDTO() {
         super();
@@ -42,5 +44,13 @@ public class QuotationInfoDTO extends Quotation {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public List<String> getFilesList() {
+        return filesList;
+    }
+
+    public void setFilesList(List<String> filesList) {
+        this.filesList = filesList;
     }
 }

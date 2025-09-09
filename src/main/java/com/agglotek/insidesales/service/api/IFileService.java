@@ -16,5 +16,5 @@ public interface IFileService {
 
     public ResponseEntity<ApiResponse> uploadAndExtractZip(MultipartFile file, Integer clientId, String referenceNumber, String projectName) throws IOException;
 
-    ResponseEntity<ApiResponse> listFiles(String referenceNumber, String projectName, Integer clientId) throws IOException;
+    List<String> listFiles(String referenceNumber, String projectName, Integer clientId) throws IOException;
 }
