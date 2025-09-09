@@ -21,6 +21,8 @@ public interface ProjectRepository extends JpaRepository<Project, Integer> {
             "c.country AS country, " +
             "q.project_value AS projectValue, " +
             "p.client_job_number AS clientJobNumber, " +
+            "p.purchase_order AS purchaseOrder, " +
+            "p.conn_po AS connPO, " +
             "p.comments AS comments " +
             "FROM projects p " +
             "JOIN quotations q ON p.quotation_id = q.quotation_id " +

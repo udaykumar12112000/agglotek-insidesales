@@ -3,6 +3,7 @@ package com.agglotek.insidesales.dto;
 import com.agglotek.insidesales.dao.entity.Project;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public class ProjectInfoDTO extends Project {
     private String quotationNumber;
@@ -12,7 +13,10 @@ public class ProjectInfoDTO extends Project {
     private String country;
     private BigDecimal projectValue;
     private String clientProjectNumber;
+    private String purchaseOrder;
+    private BigDecimal connPO;
     private Integer clientId;
+    private List<String> filesList;
 
     // Getters and Setters
 
@@ -76,13 +80,40 @@ public class ProjectInfoDTO extends Project {
         return clientProjectNumber;
     }
 
+    public List<String> getFilesList() {
+        return filesList;
+    }
+
+    public void setFilesList(List<String> filesList) {
+        this.filesList = filesList;
+    }
+
+    @Override
+    public String getPurchaseOrder() {
+        return purchaseOrder;
+    }
+
+    @Override
+    public void setPurchaseOrder(String purchaseOrder) {
+        this.purchaseOrder = purchaseOrder;
+    }
+
+    @Override
+    public BigDecimal getConnPO() {
+        return connPO;
+    }
+
+    public void setConnPO(BigDecimal connPO) {
+        this.connPO = connPO;
+    }
+
     public void setClientProjectNumber(String clientProjectNumber) {
         this.clientProjectNumber = clientProjectNumber;
     }
 
     public ProjectInfoDTO(String quotationNumber, Integer projectId, String projectNumber, String date,
                           String clientName, Integer clientId, String projectName, String country,
-                          BigDecimal projectValue, String clientProjectNumber, String comments) {
+                          BigDecimal projectValue, String clientProjectNumber, String purchaseOrder, BigDecimal connPO, String comments) {
         this.quotationNumber = quotationNumber;
         super.setProjectNumber(projectNumber);
         super.setProjectId(projectId);
@@ -93,6 +124,8 @@ public class ProjectInfoDTO extends Project {
         this.country = country;
         this.projectValue = projectValue;
         this.clientProjectNumber = clientProjectNumber;
+        this.purchaseOrder = purchaseOrder;
+        this.connPO = connPO;
         super.setComments(comments);
     }
 
