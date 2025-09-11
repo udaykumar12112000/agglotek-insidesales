@@ -7,6 +7,7 @@ import com.agglotek.insidesales.dto.ClientConvoDTO;
 import com.agglotek.insidesales.repository.ClientConvoRepository;
 import com.agglotek.insidesales.repository.ClientRepository;
 import com.agglotek.insidesales.service.api.IClientConvoService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -118,7 +119,7 @@ public class ClientConvoServiceImpl implements IClientConvoService {
         return dto;
     }
 
-    public ApiResponse editClientConvo(ClientConvoDTO request) {
+    public ApiResponse editClientConvo(ClientConvoDTO request) throws JsonProcessingException {
         Optional<ClientConvo> convoOpt = clientConvoRepository.findById(request.getClientConvoId());
 
         if (!convoOpt.isPresent()) {
@@ -128,17 +129,29 @@ public class ClientConvoServiceImpl implements IClientConvoService {
         ClientConvo convo = convoOpt.get();
 
         if (request.getCallConvo() != null)
-            convo.setCallConvo(request.getCallConvo().toString());
+            convo.setCallConvo(mapper.writeValueAsString(request.getCallConvo()));
 
         if (request.getStatusUpdate() != null)
-            convo.setStatusUpdate(request.getStatusUpdate().toString());
+            convo.setStatusUpdate(mapper.writeValueAsString(request.getStatusUpdate()));
 
         if (request.getRemarks() != null)
             convo.setRemarks(request.getRemarks());
 
         clientConvoRepository.save(convo);
 
-        return new ApiResponse(true, "Client conversation updated successfully!", convo);
+        ClientConvoDTO clientDto = new ClientConvoDTO();
+        clientDto.setClientConvoId(convo.getClientConvoId());
+        clientDto.setClientId(convo.getClientId());
+        clientDto.setUserId(convo.getUserId());
+        clientDto.setRemarks(convo.getRemarks());
+        try {
+            clientDto.setCallConvo(mapper.readValue(convo.getCallConvo(), Map.class));
+            clientDto.setStatusUpdate(mapper.readValue(convo.getStatusUpdate(), Map.class));
+        } catch (Exception e) {
+            return new ApiResponse(false, "Some error occurred while updating Client conversation", null);
+        }
+
+        return new ApiResponse(true, "Client conversation updated successfully!", clientDto);
     }
 
 

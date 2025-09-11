@@ -8,6 +8,7 @@ import com.agglotek.insidesales.dto.ClientConvoDTO;
 import com.agglotek.insidesales.repository.ClientRepository;
 import com.agglotek.insidesales.service.api.IClientConvoService;
 import com.agglotek.insidesales.service.api.IClientService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -80,7 +81,7 @@ public class ClientController {
 
     @PutMapping(ApiConstants.EDIT_CLIENT_CONVO)
     public ResponseEntity<ApiResponse> editClientConvo(
-            @RequestBody ClientConvoDTO request, @RequestHeader("User-Id") Integer userId) {
+            @RequestBody ClientConvoDTO request, @RequestHeader("User-Id") Integer userId) throws JsonProcessingException {
 
         request.setUserId(userId);
         ApiResponse response = clientConvoService.editClientConvo(request);

@@ -28,20 +28,6 @@ public class ProjectServiceImpl implements IProjectService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         List<ProjectInfoDTO> projects = rawResults.stream().map(row -> {
-            System.out.println("JAXX : row : "+row[0]);
-            System.out.println("JAXX : row : "+(String) row[0]);
-                    System.out.println("JAXX : row : "+(Integer) row[1]);
-                    System.out.println("JAXX : row : "+(String)row[2]);
-                    System.out.println("JAXX : row : "+((Date) row[3]).toLocalDate().format(formatter));
-                    System.out.println("JAXX : row : "+(String) row[4]);
-            System.out.println("JAXX : row : "+(Integer) row[5]);                    // clientId
-            System.out.println("JAXX : row : "+(String) row[6]);                     // projectName
-            System.out.println("JAXX : row : "+(String) row[7]);                     // country
-            System.out.println("JAXX : row : "+(BigDecimal) row[8]);                 // projectValue
-            System.out.println("JAXX : row : "+(String) row[9]);                     // clientProjectNumber
-            System.out.println("JAXX : row : "+(String) row[10]);                     // purchaseOrder
-            System.out.println("JAXX : row : "+(String) row[11]);                     // connPO
-            System.out.println("JAXX : row : "+(String) row[12]);                      // comments
             return new ProjectInfoDTO(
                     (String) row[0],                     // quotationNumber
                     (Integer) row[1],                     // projectId
