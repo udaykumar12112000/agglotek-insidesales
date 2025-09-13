@@ -64,6 +64,10 @@ public class FileServiceImpl implements IFileService {
                 fileName = "_scope_of_work.pdf";
             } else if ("proposal".equalsIgnoreCase(type)) {
                 fileName = "_proposal.pdf";
+            } else if ("scope_of_work_cor".equalsIgnoreCase(type)) {
+                fileName = "_scope_of_work_cor.pdf";
+            } else if ("proposal_cor".equalsIgnoreCase(type)) {
+                fileName = "_proposal_cor.pdf";
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(new ApiResponse(false, "Invalid type! Use 'po' or 'scope_of_work' or 'proposal'"));
@@ -120,6 +124,10 @@ public class FileServiceImpl implements IFileService {
             filename = folderName + "_scope_of_work.pdf";
         } else if ("proposal".equalsIgnoreCase(type)) {
             filename = folderName + "_proposal.pdf";
+        } else if ("scope_of_work_cor".equalsIgnoreCase(type)) {
+            filename = folderName + "_scope_of_work_cor.pdf";
+        } else if ("proposal_cor".equalsIgnoreCase(type)) {
+            filename = folderName + "_proposal_cor.pdf";
         } else {
             filename = type;
         }

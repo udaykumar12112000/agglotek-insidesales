@@ -139,15 +139,17 @@ public class QuotationController {
 
     @GetMapping("/get_quotations_per_estimator")
     public ResponseEntity<ApiResponse> getQuotationsRelatedToEstimator(
-            @RequestHeader("User-Id") Integer userId) {
+            @RequestHeader("User-Id") Integer userId, @RequestParam(value = "roleName", required = false) String roleName) {
 
-        // Get logged-in user
-        List<User> users = userService.getUserByUserId(userId);
-        if (users.isEmpty()) {
-            throw new RuntimeException("User not found");
+        if(roleName==null) {
+            // Get logged-in user
+            List<User> users = userService.getUserByUserId(userId);
+            if (users.isEmpty()) {
+                throw new RuntimeException("User not found");
+            }
+            User user = users.get(0);
+            roleName = roleService.getRoleNameById(user.getRoleId());
         }
-        User user = users.get(0);
-        String roleName = roleService.getRoleNameById(user.getRoleId());
 
         List<QuotationInfoDTO> quotations = quotationService.getQuotationsForUser(userId, roleName);
         return ResponseEntity.ok(new ApiResponse(true, "Quotations fetched successfully", quotations));
