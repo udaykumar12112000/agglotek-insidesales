@@ -18,6 +18,13 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 @RestController
+//@CrossOrigin(
+//        origins = "http://localhost:4200",
+//        allowedHeaders = {"Content-Type", "Authorization", "X-Requested-With"},
+//        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.PATCH, RequestMethod.DELETE, RequestMethod.OPTIONS},
+//        allowCredentials = "false" // set true only if you use cookies
+//)
+
 @CrossOrigin(
         origins = {"http://localhost:4200"},
         allowedHeaders = "*"

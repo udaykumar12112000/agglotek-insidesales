@@ -57,6 +57,9 @@ public class Project {
     @Column(name = "conn_po", precision = 15, scale = 2)
     private BigDecimal connPO;
 
+    @Column(name = "balance_amt", precision = 15, scale = 2)
+    private BigDecimal balanceAmt;
+
     // Getters and Setters
 
     public String getProjectNumber() {
@@ -179,6 +182,14 @@ public class Project {
         this.connPO = connPO;
     }
 
+    public BigDecimal getBalanceAmt() {
+        return balanceAmt;
+    }
+
+    public void setBalanceAmt(BigDecimal balanceAmt) {
+        this.balanceAmt = balanceAmt;
+    }
+
     @Override
     public String toString() {
         return "Project{" +
@@ -196,7 +207,8 @@ public class Project {
                 ", projectNumber='" + projectNumber + '\'' +
                 ", clientProjectNumber='" + clientProjectNumber + '\'' +
                 ", purchaseOrder='" + purchaseOrder + '\'' +
-                ", connPO=" + connPO +
+                ", connPO=" + connPO + '\'' +
+                ", balanceAmt=" + balanceAmt + '\'' +
                 '}';
     }
 }

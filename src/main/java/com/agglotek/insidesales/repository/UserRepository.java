@@ -79,4 +79,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             nativeQuery = true)
     Integer getTotalNumberOfProjectsAllotedThisMonth(Integer userId, String allotted);
     List<User> findBySupUserId(Integer supUserId);
+
+    @Query(value = "SELECT COUNT(*) > 0 FROM users WHERE user_id = :userId AND role_id = 1", nativeQuery = true)
+    boolean isAdminUser(@Param("userId") Integer userId);
 }

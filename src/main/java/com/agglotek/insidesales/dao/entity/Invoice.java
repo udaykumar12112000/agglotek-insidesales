@@ -29,8 +29,8 @@ public class Invoice {
     @Column(name = "user_id")
     private Integer userId;
 
-    @Column(name = "balance_amt", precision = 15, scale = 2)
-    private BigDecimal balanceAmt;
+    @Column(name = "amount", precision = 15, scale = 2)
+    private BigDecimal amount;
 
     @Column(name = "remarks", columnDefinition = "TEXT")
     private String remarks;
@@ -91,14 +91,6 @@ public class Invoice {
         this.userId = userId;
     }
 
-    public BigDecimal getBalanceAmt() {
-        return balanceAmt;
-    }
-
-    public void setBalanceAmt(BigDecimal balanceAmt) {
-        this.balanceAmt = balanceAmt;
-    }
-
     public String getRemarks() {
         return remarks;
     }
@@ -121,6 +113,14 @@ public class Invoice {
 
     public void setInsertTime(LocalDateTime insertTime) {
         this.insertTime = insertTime;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
     }
 }
 

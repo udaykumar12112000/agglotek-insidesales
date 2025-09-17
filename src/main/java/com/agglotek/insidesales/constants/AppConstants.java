@@ -21,7 +21,11 @@ public class AppConstants {
     public static final String NO_RESPONSE="no_response";
     public static final String NULL="null";
 
+//
+//    public static final String PROJECT_BASE_DIRECTORY="/home/agglotek/projects";
+//    public static final String QUOTATION_BASE_DIRECTORY="/home/agglotek/quotations";
 
-    public static final String PROJECT_BASE_DIRECTORY="/home/agglotek/projects";
-    public static final String QUOTATION_BASE_DIRECTORY="/home/agglotek/quotations";
+
+    public static final String PROJECT_BASE_DIRECTORY="C:/Users/Administrator/Documents/agglotek/projects";
+    public static final String QUOTATION_BASE_DIRECTORY="C:/Users/Administrator/Documents/agglotek/quotations";
 }

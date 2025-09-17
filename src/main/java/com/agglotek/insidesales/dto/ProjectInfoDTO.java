@@ -3,6 +3,8 @@ package com.agglotek.insidesales.dto;
 import com.agglotek.insidesales.dao.entity.Project;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.Iterator;
 import java.util.List;
 
 public class ProjectInfoDTO extends Project {
@@ -113,7 +115,8 @@ public class ProjectInfoDTO extends Project {
 
     public ProjectInfoDTO(String quotationNumber, Integer projectId, String projectNumber, String date,
                           String clientName, Integer clientId, String projectName, String country,
-                          BigDecimal projectValue, String clientProjectNumber, String purchaseOrder, BigDecimal connPO, String comments) {
+                          BigDecimal projectValue, String clientProjectNumber, String purchaseOrder, BigDecimal connPO,
+                          String comments, Integer projectManagerId, String projectStatus, LocalDate ifcSubmissionDate, LocalDate ifaSubmissionDate) {
         this.quotationNumber = quotationNumber;
         super.setProjectNumber(projectNumber);
         super.setProjectId(projectId);
@@ -127,6 +130,10 @@ public class ProjectInfoDTO extends Project {
         this.purchaseOrder = purchaseOrder;
         this.connPO = connPO;
         super.setComments(comments);
+        super.setProjectManagerId(projectManagerId);
+        super.setProjectStatus(projectStatus);
+        super.setIfcSubmissionDate(ifcSubmissionDate); // assuming setter exists
+        super.setIfaSubmissionDate(ifaSubmissionDate);
     }
 
 }

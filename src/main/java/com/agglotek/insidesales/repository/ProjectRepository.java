@@ -23,7 +23,11 @@ public interface ProjectRepository extends JpaRepository<Project, Integer> {
             "p.client_job_number AS clientJobNumber, " +
             "p.purchase_order AS purchaseOrder, " +
             "p.conn_po AS connPO, " +
-            "p.comments AS comments " +
+            "p.comments AS comments, " +
+            "p.project_manager_id AS projectManager, " +
+            "p.project_status AS projectStatus, " +
+            "p.ifc_submission_date AS ifcSubDate, " +
+            "p.ifa_submission_date AS ifaSubDate " +
             "FROM projects p " +
             "JOIN quotations q ON p.quotation_id = q.quotation_id " +
             "JOIN clients c ON q.client_id = c.client_id " +
@@ -31,8 +35,36 @@ public interface ProjectRepository extends JpaRepository<Project, Integer> {
             nativeQuery = true)
     List<Object[]> findProjectDetailsBySalesPersonId(@Param("salesPersonId") Integer salesPersonId);
 
+    @Query(value = "SELECT " +
+            "q.quotation_number AS quotationNumber, " +
+            "p.project_id AS projectId, " +
+            "p.project_number AS projectNumber, " +
+            "CURRENT_DATE AS date, " +
+            "c.name AS clientName, " +
+            "c.client_id AS clientId, " +
+            "q.project_name AS projectName, " +
+            "c.country AS country, " +
+            "q.project_value AS projectValue, " +
+            "p.client_job_number AS clientJobNumber, " +
+            "p.purchase_order AS purchaseOrder, " +
+            "p.conn_po AS connPO, " +
+            "p.comments AS comments, " +
+            "p.project_manager_id AS projectManager, " +
+            "p.project_status AS projectStatus, " +
+            "p.ifc_submission_date AS ifcSubDate, " +
+            "p.ifa_submission_date AS ifaSubDate " +
+            "FROM projects p " +
+            "JOIN quotations q ON p.quotation_id = q.quotation_id " +
+            "JOIN clients c ON q.client_id = c.client_id",
+            nativeQuery = true)
+    List<Object[]> findAllProjectDetails();
+
     @Query(value = "SELECT project_number FROM projects WHERE project_number LIKE :prefix% ORDER BY project_number DESC LIMIT 1", nativeQuery = true)
     String findLastProjectNumberForYear(@Param("prefix") String prefix);
 
 
+    @Query("SELECT p FROM Project p WHERE p.projectManagerId = :managerId")
+    List<Project> findByProjectManagerId(@Param("managerId") Integer managerId);
+
+    List<Project> findByProjectStatusIn(List<String> projectStatuses);
 }

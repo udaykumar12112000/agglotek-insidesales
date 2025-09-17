@@ -1,5 +1,7 @@
 package com.agglotek.insidesales.constants;
 
+import jakarta.servlet.http.PushBuilder;
+
 public class ApiConstants {
 
 
@@ -93,4 +95,22 @@ public class ApiConstants {
     public static final String EMAIL_SENDING = "/email";
 
     public static final String SEND_EMAIL = "/sendEmail";
+
+    public static final String MANAGER_DATA = "/api/manager";
+
+    //Project Manager
+    public static final String GET_PROJECTS_FOR_PROJECT_MANAGER = "/userProjects";
+
+    public static final String UPDATE_PROJECT_DETAILS = "/updateProjectDetails";
+
+    public static final String FILTER_BY_STATUS = "/projectFilterByStatus";
+
+
+    public static final String PAYMENTS = "/api/payments";
+
+    public static final String PAYMENT_CREATION = "/api/payments";
+
+    public static final String INVOICE = "/api/invoice";
+
+    public static final String CREATE_OR_UPDATE_INVOICE = "createOrUpdateInvoice";
 }
