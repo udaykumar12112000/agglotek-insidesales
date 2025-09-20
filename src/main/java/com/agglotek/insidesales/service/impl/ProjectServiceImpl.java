@@ -2,6 +2,7 @@ package com.agglotek.insidesales.service.impl;
 
 import com.agglotek.insidesales.dao.entity.Project;
 import com.agglotek.insidesales.dao.entity.Quotation;
+import com.agglotek.insidesales.dto.ProjectDetailsWithQuotationDetails;
 import com.agglotek.insidesales.dto.ProjectInfoDTO;
 import com.agglotek.insidesales.dto.ProjectQuotationDTO;
 import com.agglotek.insidesales.repository.ProjectRepository;
@@ -235,12 +236,11 @@ public class ProjectServiceImpl implements IProjectService {
     }
 
     @Override
-    public List<Project> getProjectsByStatuses(List<String> projectStatuses) {
+    public List<ProjectDetailsWithQuotationDetails> getProjectsByStatuses(List<String> projectStatuses) {
         if (projectStatuses == null || projectStatuses.isEmpty()) {
             return Collections.emptyList();
         }
-
-        return projectRepository.findByProjectStatusIn(projectStatuses);
+        return projectRepository.findProjectsWithNameByStatus(projectStatuses);
     }
 
 }

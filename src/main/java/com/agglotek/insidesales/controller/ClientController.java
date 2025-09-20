@@ -94,4 +94,10 @@ public class ClientController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping(ApiConstants.GET_CLIENT_BY_PROJECT_ID)
+    public ResponseEntity<?> getClientByProjectId(@PathVariable Integer projectId) {
+        Client client = clientService.getClientByProjectId(projectId);
+        return ResponseEntity.ok(client);
+    }
+
 }

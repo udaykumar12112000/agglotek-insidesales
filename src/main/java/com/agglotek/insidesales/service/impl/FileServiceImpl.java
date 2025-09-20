@@ -56,6 +56,8 @@ public class FileServiceImpl implements IFileService {
                 baseDir = AppConstants.PROJECT_BASE_DIRECTORY;
             } else if (referenceNumber.startsWith("QO")) {
                 baseDir = AppConstants.QUOTATION_BASE_DIRECTORY;
+            } else if (referenceNumber.startsWith("INV")) {
+                baseDir = AppConstants.INVOICE_BASE_DIRECTORY;
             }
 
             if ("po".equalsIgnoreCase(type)) {
@@ -68,6 +70,8 @@ public class FileServiceImpl implements IFileService {
                 fileName = "_scope_of_work_cor.pdf";
             } else if ("proposal_cor".equalsIgnoreCase(type)) {
                 fileName = "_proposal_cor.pdf";
+            } else if ("invoice".equalsIgnoreCase(type)) {
+                fileName = "_invoice.pdf";
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(new ApiResponse(false, "Invalid type! Use 'po' or 'scope_of_work' or 'proposal'"));
@@ -113,6 +117,8 @@ public class FileServiceImpl implements IFileService {
             baseDir = AppConstants.PROJECT_BASE_DIRECTORY;
         } else if (referenceNumber.startsWith("QO")) {
             baseDir = AppConstants.QUOTATION_BASE_DIRECTORY;
+        } else if (referenceNumber.startsWith("INV")) {
+            baseDir = AppConstants.INVOICE_BASE_DIRECTORY;
         }
 
         if(type == null) {
@@ -128,7 +134,9 @@ public class FileServiceImpl implements IFileService {
             filename = folderName + "_scope_of_work_cor.pdf";
         } else if ("proposal_cor".equalsIgnoreCase(type)) {
             filename = folderName + "_proposal_cor.pdf";
-        } else {
+        } else if ("invoice".equalsIgnoreCase(type)) {
+            filename = "_invoice.pdf";
+        }else {
             filename = type;
         }
 
@@ -166,6 +174,8 @@ public class FileServiceImpl implements IFileService {
             baseDir = AppConstants.PROJECT_BASE_DIRECTORY;
         } else if (referenceNumber.startsWith("QO")) {
             baseDir = AppConstants.QUOTATION_BASE_DIRECTORY;
+        } else if (referenceNumber.startsWith("INV")) {
+            baseDir = AppConstants.INVOICE_BASE_DIRECTORY;
         }
 
         Path clientDir = Paths.get(baseDir, clientName);
@@ -242,7 +252,9 @@ public class FileServiceImpl implements IFileService {
             baseDir = AppConstants.PROJECT_BASE_DIRECTORY;
         } else if (referenceNumber.startsWith("QO")) {
             baseDir = AppConstants.QUOTATION_BASE_DIRECTORY;
-        } else {
+        } else if (referenceNumber.startsWith("INV")) {
+            baseDir = AppConstants.INVOICE_BASE_DIRECTORY;
+        }else {
             throw new IllegalArgumentException("Invalid reference number. Must start with PO or QO");
         }
 

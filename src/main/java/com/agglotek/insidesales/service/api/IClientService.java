@@ -14,4 +14,6 @@ public interface IClientService {
     public List<Client> getClientsByUserId(Integer userId);
 
     ApiResponse editClient(Client clientData);
+
+    Client getClientByProjectId(Integer projectId);
 }

@@ -1,6 +1,7 @@
 package com.agglotek.insidesales.repository;
 
 import com.agglotek.insidesales.dao.entity.Project;
+import com.agglotek.insidesales.dto.ProjectDetailsWithQuotationDetails;
 import com.agglotek.insidesales.dto.ProjectInfoDTO;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -67,4 +68,15 @@ public interface ProjectRepository extends JpaRepository<Project, Integer> {
     List<Project> findByProjectManagerId(@Param("managerId") Integer managerId);
 
     List<Project> findByProjectStatusIn(List<String> projectStatuses);
+
+    @Query("SELECT new com.agglotek.insidesales.dto.ProjectDetailsWithQuotationDetails(" +
+            "p.projectId, p.quotationId, p.comments, p.ifaDate, " +
+            "p.ifcSubmissionDate, p.ifaSubmissionDate, p.plannedSubmittedDate, " +
+            "p.updatedTime, p.createdTime, p.projectManagerId, p.projectStatus, " +
+            "p.projectNumber, p.clientProjectNumber, p.purchaseOrder, " +
+            "p.connPO, p.balanceAmt, q.projectName) " +
+            "FROM Project p " +
+            "LEFT JOIN Quotation q ON p.quotationId = q.quotationId " +
+            "WHERE p.projectStatus IN :statuses")
+    List<ProjectDetailsWithQuotationDetails> findProjectsWithNameByStatus(@Param("statuses") List<String> statuses);
 }

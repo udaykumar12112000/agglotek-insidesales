@@ -2,6 +2,7 @@ package com.agglotek.insidesales.service.api;
 
 import com.agglotek.insidesales.dao.entity.Project;
 import com.agglotek.insidesales.dao.entity.Quotation;
+import com.agglotek.insidesales.dto.ProjectDetailsWithQuotationDetails;
 import com.agglotek.insidesales.dto.ProjectInfoDTO;
 import com.agglotek.insidesales.dto.ProjectQuotationDTO;
 
@@ -21,5 +22,5 @@ public interface IProjectService {
 
     boolean updateProject(Project updateRequest);
 
-    List<Project> getProjectsByStatuses(List<String> projectStatuses);
+    List<ProjectDetailsWithQuotationDetails> getProjectsByStatuses(List<String> projectStatuses);
 }

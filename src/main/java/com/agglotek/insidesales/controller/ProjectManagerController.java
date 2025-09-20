@@ -5,6 +5,7 @@ import com.agglotek.insidesales.constants.ApiConstants;
 import com.agglotek.insidesales.constants.AppConstants;
 import com.agglotek.insidesales.dao.entity.Project;
 import com.agglotek.insidesales.dao.entity.User;
+import com.agglotek.insidesales.dto.ProjectDetailsWithQuotationDetails;
 import com.agglotek.insidesales.dto.ProjectInfoDTO;
 import com.agglotek.insidesales.dto.ProjectQuotationDTO;
 import com.agglotek.insidesales.dto.ProjectStatusFilterDTO;
@@ -66,7 +67,7 @@ public class ProjectManagerController {
         }
     }
 
-    @PostMapping(ApiConstants. FILTER_BY_STATUS)
+    @PostMapping(ApiConstants.FILTER_BY_STATUS)
     public ResponseEntity<ApiResponse> getProjectsByStatuses(@RequestBody ProjectStatusFilterDTO request) {
 
         if (request.getProjectStatuses() == null || request.getProjectStatuses().isEmpty()) {
@@ -74,7 +75,7 @@ public class ProjectManagerController {
                     .body(new ApiResponse(false, "Project statuses must not be empty"));
         }
 
-        List<Project> projects = projectService.getProjectsByStatuses(request.getProjectStatuses());
+        List<ProjectDetailsWithQuotationDetails> projects = projectService.getProjectsByStatuses(request.getProjectStatuses());
 
         return ResponseEntity.ok(new ApiResponse(true, "Fetched projects by status successfully", projects));
     }

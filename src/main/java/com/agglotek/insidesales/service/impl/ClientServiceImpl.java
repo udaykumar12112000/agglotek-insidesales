@@ -97,5 +97,11 @@ public class ClientServiceImpl implements IClientService {
             return new ApiResponse(false, "No changes detected", existingClient);
         }
     }
+
+    @Override
+    public Client getClientByProjectId(Integer projectId) {
+        return clientRepository.findClientByProjectId(projectId)
+                .orElseThrow(() -> new RuntimeException("Client not found for projectId: " + projectId));
+    }
 }
 

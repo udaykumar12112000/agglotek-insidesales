@@ -2,6 +2,8 @@ package com.agglotek.insidesales.constants;
 
 import jakarta.servlet.http.PushBuilder;
 
+import javax.swing.plaf.PanelUI;
+
 public class ApiConstants {
 
 
@@ -19,6 +21,8 @@ public class ApiConstants {
     public static final String EDIT_CLIENT = "/editClient";
 
     public static final String EDIT_CLIENT_CONVO = "editClientConvo";
+
+    public static final String GET_CLIENT_BY_PROJECT_ID = "/getClient/{projectId}";
 
     //users
     public static final String USER_APIS = "/api/users";
@@ -108,9 +112,13 @@ public class ApiConstants {
 
     public static final String PAYMENTS = "/api/payments";
 
-    public static final String PAYMENT_CREATION = "/api/payments";
+    public static final String PAYMENT_CREATION = "/createPayment";
 
     public static final String INVOICE = "/api/invoice";
 
-    public static final String CREATE_OR_UPDATE_INVOICE = "createOrUpdateInvoice";
+    public static final String CREATE_OR_UPDATE_INVOICE = "/createOrUpdateInvoice";
+
+    public static final String FETCH_INVOICE_BY_USERID = "/invoiceByUserId";
+
+    public static final String DELETE_INVOICE_BY_ID = "delete/{invoiceId}";
 }
