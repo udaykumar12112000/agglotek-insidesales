@@ -18,6 +18,15 @@ public class InvoiceResponseDto {
     private List<Payment> payments;
     private String projectName;
     private Integer clientId;
+    private String description;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public Integer getInvoiceId() {
         return invoiceId;

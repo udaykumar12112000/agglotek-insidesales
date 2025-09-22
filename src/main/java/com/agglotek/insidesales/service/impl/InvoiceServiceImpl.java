@@ -55,6 +55,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
         invoice.setUserId(userId);
         invoice.setAmount(request.getAmount());
         invoice.setRemarks(request.getRemarks());
+        invoice.setDescription(request.getDescription());
 
         return invoiceRepository.save(invoice);
     }
@@ -73,6 +74,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
             dto.setUserId(invoice.getUserId());
             dto.setAmount(invoice.getAmount());
             dto.setRemarks(invoice.getRemarks());
+            dto.setDescription(invoice.getDescription());
 
             // Fetch payments for this invoice
             List<Payment> payments = paymentRepository.findAllByInvoiceId(invoice.getInvoiceId());

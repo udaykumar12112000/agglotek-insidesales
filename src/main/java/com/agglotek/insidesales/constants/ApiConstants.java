@@ -121,4 +121,6 @@ public class ApiConstants {
     public static final String FETCH_INVOICE_BY_USERID = "/invoiceByUserId";
 
     public static final String DELETE_INVOICE_BY_ID = "delete/{invoiceId}";
+
+    public static final String ASSIGN_SALES_TARGETS = "/assignSalesTargets";
 }

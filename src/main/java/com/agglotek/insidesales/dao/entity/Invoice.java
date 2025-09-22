@@ -41,7 +41,18 @@ public class Invoice {
     @Column(name = "insert_time")
     private LocalDateTime insertTime;
 
+    @Column(name = "description", columnDefinition = "TEXT")
+    private String description;
     // Getters and Setters
+
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public Integer getInvoiceId() {
         return invoiceId;

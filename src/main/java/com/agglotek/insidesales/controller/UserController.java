@@ -3,6 +3,8 @@ package com.agglotek.insidesales.controller;
 import com.agglotek.insidesales.ApiResponse;
 import com.agglotek.insidesales.constants.ApiConstants;
 import com.agglotek.insidesales.constants.AppConstants;
+import com.agglotek.insidesales.dao.api.ISalesTargetDao;
+import com.agglotek.insidesales.dao.entity.SalesTarget;
 import com.agglotek.insidesales.dao.entity.User;
 import com.agglotek.insidesales.service.api.IRoleService;
 import com.agglotek.insidesales.service.api.IUserService;
@@ -34,6 +36,9 @@ public class UserController {
 
     @Autowired
     private IRoleService roleService;
+
+    @Autowired
+    private ISalesTargetDao salesTargetDao;
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -222,4 +227,21 @@ public class UserController {
         }
     }
 
+    @PostMapping(ApiConstants.ASSIGN_SALES_TARGETS)
+    public ResponseEntity<ApiResponse> assignBulkUserTargets(@RequestBody Map<String, List<SalesTarget>> requestData, @RequestHeader("User-Id") Integer userId) {
+
+        if(userService.getUserByUserId(userId).get(0).getRoleId() == roleService.getRoleIdByRoleName(AppConstants.ADMIN)) {
+            try {
+                if (requestData.get("targets") != null && !requestData.get("targets").isEmpty()) {
+                    return ResponseEntity.ok(new ApiResponse(true, "Sales targets assigned successfully", salesTargetDao.saveUserTargets(requestData.get("targets"))));
+                } else
+                    return ResponseEntity.ok(new ApiResponse(false, "Targets list cannot be empty"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return ResponseEntity.ok(new ApiResponse(false, "Failed to assign sales targets"));
+        }
+        else
+            return ResponseEntity.ok(new ApiResponse(false, "You do not have permission to perform this action"));
+    }
 }

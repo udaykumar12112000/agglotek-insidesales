@@ -7,6 +7,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
+
 @Repository
 public interface SalesTargetsRepository extends JpaRepository<SalesTarget, Integer> {
 
@@ -41,4 +45,7 @@ public interface SalesTargetsRepository extends JpaRepository<SalesTarget, Integ
             "AND year = CAST(EXTRACT(YEAR FROM CURRENT_DATE) AS numeric)",
             nativeQuery = true)
     Integer getYearlyTarget(@Param("userId") Integer userId);
+
+    Optional<SalesTarget> findByUserIdAndYear(Integer userId, BigDecimal year);
+
 }
