@@ -25,4 +25,7 @@ public interface IUserService {
     
     public ApiResponse changePassword(Integer userId, Map<String, String> request);
 
+    String getAcctMail();
+
+    List<?> getAllUsersWithRole();
 }

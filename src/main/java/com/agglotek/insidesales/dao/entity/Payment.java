@@ -31,6 +31,9 @@ public class Payment {
     @Column(name = "payment_mode", length = 50)
     private String paymentMode;
 
+    @Column(name = "currency", length = 10)
+    private String currency;
+
     // Getters and Setters
 
     public Integer getPaymentId() {
@@ -89,6 +92,14 @@ public class Payment {
         this.paymentMode = paymentMode;
     }
 
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
     @Override
     public String toString() {
         return "Payment{" +
@@ -99,6 +110,7 @@ public class Payment {
                 ", projectId=" + projectId +
                 ", receivedDate=" + receivedDate +
                 ", paymentMode='" + paymentMode + '\'' +
+                ", currency='" + currency + '\'' +
                 '}';
     }
 }

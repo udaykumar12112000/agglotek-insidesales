@@ -58,25 +58,25 @@ public class UserController {
 
     }
 
-    @GetMapping(ApiConstants.GET_USER)
-    public List<User> getUsers(@RequestParam(required = false) Integer userId,
-                               @RequestParam(required = false) Integer roleId) {
-
-        List<User> users;
-        if (userId != null) {
-            users = userService.getUserByUserId(userId);
-        } else if (roleId != null) {
-            users = userService.getUsersByRoleId(roleId);
-        } else {
-            users = userService.getAllUsers();
-        }
-        users.forEach(user -> {
-                String hashedPassword = passwordEncoder.encode(user.getPassword());
-                user.setPassword(hashedPassword);
-        });
-
-        return users;
-    }
+//    @GetMapping(ApiConstants.GET_USER)
+//    public List<User> getUsers(@RequestParam(required = false) Integer userId,
+//                               @RequestParam(required = false) Integer roleId) {
+//
+//        List<User> users;
+//        if (userId != null) {
+//            users = userService.getUserByUserId(userId);
+//        } else if (roleId != null) {
+//            users = userService.getUsersByRoleId(roleId);
+//        } else {
+//            users = userService.getAllUsers();
+//        }
+//        users.forEach(user -> {
+//                String hashedPassword = passwordEncoder.encode(user.getPassword());
+//                user.setPassword(hashedPassword);
+//        });
+//
+//        return users;
+//    }
 
     @PostMapping(ApiConstants.EDIT_USER)
     public ResponseEntity<ApiResponse> editUser(@RequestBody User request) {
@@ -244,4 +244,22 @@ public class UserController {
         else
             return ResponseEntity.ok(new ApiResponse(false, "You do not have permission to perform this action"));
     }
+    @GetMapping(ApiConstants.GET_USER)
+    public List<?> getUsers(@RequestParam(required = false) Integer userId,
+                            @RequestParam(required = false) Integer roleId) {
+
+        if (userId != null) {
+            List<User> users = userService.getUserByUserId(userId);
+            users.forEach(user -> user.setPassword(passwordEncoder.encode(user.getPassword())));
+            return users;
+        } else if (roleId != null) {
+            List<User> users = userService.getUsersByRoleId(roleId);
+            users.forEach(user -> user.setPassword(passwordEncoder.encode(user.getPassword())));
+            return users;
+        } else {
+            // ✅ Return DTO with role name
+            return userService.getAllUsersWithRole();
+        }
+    }
+
 }

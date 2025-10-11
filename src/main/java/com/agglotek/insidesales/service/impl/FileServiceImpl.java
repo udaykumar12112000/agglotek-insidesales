@@ -135,7 +135,7 @@ public class FileServiceImpl implements IFileService {
         } else if ("proposal_cor".equalsIgnoreCase(type)) {
             filename = folderName + "_proposal_cor.pdf";
         } else if ("invoice".equalsIgnoreCase(type)) {
-            filename = "_invoice.pdf";
+            filename = folderName + "_invoice.pdf";
         }else {
             filename = type;
         }

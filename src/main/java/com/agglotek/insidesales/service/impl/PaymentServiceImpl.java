@@ -49,6 +49,7 @@ public class PaymentServiceImpl implements IPaymentService {
         payment.setProjectId(request.getProjectId());
         payment.setReceivedDate(request.getReceivedDate());
         payment.setPaymentMode(request.getPaymentMode());
+        payment.setCurrency(request.getCurrency());
 
         Payment savedPayment = paymentRepository.save(payment);
 

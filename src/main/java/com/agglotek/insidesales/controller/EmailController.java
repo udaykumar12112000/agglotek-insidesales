@@ -61,6 +61,7 @@ public class EmailController {
             // 1. Fetch user details
             User fromUser = userService.getUserByUserId(fromId).stream().findFirst().orElse(null);
             User toUser = userService.getUserByUserId(sendtoId).stream().findFirst().orElse(null);
+            String emailUsers = userService.getAcctMail();
 
             if (fromUser == null || toUser == null) {
                 return ResponseEntity.badRequest().body(new ApiResponse(false, "Invalid fromId or sendtoId"));
@@ -107,6 +108,22 @@ public class EmailController {
                     variables.put("estimatorName", toUser.getName());
                     variables.put("salesPersonName", fromUser.getName());
                     break;
+                case "assign_estimator":
+                    templateName = "assign_estimator";
+                    variables.put("estimatorName", toUser.getName());
+                    variables.put("salesPersonName", fromUser.getName());
+                    break;
+                case "assign_project_manager":
+                    templateName = "assign_project_manager";
+                    variables.put("estimatorName", toUser.getName());
+                    variables.put("salesPersonName", fromUser.getName());
+                    break;
+                case "accountant_notify":
+                    templateName = "accountant_notification";
+                    variables.put("estimatorName", emailUsers);
+                    variables.put("salesPersonName", fromUser.getName());
+                    break;
+
                 default:
                     templateName = "quotation_request";
                     break;

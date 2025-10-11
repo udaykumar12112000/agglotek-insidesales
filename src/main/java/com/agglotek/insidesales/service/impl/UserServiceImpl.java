@@ -182,4 +182,16 @@ public class UserServiceImpl implements IUserService {
         return new ApiResponse(true, "Password changed successfully");
     }
 
+    @Override
+    public String getAcctMail() {
+        List<String> emails = usersRepository.getAcctMail();
+        return String.join(",", emails);  // join into single string
+    }
+
+    @Override
+    public List<?> getAllUsersWithRole() {
+        return usersRepository.findAllUsersWithRole();
+    }
+
+
 }

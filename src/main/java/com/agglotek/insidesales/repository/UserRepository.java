@@ -1,6 +1,7 @@
 package com.agglotek.insidesales.repository;
 
 import com.agglotek.insidesales.dao.entity.User;
+import com.agglotek.insidesales.dto.UserWithRoleDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -82,4 +83,29 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query(value = "SELECT COUNT(*) > 0 FROM users WHERE user_id = :userId AND role_id = 1", nativeQuery = true)
     boolean isAdminUser(@Param("userId") Integer userId);
+
+    @Query(
+            value = "SELECT u.email " +
+                    "FROM users u " +
+                    "JOIN roles r ON u.role_id = r.role_id " +
+                    "WHERE r.role_name = 'ACCOUNTS'",
+            nativeQuery = true
+    )
+    List<String> getAcctMail();
+
+    @Query(
+            value = "SELECT u.user_id AS userId, " +
+                    "u.agglo_user_id AS aggloUserId, " +
+                    "u.name, " +
+                    "u.designation, " +
+                    "u.department, " +
+                    "u.email, " +
+                    "u.phone_number AS phoneNumber, " +
+                    "u.role_id AS roleId, " +
+                    "r.role_name AS roleName, " +
+                    "u.sup_user_id AS supUserId " +
+                    "FROM users u " +
+                    "JOIN roles r ON u.role_id = r.role_id",
+            nativeQuery = true)
+    List<UserWithRoleDto> findAllUsersWithRole();
 }
