@@ -72,6 +72,8 @@ public class FileServiceImpl implements IFileService {
                 fileName = "_proposal_cor.pdf";
             } else if ("invoice".equalsIgnoreCase(type)) {
                 fileName = "_invoice.pdf";
+            } else if ("purchase_order".equalsIgnoreCase(type)) {
+                fileName = "_purchase_order.pdf";
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(new ApiResponse(false, "Invalid type! Use 'po' or 'scope_of_work' or 'proposal'"));
@@ -136,7 +138,10 @@ public class FileServiceImpl implements IFileService {
             filename = folderName + "_proposal_cor.pdf";
         } else if ("invoice".equalsIgnoreCase(type)) {
             filename = folderName + "_invoice.pdf";
-        }else {
+        } else if ("purchase_order".equalsIgnoreCase(type)) {
+            filename = folderName + "_purchase_order.pdf";
+        }
+        else {
             filename = type;
         }
 
@@ -239,6 +244,8 @@ public class FileServiceImpl implements IFileService {
     public List<String> listFiles(String referenceNumber, String projectName, Integer clientId) throws IOException {
 
         List<String> fileNames = new ArrayList<>();
+        if(clientId == null)
+            return new ArrayList<>();
         Optional<Client> clientOpt = clientRepository.findById(clientId);
         if (clientOpt.isEmpty()) {
             return new ArrayList<>();

@@ -41,6 +41,9 @@ public class Quotation {
     @Column(name = "user_id")
     private Integer userId;
 
+    @Column(name = "connection_eng_id")
+    private Integer connectionEngId;
+
     @Column(name = "client_id")
     private Integer clientId;
 
@@ -61,9 +64,6 @@ public class Quotation {
 
     @Column(name = "assigned_estimator_id")
     private Integer assignedEstimatorId;
-
-    @Column(name = "project_value", precision = 15, scale = 2)
-    private BigDecimal projectValue;
 
     @Column(name = "updated_time")
     private LocalDateTime updatedTime;
@@ -94,6 +94,14 @@ public class Quotation {
 
     // Getters and Setters
 
+
+    public Integer getConnectionEngId() {
+        return connectionEngId;
+    }
+
+    public void setConnectionEngId(Integer connectionEngId) {
+        this.connectionEngId = connectionEngId;
+    }
 
     public Integer getQuotationId() {
         return quotationId;
@@ -215,14 +223,6 @@ public class Quotation {
         this.assignedEstimatorId = assignedEstimatorId;
     }
 
-    public BigDecimal getProjectValue() {
-        return projectValue;
-    }
-
-    public void setProjectValue(BigDecimal projectValue) {
-        this.projectValue = projectValue;
-    }
-
     public LocalDateTime getUpdatedTime() {
         return updatedTime;
     }
@@ -322,7 +322,6 @@ public class Quotation {
                 ", comments='" + comments + '\'' +
                 ", estimatorId=" + estimatorId +
                 ", assignedEstimatorId=" + assignedEstimatorId +
-                ", projectValue=" + projectValue +
                 ", updatedTime=" + updatedTime +
                 ", createdTime=" + createdTime +
                 ", currency='" + currency + '\'' +

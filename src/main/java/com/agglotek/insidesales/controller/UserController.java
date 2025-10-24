@@ -15,8 +15,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+
+import static com.agglotek.insidesales.constants.AppConstants.ADMIN;
 
 @RestController
 //@CrossOrigin(
@@ -201,6 +204,12 @@ public class UserController {
         return ResponseEntity.ok(new ApiResponse(true, "Notifications fetched successfully", notifications));
     }
 
+    @GetMapping(ApiConstants.NOTIFY_UNASSIGNED_PROJECTS_TO_ADMIN)
+    public ResponseEntity<?> notifyAdmins() {
+        List<NotificationDTO> result = userService.notifyAdminsForUnassignedProjects();
+        return ResponseEntity.ok(result);
+    }
+
     @PostMapping(ApiConstants.UPDATE_BID_STATUS_FROM_CLIENT)
     public ResponseEntity<ApiResponse> updateBidStatusFromClient(@RequestParam(required = true) String status, @RequestParam(required = true)Integer quotationId) {
 
@@ -260,6 +269,18 @@ public class UserController {
             // ✅ Return DTO with role name
             return userService.getAllUsersWithRole();
         }
+    }
+
+    @GetMapping(ApiConstants.GET_SALES_TARGETS)
+    public ResponseEntity<ApiResponse> getSalesTargets(@PathVariable BigDecimal year) {
+        if(year!= null) {
+            try {
+                return ResponseEntity.ok(new ApiResponse(true, "sales targets fetched successfully",salesTargetDao.getAllSalestargets(year)));
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return ResponseEntity.ok(new ApiResponse(false, "Failed to fetch sales targets"));
     }
 
 }

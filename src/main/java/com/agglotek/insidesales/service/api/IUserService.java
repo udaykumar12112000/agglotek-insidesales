@@ -28,4 +28,6 @@ public interface IUserService {
     String getAcctMail();
 
     List<?> getAllUsersWithRole();
+
+    public List<NotificationDTO> notifyAdminsForUnassignedProjects();
 }

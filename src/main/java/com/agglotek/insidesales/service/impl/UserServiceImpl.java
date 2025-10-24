@@ -4,11 +4,16 @@ import com.agglotek.insidesales.ApiResponse;
 import com.agglotek.insidesales.constants.AppConstants;
 import com.agglotek.insidesales.dao.api.ISalesTargetDao;
 import com.agglotek.insidesales.dao.api.IUserInterfaceDao;
+import com.agglotek.insidesales.dao.entity.Client;
+import com.agglotek.insidesales.dao.entity.Project;
 import com.agglotek.insidesales.dao.entity.Quotation;
 import com.agglotek.insidesales.dao.entity.User;
 import com.agglotek.insidesales.dto.NotificationDTO;
+import com.agglotek.insidesales.repository.ProjectRepository;
+import com.agglotek.insidesales.repository.PurchaseOrderRepository;
 import com.agglotek.insidesales.repository.QuotationRepository;
 import com.agglotek.insidesales.repository.UserRepository;
+import com.agglotek.insidesales.service.api.IClientService;
 import com.agglotek.insidesales.service.api.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +36,15 @@ public class UserServiceImpl implements IUserService {
 
     @Autowired
     private QuotationRepository quotationRepository;
+
+    @Autowired
+    private ProjectRepository projectRepository;
+
+    @Autowired
+    private IClientService clientService;
+
+    @Autowired
+    private PurchaseOrderRepository purchaseOrderRepository;
 
     @Override
     public User addUser(User user) {
@@ -193,5 +207,51 @@ public class UserServiceImpl implements IUserService {
         return usersRepository.findAllUsersWithRole();
     }
 
+    public List<NotificationDTO> notifyAdminsForUnassignedProjects() {
+        List<Project> projects = projectRepository.findAllAllottedProjectsWithoutManager();
+
+        if (projects.isEmpty()) {
+            return List.of(new NotificationDTO("No new allotted projects without manager.", null));
+        }
+        // Find all admins
+        // List<User> admins = usersRepository.findAllAdmins();
+
+        List<NotificationDTO> notifications = new ArrayList<>();
+        for (Project project : projects) {
+            Quotation quotation = quotationRepository.getByQuotationId(project.getQuotationId());
+            Client client = clientService.getClientByProjectId(project.getProjectId());
+            if (quotation == null) {
+                continue;
+            }
+
+            // Case 1: Allotted project without manager
+            if (project.getProjectManagerId() == null) {
+                String message = String.format(
+                        "Project : %s - %s from Fabricator %s is allotted, assign manager.",
+                        quotation.getProjectName(),
+                        project.getProjectNumber(),
+                        client.getName()
+                );
+                notifications.add(new NotificationDTO(message, "HIGH"));
+            }
+
+            // Case 2: Connection engineering required
+            if (Boolean.TRUE.equals(quotation.getConnectionEngineering())) {
+                // Check if Purchase Order already exists for this project
+                boolean poExists = purchaseOrderRepository.existsByProjectId(project.getProjectId());
+
+                if (!poExists) {
+                    String message = String.format(
+                            "Project : %s - %s from Fabricator %s has Connection Engineering, Generate Purchase Order.",
+                            quotation.getProjectName(),
+                            project.getProjectNumber(),
+                            client.getName()
+                    );
+                    notifications.add(new NotificationDTO(message, "HIGH"));
+                }
+            }
+        }
+        return notifications;
+    }
 
 }

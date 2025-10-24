@@ -123,4 +123,8 @@ public class ApiConstants {
     public static final String DELETE_INVOICE_BY_ID = "delete/{invoiceId}";
 
     public static final String ASSIGN_SALES_TARGETS = "/assignSalesTargets";
+
+    public static final String GET_SALES_TARGETS = "/getSalesTargets/{year}";
+
+    public static final String NOTIFY_UNASSIGNED_PROJECTS_TO_ADMIN = "/unassignedProjects";
 }

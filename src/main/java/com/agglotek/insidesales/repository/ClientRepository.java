@@ -16,4 +16,6 @@ import java.util.Optional;
                 "JOIN Project p ON q.quotationId = p.quotationId " +
                 "WHERE p.projectId = :projectId")
         Optional<Client> findClientByProjectId(@Param("projectId") Integer projectId);
+
+        Client getByClientId(Integer clientId);
     }

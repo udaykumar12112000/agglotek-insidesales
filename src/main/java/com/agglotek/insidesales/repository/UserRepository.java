@@ -52,7 +52,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             "JOIN quotations q ON c.client_id = q.client_id " +
             "WHERE c.user_id = :userId " +
             "AND date_trunc('year', c.insert_time) = date_trunc('year', CURRENT_DATE) " +
-            "AND q.quotation_status = 'Alloted'",
+            "AND q.quotation_status = 'alloted'",
             nativeQuery = true)
     Integer getTotalNewClientsAchievedThisYear(@Param("userId")Integer userId);
 
@@ -81,8 +81,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     Integer getTotalNumberOfProjectsAllotedThisMonth(Integer userId, String allotted);
     List<User> findBySupUserId(Integer supUserId);
 
-    @Query(value = "SELECT COUNT(*) > 0 FROM users WHERE user_id = :userId AND role_id = 1", nativeQuery = true)
-    boolean isAdminUser(@Param("userId") Integer userId);
+//    @Query(value = "SELECT COUNT(*) > 0 FROM users WHERE user_id = :userId AND role_id = 1", nativeQuery = true)
+//    boolean isAdminUser(@Param("userId") Integer userId);
 
     @Query(
             value = "SELECT u.email " +
@@ -108,4 +108,21 @@ public interface UserRepository extends JpaRepository<User, Integer> {
                     "JOIN roles r ON u.role_id = r.role_id",
             nativeQuery = true)
     List<UserWithRoleDto> findAllUsersWithRole();
+
+    @Query(value = """
+    SELECT CASE WHEN COUNT(*) > 0 THEN TRUE ELSE FALSE END
+    FROM users u
+    JOIN roles r ON u.role_id = r.role_id
+    WHERE u.user_id = :userId
+      AND r.role_name = 'ADMIN'
+    """, nativeQuery = true)
+    boolean isAdminUser(@Param("userId") Integer userId);
+
+    @Query(
+            value = "SELECT u.* FROM users u " +
+                    "JOIN roles r ON u.role_id = r.role_id " +
+                    "WHERE r.role_name = 'ADMIN'",
+            nativeQuery = true
+    )
+    List<User> findAllAdmins();
 }

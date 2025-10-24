@@ -8,6 +8,7 @@ import com.agglotek.insidesales.dto.ProjectQuotationDTO;
 import com.agglotek.insidesales.repository.ProjectRepository;
 import com.agglotek.insidesales.repository.QuotationRepository;
 import com.agglotek.insidesales.repository.UserRepository;
+import com.agglotek.insidesales.service.api.IConnectionEngService;
 import com.agglotek.insidesales.service.api.IProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,10 @@ public class ProjectServiceImpl implements IProjectService {
     @Autowired
     private UserRepository userRepository;
 
-    public List<ProjectInfoDTO> getProjectDetailsBySalesPersonId(Integer salesPersonId) {
+    @Autowired
+    private IConnectionEngService connectionEngService;
+
+    public List<ProjectInfoDTO> getProjectDetailsBySalesPersonId(Integer salesPersonId, Boolean isConnEng) {
         List<Object[]> rawResults;
 
         // Check if the user is Admin
@@ -48,29 +52,84 @@ public class ProjectServiceImpl implements IProjectService {
         }
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        List<ProjectInfoDTO> filteredProjects = new ArrayList<>();
 
-        return rawResults.stream().map(row -> {
-            return new ProjectInfoDTO(
+        for (Object[] row : rawResults) {
+            Integer quotationId = (Integer) row[1];
+            Quotation quotation = quotationRepository.getByQuotationId(quotationId);
+            Boolean isConnEngInDb = quotation.getConnectionEngineering();
+
+            ProjectInfoDTO dto = new ProjectInfoDTO(
                     (String) row[0],
-                    (Integer) row[1],
-                    (String) row[2],
-                    ((Date) row[3]).toLocalDate().format(formatter),
-                    (String) row[4],
-                    (Integer) row[5],
-                    (String) row[6],
+                    quotationId,
+                    (Integer) row[2],
+                    (String) row[3],
+                    ((Date) row[4]).toLocalDate().format(formatter),
+                    (String) row[5],
+                    (Integer) row[6],
                     (String) row[7],
-                    (BigDecimal) row[8],
-                    (String) row[9],
+                    (String) row[8],
+                    (BigDecimal) row[9],
                     (String) row[10],
-                    (BigDecimal) row[11],
-                    (String) row[12],
-                    (Integer) row[13],
-                    (String) row[14],
-                    row[15] != null ? ((Date) row[15]).toLocalDate() : null,
-                    row[16] != null ? ((Date) row[16]).toLocalDate() : null
+                    (String) row[11],
+                    (BigDecimal) row[12],
+                    (String) row[13],
+                    (Integer) row[14],
+                    (String) row[15],
+                    row[16] != null ? ((Date) row[16]).toLocalDate() : null,
+                    row[17] != null ? ((Date) row[17]).toLocalDate() : null
             );
-        }).collect(Collectors.toList());
+
+            if (isConnEng == null) {
+                // Case 1: Parameter not passed → include all
+                filteredProjects.add(dto);
+            } else if (Boolean.TRUE.equals(isConnEng) && isConnEngInDb) {
+                // Case 2: Only connection engineering projects
+                Integer connEngId = quotation.getConnectionEngId();
+                if (connEngId != null) {
+                    connectionEngService.getById(Long.valueOf(connEngId)).ifPresent(connEng -> {
+                        dto.setConnectionEng(connEng);
+                    });
+                }
+                filteredProjects.add(dto);
+            } else if (Boolean.FALSE.equals(isConnEng) && !isConnEngInDb) {
+                // Case 3: Only non-connection engineering projects
+                filteredProjects.add(dto);
+            }
+        }
+
+        return filteredProjects;
+
+
+//        return rawResults.stream().map(row -> new ProjectInfoDTO(
+//                (String) row[0],
+//                (Integer) row[1],
+//                (Integer) row[2],
+//                (String) row[3],
+//                ((Date) row[4]).toLocalDate().format(formatter),
+//                (String) row[5],
+//                (Integer) row[6],
+//                (String) row[7],
+//                (String) row[8],
+//                (BigDecimal) row[9],
+//                (String) row[10],
+//                (String) row[11],
+//                (BigDecimal) row[12],
+//                (String) row[13],
+//                (Integer) row[14],
+//                (String) row[15],
+//                row[16] != null ? ((Date) row[16]).toLocalDate() : null,
+//                row[17] != null ? ((Date) row[17]).toLocalDate() : null
+//        )).collect(Collectors.toList());
     }
+    private boolean checkIsConnEng(Integer quotationId) {
+
+        System.out.println("JAXX :: quotationId : "+quotationId);
+        Quotation quotation = quotationRepository.getByQuotationId(quotationId);
+        Boolean connEngFlag = quotation.getConnectionEngineering();
+        return connEngFlag;
+    }
+
 
     public boolean updateProjectDetails(ProjectInfoDTO request) {
         Optional<Project> optionalProject = projectRepository.findById(request.getProjectId());
@@ -130,6 +189,7 @@ public class ProjectServiceImpl implements IProjectService {
         String projectNumber = generateProjectNumber();
         project.setProjectNumber(projectNumber);
         project.setBalanceAmt(quotation.getQuotationValue());
+        project.setProjectValue(quotation.getQuotationValue());
         project.setCreatedTime(LocalDateTime.now());
         projectRepository.save(project);
     }

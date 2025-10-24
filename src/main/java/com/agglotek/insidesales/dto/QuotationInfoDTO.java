@@ -1,5 +1,6 @@
 package com.agglotek.insidesales.dto;
 
+import com.agglotek.insidesales.dao.entity.ConnectionEng;
 import com.agglotek.insidesales.dao.entity.Quotation;
 import java.util.List;
 
@@ -9,6 +10,7 @@ public class QuotationInfoDTO extends Quotation {
     private String country;
     private String userName;
     List<String> filesList;
+    private ConnectionEng connectionEng;
 
     public QuotationInfoDTO() {
         super();
@@ -21,6 +23,14 @@ public class QuotationInfoDTO extends Quotation {
     }
 
     // Getters and Setters
+
+    public ConnectionEng getConnectionEng() {
+        return connectionEng;
+    }
+
+    public void setConnectionEng(ConnectionEng connectionEng) {
+        this.connectionEng = connectionEng;
+    }
 
     public String getClientName() {
         return clientName;
@@ -53,4 +63,5 @@ public class QuotationInfoDTO extends Quotation {
     public void setFilesList(List<String> filesList) {
         this.filesList = filesList;
     }
+
 }

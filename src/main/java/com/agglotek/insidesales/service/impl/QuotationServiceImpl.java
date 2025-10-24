@@ -7,6 +7,7 @@ import com.agglotek.insidesales.dto.QuotationInfoDTO;
 import com.agglotek.insidesales.repository.ClientRepository;
 import com.agglotek.insidesales.repository.QuotationRepository;
 import com.agglotek.insidesales.repository.UserRepository;
+import com.agglotek.insidesales.service.api.IConnectionEngService;
 import com.agglotek.insidesales.service.api.IProjectService;
 import com.agglotek.insidesales.service.api.IQuotationService;
 import org.springframework.beans.BeanUtils;
@@ -38,6 +39,9 @@ public class QuotationServiceImpl implements IQuotationService {
 
     @Autowired
     private IProjectService projectService;
+
+    @Autowired
+    private IConnectionEngService connectionEngService;
 
     @Override
     public boolean existsByClientId(Integer clientId) {
@@ -80,22 +84,36 @@ public class QuotationServiceImpl implements IQuotationService {
         return convertToDTOList(quotations);
     }
 
-    private List<QuotationInfoDTO> convertToDTOList(List<Quotation> quotations) {
+    public List<QuotationInfoDTO> convertToDTOList(List<Quotation> quotations) {
 
-        if(quotations.isEmpty() || quotations == null)
+        if (quotations == null || quotations.isEmpty()) {
             return new ArrayList<>();
+        }
         return quotations.stream().map(quotation -> {
             QuotationInfoDTO dto = new QuotationInfoDTO();
             BeanUtils.copyProperties(quotation, dto);
 
-            clientRepository.findById(quotation.getClientId()).ifPresent(client -> {
-                dto.setClientName(client.getName());
-                dto.setCountry(client.getCountry());
-            });
+            Integer clientId = quotation.getClientId();
+            if (clientId != null) {
+                clientRepository.findById(clientId).ifPresent(client -> {
+                    dto.setClientName(client.getName());
+                    dto.setCountry(client.getCountry());
+                });
+            }
 
-            userRepository.findById(quotation.getUserId()).ifPresent(user -> {
-                dto.setUserName(user.getName());
-            });
+            Integer userId = quotation.getUserId();
+            if (userId != null) {
+                userRepository.findById(userId).ifPresent(user -> {
+                    dto.setUserName(user.getName());
+                });
+            }
+
+            Integer connEngId = quotation.getConnectionEngId();
+            if (connEngId != null) {
+                connectionEngService.getById(Long.valueOf(connEngId)).ifPresent(connEng -> {
+                    dto.setConnectionEng(connEng);
+                });
+            }
 
             return dto;
         }).collect(Collectors.toList());
@@ -121,6 +139,8 @@ public class QuotationServiceImpl implements IQuotationService {
             quotation.setConnectionEngineering(dto.getConnectionEngineering());
         if(dto.getConnectionEngineeringDescription()!=null)
             quotation.setConnectionEngineeringDescription(dto.getConnectionEngineeringDescription());
+        if(dto.getConnectionEngId()!=null)
+            quotation.setConnectionEngId(dto.getConnectionEngId());
         if(dto.getScopeOfWork()!=null)
             quotation.setScopeOfWork(dto.getScopeOfWork());
         if(dto.getLeadTime()!=null)

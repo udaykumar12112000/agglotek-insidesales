@@ -48,4 +48,6 @@ public interface SalesTargetsRepository extends JpaRepository<SalesTarget, Integ
 
     Optional<SalesTarget> findByUserIdAndYear(Integer userId, BigDecimal year);
 
+    List<SalesTarget> findByYear(BigDecimal year);
+
 }

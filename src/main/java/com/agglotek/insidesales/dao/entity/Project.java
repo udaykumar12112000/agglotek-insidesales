@@ -36,6 +36,9 @@ public class Project {
     @Column(name = "project_status", length = 50)
     private String projectStatus;
 
+    @Column(name = "project_value", precision = 15, scale = 2)
+    private BigDecimal projectValue;
+
     @Column(name = "planned_submitted_date")
     private LocalDate plannedSubmittedDate;
 
@@ -61,6 +64,14 @@ public class Project {
     private BigDecimal balanceAmt;
 
     // Getters and Setters
+
+    public BigDecimal getProjectValue() {
+        return projectValue;
+    }
+
+    public void setProjectValue(BigDecimal projectValue) {
+        this.projectValue = projectValue;
+    }
 
     public String getProjectNumber() {
         return projectNumber;
@@ -201,14 +212,15 @@ public class Project {
                 ", createdTime=" + createdTime +
                 ", projectManagerId=" + projectManagerId +
                 ", projectStatus='" + projectStatus + '\'' +
+                ", projectValue=" + projectValue +
                 ", plannedSubmittedDate=" + plannedSubmittedDate +
                 ", ifcSubmissionDate=" + ifcSubmissionDate +
                 ", ifaSubmissionDate=" + ifaSubmissionDate +
                 ", projectNumber='" + projectNumber + '\'' +
                 ", clientProjectNumber='" + clientProjectNumber + '\'' +
                 ", purchaseOrder='" + purchaseOrder + '\'' +
-                ", connPO=" + connPO + '\'' +
-                ", balanceAmt=" + balanceAmt + '\'' +
+                ", connPO=" + connPO +
+                ", balanceAmt=" + balanceAmt +
                 '}';
     }
 }

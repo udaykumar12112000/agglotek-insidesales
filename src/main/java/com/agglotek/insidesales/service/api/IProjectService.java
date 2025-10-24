@@ -10,7 +10,7 @@ import java.util.List;
 
 
 public interface IProjectService {
-    public List<ProjectInfoDTO> getProjectDetailsBySalesPersonId(Integer salesPersonId) ;
+    public List<ProjectInfoDTO> getProjectDetailsBySalesPersonId(Integer salesPersonId, Boolean isConnEng) ;
 
     public boolean updateProjectDetails(ProjectInfoDTO request);
 

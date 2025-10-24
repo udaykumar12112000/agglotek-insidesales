@@ -48,5 +48,7 @@ public interface QuotationRepository extends JpaRepository<Quotation, Integer> {
 
     @Query("SELECT q FROM Quotation q")
     List<Quotation> getAllQuotations();
+
+    Quotation getByQuotationId(Integer quotationId);
 }
 

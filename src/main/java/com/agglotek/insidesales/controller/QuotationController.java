@@ -66,6 +66,7 @@ public class QuotationController {
         quotation.setQuotationDueDate(request.getQuotationDueDate());
         quotation.setProjectName(request.getProjectName());
         quotation.setConnectionEngineering(request.getConnectionEngineering());
+        quotation.setConnectionEngId(request.getConnectionEngId());
         quotation.setComments(request.getComments());
         quotation.setUserId(userId);
         quotation.setClientId(request.getClientId());
@@ -127,8 +128,10 @@ public class QuotationController {
             quotations = quotationService.getQuotationsByUserIdAndStatus(userId, quotationStatus);
         }
 
-        for(QuotationInfoDTO quotation : quotations) {
-             quotation.setFilesList(fileService.listFiles(quotation.getQuotationNumber(), quotation.getProjectName(), quotation.getClientId()));
+        if(!quotations.isEmpty() || quotations != null) {
+            for (QuotationInfoDTO quotation : quotations) {
+                quotation.setFilesList(fileService.listFiles(quotation.getQuotationNumber(), quotation.getProjectName(), quotation.getClientId()));
+            }
         }
         return ResponseEntity.ok(quotations);
     }
@@ -139,6 +142,7 @@ public class QuotationController {
             quotationService.updateQuotation(dto);
             return ResponseEntity.ok(new ApiResponse(true,"Quotation updated successfully"));
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse(false, "Failed to update quotation"));
         }

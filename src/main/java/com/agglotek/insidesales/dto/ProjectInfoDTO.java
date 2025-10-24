@@ -1,5 +1,6 @@
 package com.agglotek.insidesales.dto;
 
+import com.agglotek.insidesales.dao.entity.ConnectionEng;
 import com.agglotek.insidesales.dao.entity.Project;
 
 import java.math.BigDecimal;
@@ -19,8 +20,17 @@ public class ProjectInfoDTO extends Project {
     private BigDecimal connPO;
     private Integer clientId;
     private List<String> filesList;
+    private ConnectionEng connectionEng;
 
     // Getters and Setters
+
+    public ConnectionEng getConnectionEng() {
+        return connectionEng;
+    }
+
+    public void setConnectionEng(ConnectionEng connectionEng) {
+        this.connectionEng = connectionEng;
+    }
 
     public Integer getClientId() {
         return clientId;
@@ -113,11 +123,12 @@ public class ProjectInfoDTO extends Project {
         this.clientProjectNumber = clientProjectNumber;
     }
 
-    public ProjectInfoDTO(String quotationNumber, Integer projectId, String projectNumber, String date,
+    public ProjectInfoDTO(String quotationNumber, Integer quotationId, Integer projectId, String projectNumber, String date,
                           String clientName, Integer clientId, String projectName, String country,
                           BigDecimal projectValue, String clientProjectNumber, String purchaseOrder, BigDecimal connPO,
                           String comments, Integer projectManagerId, String projectStatus, LocalDate ifcSubmissionDate, LocalDate ifaSubmissionDate) {
         this.quotationNumber = quotationNumber;
+        super.setQuotationId(quotationId);
         super.setProjectNumber(projectNumber);
         super.setProjectId(projectId);
         this.date = date;

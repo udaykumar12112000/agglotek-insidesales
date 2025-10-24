@@ -18,4 +18,6 @@ public interface IQuotationService {
     public void updateAssignedEstimator(Integer quotationId, Integer newEstimatorId);
 
     public List<QuotationInfoDTO> getAllQuotations();
+
+    public List<QuotationInfoDTO> convertToDTOList(List<Quotation> quotations);
 }

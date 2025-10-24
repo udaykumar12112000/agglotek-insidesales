@@ -1,6 +1,7 @@
 package com.agglotek.insidesales.repository;
 
 import com.agglotek.insidesales.dao.entity.Project;
+import com.agglotek.insidesales.dao.entity.Quotation;
 import com.agglotek.insidesales.dto.ProjectDetailsWithQuotationDetails;
 import com.agglotek.insidesales.dto.ProjectInfoDTO;
 import org.springframework.data.jpa.repository.Query;
@@ -13,6 +14,7 @@ public interface ProjectRepository extends JpaRepository<Project, Integer> {
 
     @Query(value = "SELECT " +
             "q.quotation_number AS quotationNumber, " +
+            "p.quotation_id AS quotationId, " +
             "p.project_id AS projectId, " +
             "p.project_number AS projectNumber, " +
             "CURRENT_DATE AS date, " +
@@ -20,7 +22,7 @@ public interface ProjectRepository extends JpaRepository<Project, Integer> {
             "c.client_id AS clientId, " +
             "q.project_name AS projectName, " +
             "c.country AS country, " +
-            "q.project_value AS projectValue, " +
+            "p.project_value AS projectValue, " +
             "p.client_job_number AS clientJobNumber, " +
             "p.purchase_order AS purchaseOrder, " +
             "p.conn_po AS connPO, " +
@@ -38,6 +40,7 @@ public interface ProjectRepository extends JpaRepository<Project, Integer> {
 
     @Query(value = "SELECT " +
             "q.quotation_number AS quotationNumber, " +
+            "p.quotation_id AS quotationId, " +
             "p.project_id AS projectId, " +
             "p.project_number AS projectNumber, " +
             "CURRENT_DATE AS date, " +
@@ -45,7 +48,7 @@ public interface ProjectRepository extends JpaRepository<Project, Integer> {
             "c.client_id AS clientId, " +
             "q.project_name AS projectName, " +
             "c.country AS country, " +
-            "q.project_value AS projectValue, " +
+            "p.project_value AS projectValue, " +
             "p.client_job_number AS clientJobNumber, " +
             "p.purchase_order AS purchaseOrder, " +
             "p.conn_po AS connPO, " +
@@ -79,4 +82,15 @@ public interface ProjectRepository extends JpaRepository<Project, Integer> {
             "LEFT JOIN Quotation q ON p.quotationId = q.quotationId " +
             "WHERE p.projectStatus IN :statuses")
     List<ProjectDetailsWithQuotationDetails> findProjectsWithNameByStatus(@Param("statuses") List<String> statuses);
+
+    @Query("""
+            SELECT p 
+            FROM Project p 
+            JOIN Quotation q ON p.quotationId = q.quotationId
+            WHERE q.quotationStatus = 'allotted'
+            AND p.projectManagerId IS NULL
+    """)
+    List<Project> findAllAllottedProjectsWithoutManager();
+
+    Project getByProjectId(Integer projectId);
 }
