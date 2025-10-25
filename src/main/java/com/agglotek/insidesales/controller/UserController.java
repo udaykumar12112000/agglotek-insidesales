@@ -101,7 +101,7 @@ public class UserController {
         if (request.getEmail() != null) user.setEmail(request.getEmail());
         if (request.getPhoneNumber() != null) user.setPhoneNumber(request.getPhoneNumber());
 
-        if (AppConstants.ADMIN.equalsIgnoreCase(user.getEditorRoleName())) {
+        if (AppConstants.ADMIN.equalsIgnoreCase(request.getEditorRoleName())) {
             if (request.getDepartment() != null) user.setDepartment(request.getDepartment());
             if (request.getSupUserId() != null) user.setSupUserId(request.getSupUserId());
             if (request.getRoleId() != null) user.setRoleId(request.getRoleId());
