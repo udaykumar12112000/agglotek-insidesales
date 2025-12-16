@@ -41,12 +41,6 @@ public class ConnectionEngServiceImpl implements IConnectionEngService {
                     if (updated.getContactPersonName() != null)
                         existing.setContactPersonName(updated.getContactPersonName());
 
-                    if (updated.getPhoneNo() != null)
-                        existing.setPhoneNo(updated.getPhoneNo());
-
-                    if (updated.getMailAddress() != null)
-                        existing.setMailAddress(updated.getMailAddress());
-
                     if (updated.getCountry() != null)
                         existing.setCountry(updated.getCountry());
 
@@ -55,6 +49,9 @@ public class ConnectionEngServiceImpl implements IConnectionEngService {
 
                     if (updated.getAddress() != null)
                         existing.setAddress(updated.getAddress());
+
+                    if (updated.getState() != null)
+                        existing.setState(updated.getState());
 
                     return repository.save(existing);
                 })

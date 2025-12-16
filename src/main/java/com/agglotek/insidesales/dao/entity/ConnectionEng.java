@@ -13,17 +13,14 @@ public class ConnectionEng {
     @Column(name = "company_name", nullable = false)
     private String companyName;
 
-    @Column(name = "contact_person_name")
+    @Column(name = "contact_person_name", columnDefinition = "TEXT")
     private String contactPersonName;
-
-    @Column(name = "phone_no")
-    private String phoneNo;
-
-    @Column(name = "mail_address")
-    private String mailAddress;
 
     @Column(name = "country")
     private String country;
+
+    @Column(name = "state")
+    private String state;
 
     @Column(name = "remark")
     private String remark;
@@ -65,22 +62,6 @@ public class ConnectionEng {
         this.contactPersonName = contactPersonName;
     }
 
-    public String getPhoneNo() {
-        return phoneNo;
-    }
-
-    public void setPhoneNo(String phoneNo) {
-        this.phoneNo = phoneNo;
-    }
-
-    public String getMailAddress() {
-        return mailAddress;
-    }
-
-    public void setMailAddress(String mailAddress) {
-        this.mailAddress = mailAddress;
-    }
-
     public String getCountry() {
         return country;
     }
@@ -95,5 +76,26 @@ public class ConnectionEng {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    @java.lang.Override
+    public java.lang.String toString() {
+        return "ConnectionEng{" +
+                "connectionEngId=" + connectionEngId +
+                ", companyName='" + companyName + '\'' +
+                ", contactPersonName='" + contactPersonName + '\'' +
+                ", country='" + country + '\'' +
+                ", state='" + state + '\'' +
+                ", remark='" + remark + '\'' +
+                ", address='" + address + '\'' +
+                '}';
     }
 }

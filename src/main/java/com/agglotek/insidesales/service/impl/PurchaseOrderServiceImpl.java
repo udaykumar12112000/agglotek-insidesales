@@ -1,8 +1,14 @@
 package com.agglotek.insidesales.service.impl;
 
+import com.agglotek.insidesales.dao.entity.Project;
+import com.agglotek.insidesales.dao.entity.Quotation;
+import com.agglotek.insidesales.dto.QuotationInfoDTO;
+import com.agglotek.insidesales.repository.ProjectRepository;
+import com.agglotek.insidesales.service.api.IProjectService;
 import com.agglotek.insidesales.service.api.IPurchaseOrderService;
 import com.agglotek.insidesales.dao.entity.PurchaseOrder;
 import com.agglotek.insidesales.repository.PurchaseOrderRepository;
+import com.agglotek.insidesales.service.api.IQuotationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,12 +16,19 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.math.BigDecimal;
 
 @Service
 public class PurchaseOrderServiceImpl implements IPurchaseOrderService {
 
     @Autowired
     private PurchaseOrderRepository purchaseOrderRepository;
+
+    @Autowired
+    private IProjectService projectService;
+
+    @Autowired
+    private ProjectRepository projectRepository;
 
     @Override
     public PurchaseOrder createPurchaseOrder(PurchaseOrder purchaseOrder) {
@@ -30,6 +43,10 @@ public class PurchaseOrderServiceImpl implements IPurchaseOrderService {
 
         purchaseOrder.setPoNumber(poNumber);
 
+        Project project = projectRepository.getByProjectId(purchaseOrder.getProjectId());
+        System.out.println(("JAXX ::: PROJECT :: " + project));
+        project.setConnPO(BigDecimal.valueOf(purchaseOrder.getValue()));
+        projectService.updateProject(project);
         return purchaseOrderRepository.save(purchaseOrder);
     }
 

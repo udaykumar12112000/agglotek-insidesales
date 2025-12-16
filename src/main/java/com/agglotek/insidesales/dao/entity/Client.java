@@ -20,8 +20,14 @@ public class Client {
     @Column(name = "user_id")
     private Integer userId;
 
+    @Column(name = "assigned_sales_user_id")
+    private Integer assignedSalesUserId;
+
     @Column(name = "name", length = 100)
     private String name;
+
+    @Column(name = "is_fabricator")
+    private Boolean isFabricator;
 
     @Column(name = "email", length = 100)
     private String email;
@@ -46,6 +52,9 @@ public class Client {
 
     @Column(name = "country", length = 50)
     private String country;
+
+    @Column(name = "state", length = 50)
+    private String state;
 
     @Column(name = "address", columnDefinition = "text")
     private String address;
@@ -201,12 +210,38 @@ public class Client {
         this.updatedTime = updatedTime;
     }
 
-    @Override
-    public String toString() {
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public Integer getAssignedSalesUserId() {
+        return assignedSalesUserId;
+    }
+
+    public void setAssignedSalesUserId(Integer assignedSalesUserId) {
+        this.assignedSalesUserId = assignedSalesUserId;
+    }
+
+    public Boolean getIsFabricator() {
+        return isFabricator;
+    }
+
+    public void setIsFabricator(Boolean isFabricator) {
+        this.isFabricator = isFabricator;
+    }
+
+    @java.lang.Override
+    public java.lang.String toString() {
         return "Client{" +
                 "clientId=" + clientId +
                 ", userId=" + userId +
+                ", assignedSalesUserId=" + assignedSalesUserId +
                 ", name='" + name + '\'' +
+                ", isFabricator=" + isFabricator +
                 ", email='" + email + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", alterPhoneNumber='" + alterPhoneNumber + '\'' +
@@ -215,12 +250,13 @@ public class Client {
                 ", availableHrs='" + availableHrs + '\'' +
                 ", ourTime='" + ourTime + '\'' +
                 ", country='" + country + '\'' +
+                ", state='" + state + '\'' +
                 ", address='" + address + '\'' +
                 ", details='" + details + '\'' +
                 ", stakeHolders='" + stakeHolders + '\'' +
                 ", dateOfEntry='" + dateOfEntry + '\'' +
                 ", updatedTime=" + updatedTime +
-                ", createdTime=" + insertedTime +
+                ", insertedTime=" + insertedTime +
                 '}';
     }
 

@@ -4,10 +4,13 @@ import com.agglotek.insidesales.ApiResponse;
 import com.agglotek.insidesales.constants.ApiConstants;
 import com.agglotek.insidesales.dao.entity.Client;
 import com.agglotek.insidesales.dao.entity.ClientConvo;
+import com.agglotek.insidesales.dao.entity.User;
 import com.agglotek.insidesales.dto.ClientConvoDTO;
 import com.agglotek.insidesales.repository.ClientRepository;
 import com.agglotek.insidesales.service.api.IClientConvoService;
 import com.agglotek.insidesales.service.api.IClientService;
+import com.agglotek.insidesales.service.api.IRoleService;
+import com.agglotek.insidesales.service.api.IUserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +19,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
 import java.util.Optional;
+
+import static com.agglotek.insidesales.constants.AppConstants.ADMIN;
 
 @RestController
 //@CrossOrigin(
@@ -41,6 +48,11 @@ public class ClientController {
     @Autowired
     private ClientRepository clientRepository;
 
+    @Autowired
+    private IUserService userService;
+
+    @Autowired
+    private IRoleService roleService;
 
     @PostMapping(ApiConstants.ADD_CLIENTS)
     public Client saveClient(@RequestBody Client client, @RequestHeader("User-Id") Integer userId) {
@@ -65,11 +77,34 @@ public class ClientController {
 
     @GetMapping(ApiConstants.GET_CLIENTS)
     public List<Client> getClients(@RequestParam(required = false) Integer userId) {
-        if (userId != null) {
-            return clientService.getClientsByUserId(userId);
-        } else {
+
+        // CASE 1: userId not passed → return ALL clients
+        if (userId == null) {
             return clientService.getAllClients();
         }
+        // CASE 2: userId passed as NULL-like value → return unassigned clients
+        else if (userId.intValue() == 0) {  // optional: treat 0 as "null" flag
+            return clientService.getUnassignedClients();
+        }
+
+        // CASE 3: userId passed normally → return assigned clients
+        return clientService.getClientsByAssignedSalesUserId(userId);
+    }
+
+    @GetMapping(ApiConstants.GET_FABRICATORS)
+    public List<Client> getFabricatorList(@RequestHeader("User-Id") Integer userId) {
+
+        List<User> usersList = userService.getUserByUserId(userId);
+
+        if(usersList == null || usersList.isEmpty())
+            return new ArrayList<>();
+
+        User user = usersList.get(0);
+        if(roleService.getRoleNameById(user.getRoleId()).equals(ADMIN)){
+            return clientRepository.findByIsFabricatorTrue();
+        }
+        else
+            return clientRepository.findByAssignedSalesUserIdAndIsFabricatorTrue(userId);
     }
 
     @PostMapping(ApiConstants.ADD_CLIENT_CONVO)
@@ -98,6 +133,24 @@ public class ClientController {
     public ResponseEntity<?> getClientByProjectId(@PathVariable Integer projectId) {
         Client client = clientService.getClientByProjectId(projectId);
         return ResponseEntity.ok(client);
+    }
+
+    @PostMapping(ApiConstants.ASSIGN_CLEINTS_TO_SALES)
+    public ResponseEntity<ApiResponse> assignClientsToSales(@RequestBody Map<String, Map<Integer, List<Integer>>> requestMap) {
+
+        try {
+            Map<Integer, List<Integer>> usersToClientsMap = requestMap.get("data");
+            if (usersToClientsMap == null || usersToClientsMap.isEmpty()) {
+                return ResponseEntity.ok(new ApiResponse(false, "request data is empty!", null));
+            }
+
+            return ResponseEntity.ok(clientService.assignClientsToSales(usersToClientsMap));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse(false, "Failed to assign clients to users!"));
+        }
     }
 
 }

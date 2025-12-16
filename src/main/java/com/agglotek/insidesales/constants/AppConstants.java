@@ -22,11 +22,12 @@ public class AppConstants {
     public static final String NULL="null";
 
 //
-    public static final String PROJECT_BASE_DIRECTORY="/home/agglotek/projects";
-    public static final String QUOTATION_BASE_DIRECTORY="/home/agglotek/quotations";
-    public static final String INVOICE_BASE_DIRECTORY = "/home/agglotek/invoice";
+//    public static final String PROJECT_BASE_DIRECTORY="/home/agglotek/projects";
+//    public static final String QUOTATION_BASE_DIRECTORY="/home/agglotek/quotations";
+//    public static final String INVOICE_BASE_DIRECTORY = "/home/agglotek/invoice";
 
 
-//    public static final String PROJECT_BASE_DIRECTORY="C:/Users/Administrator/Documents/agglotek/projects";
-//    public static final String QUOTATION_BASE_DIRECTORY="C:/Users/Administrator/Documents/agglotek/quotations";
+    public static final String PROJECT_BASE_DIRECTORY = "C:/Users/jaanu/Documents/data/agglotek/projects";
+    public static final String QUOTATION_BASE_DIRECTORY = "C:/Users/jaanu/Documents/data/agglotek/quotations";
+    public static final String INVOICE_BASE_DIRECTORY = "C:/Users/jaanu/Documents/data/agglotek/invoice";
 }

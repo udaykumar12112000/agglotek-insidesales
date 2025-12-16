@@ -7,6 +7,7 @@ import com.agglotek.insidesales.dto.QuotationInfoDTO;
 import com.agglotek.insidesales.repository.ClientRepository;
 import com.agglotek.insidesales.repository.QuotationRepository;
 import com.agglotek.insidesales.repository.UserRepository;
+import com.agglotek.insidesales.service.api.IClientService;
 import com.agglotek.insidesales.service.api.IConnectionEngService;
 import com.agglotek.insidesales.service.api.IProjectService;
 import com.agglotek.insidesales.service.api.IQuotationService;
@@ -42,6 +43,9 @@ public class QuotationServiceImpl implements IQuotationService {
 
     @Autowired
     private IConnectionEngService connectionEngService;
+
+    @Autowired
+    private IClientService clientService;
 
     @Override
     public boolean existsByClientId(Integer clientId) {
@@ -133,6 +137,7 @@ public class QuotationServiceImpl implements IQuotationService {
 
             if (AppConstants.ALLOTTED.equalsIgnoreCase(dto.getQuotationStatus())) {
                 projectService.createProjectFromQuotation(quotation);
+                clientService.updateClientToFabricator(quotation.getClientId());
             }
         }
         if(dto.getConnectionEngineering()!=null)
@@ -149,8 +154,12 @@ public class QuotationServiceImpl implements IQuotationService {
             quotation.setAdditionalProperties(dto.getAdditionalProperties());
         if(dto.getDateOfProposal()!=null)
             quotation.setDateOfProposal(dto.getDateOfProposal());
+        if(dto.getContactPersonName()!=null)
+            quotation.setContactPersonName(dto.getContactPersonName());
+        if(dto.getContactPersonNumber()!=null)
+            quotation.setContactPersonNumber(dto.getContactPersonNumber());
 
-        quotation.setDateOfProposal(LocalDate.now());
+//      quotation.setDateOfProposal(LocalDate.now());
         quotation.setUpdatedTime(LocalDateTime.now());
 
         quotationRepository.save(quotation);

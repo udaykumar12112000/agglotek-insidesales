@@ -14,6 +14,8 @@ public class ApiConstants {
 
     public static final String GET_CLIENTS = "/getClients";
 
+    public static final String GET_FABRICATORS = "/getFabricators";
+
     public static final String ADD_CLIENT_CONVO = "/addClientConvo";
 
     public static final String GET_CLIENT_CONVO = "/getClientConvoData";
@@ -23,6 +25,8 @@ public class ApiConstants {
     public static final String EDIT_CLIENT_CONVO = "editClientConvo";
 
     public static final String GET_CLIENT_BY_PROJECT_ID = "/getClient/{projectId}";
+
+    public static final String ASSIGN_CLEINTS_TO_SALES = "/assignClients";
 
     //users
     public static final String USER_APIS = "/api/users";

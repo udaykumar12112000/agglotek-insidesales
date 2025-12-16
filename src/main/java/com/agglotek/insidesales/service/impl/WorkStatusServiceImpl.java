@@ -35,6 +35,7 @@ public class WorkStatusServiceImpl implements IWorkStatusService {
         entry.setSamplesSend(request.getSamplesSend() != null ? request.getSamplesSend() : 0);
         entry.setBidsReceived(request.getBidsReceived() != null ? request.getBidsReceived() : 0);
         entry.setProjectsReceived(request.getProjectsReceived() != null ? request.getProjectsReceived() : 0);
+        entry.setRemarks(request.getRemarks());
 
         return repository.save(entry);
     }
@@ -75,6 +76,9 @@ public class WorkStatusServiceImpl implements IWorkStatusService {
 
             if (request.getProjectsReceived() != null)
                 workStatus.setProjectsReceived(request.getProjectsReceived());
+
+            if (request.getRemarks() != null)
+                workStatus.setRemarks(request.getRemarks());
 
             repository.save(workStatus);
             return new ApiResponse(true, "Work status updated successfully!", workStatus);

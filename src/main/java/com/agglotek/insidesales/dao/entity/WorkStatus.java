@@ -20,6 +20,9 @@ public class WorkStatus {
     @Column(nullable = false)
     private LocalDate date;
 
+    @Column(name = "remarks", columnDefinition = "TEXT")
+    private String remarks;
+
     private Integer noOfCalls = 0;
     private Integer samplesSend = 0;
     private Integer bidsReceived = 0;
@@ -77,6 +80,14 @@ public class WorkStatus {
 
     public Integer getProjectsReceived() {
         return projectsReceived;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
     }
 
     public void setProjectsReceived(Integer projectsReceived) {

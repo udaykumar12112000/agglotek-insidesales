@@ -49,6 +49,8 @@ public class GlobalExceptionHandler {
                 message = "Project Already exists.";
             } else if(causeMsg.contains("unique_quotation_number")){
                 message = "Quotation Already exists.";
+            } else if(causeMsg.contains("unique_work_status_date")){
+                message = "Entry Already exists for the entered date. Please edit the record.";
             }
         }
 

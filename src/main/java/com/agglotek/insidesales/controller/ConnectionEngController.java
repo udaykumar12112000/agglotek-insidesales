@@ -26,6 +26,7 @@ public class ConnectionEngController {
     public ResponseEntity<ApiResponse> create(@RequestBody ConnectionEng connectionEng) {
 
         ConnectionEng connEng = new ConnectionEng();
+        System.out.println("JAXX :: connectionEng : "+connectionEng.getContactPersonName());
         try{
             connEng = service.save(connectionEng);
         } catch (Exception e) {

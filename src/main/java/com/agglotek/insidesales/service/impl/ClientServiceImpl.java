@@ -7,6 +7,7 @@ import com.agglotek.insidesales.service.api.IClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -27,6 +28,14 @@ public class ClientServiceImpl implements IClientService {
         return clientRepository.findByUserId(userId);
     }
 
+    public List<Client> getUnassignedClients() {
+        return clientRepository.findByAssignedSalesUserIdIsNull();
+    }
+
+    public List<Client> getClientsByAssignedSalesUserId(Integer userId) {
+        return clientRepository.findByAssignedSalesUserId(userId);
+    }
+
     public ApiResponse editClient(Client clientData) {
 
         Optional<Client> optionalClient = clientRepository.findById(clientData.getClientId());
@@ -35,73 +44,87 @@ public class ClientServiceImpl implements IClientService {
         }
 
         Client existingClient = optionalClient.get();
-        boolean updated = false;
 
         if (clientData.getName() != null && !clientData.getName().equals(existingClient.getName())) {
             existingClient.setName(clientData.getName());
-            updated = true;
         }
         if (clientData.getEmail() != null && !clientData.getEmail().equals(existingClient.getEmail())) {
             existingClient.setEmail(clientData.getEmail());
-            updated = true;
         }
         if (clientData.getPhoneNumber() != null && !clientData.getPhoneNumber().equals(existingClient.getPhoneNumber())) {
             existingClient.setPhoneNumber(clientData.getPhoneNumber());
-            updated = true;
         }
         if (clientData.getAlterPhoneNumber() != null && !clientData.getAlterPhoneNumber().equals(existingClient.getAlterPhoneNumber())) {
             existingClient.setAlterPhoneNumber(clientData.getAlterPhoneNumber());
-            updated = true;
         }
         if (clientData.getClientType() != null && !clientData.getClientType().equals(existingClient.getClientType())) {
             existingClient.setClientType(clientData.getClientType());
-            updated = true;
         }
         if (clientData.getTimeZone() != null && !clientData.getTimeZone().equals(existingClient.getTimeZone())) {
             existingClient.setTimeZone(clientData.getTimeZone());
-            updated = true;
         }
         if (clientData.getAvailableHrs() != null && !clientData.getAvailableHrs().equals(existingClient.getAvailableHrs())) {
             existingClient.setAvailableHrs(clientData.getAvailableHrs());
-            updated = true;
         }
         if (clientData.getOurTime() != null && !clientData.getOurTime().equals(existingClient.getOurTime())) {
             existingClient.setOurTime(clientData.getOurTime());
-            updated = true;
         }
         if (clientData.getCountry() != null && !clientData.getCountry().equals(existingClient.getCountry())) {
             existingClient.setCountry(clientData.getCountry());
-            updated = true;
+        }
+
+        if (clientData.getState() != null && !clientData.getState().equals(existingClient.getState())) {
+            existingClient.setState(clientData.getState());
         }
         if (clientData.getAddress() != null && !clientData.getAddress().equals(existingClient.getAddress())) {
             existingClient.setAddress(clientData.getAddress());
-            updated = true;
         }
         if (clientData.getDetails() != null && !clientData.getDetails().equals(existingClient.getDetails())) {
             existingClient.setDetails(clientData.getDetails());
-            updated = true;
         }
         if (clientData.getStakeHolders() != null && !clientData.getStakeHolders().equals(existingClient.getStakeHolders())) {
             existingClient.setStakeHolders(clientData.getStakeHolders());
-            updated = true;
         }
         if (clientData.getDateOfEntry() != null && !clientData.getDateOfEntry().equals(existingClient.getDateOfEntry())) {
             existingClient.setDateOfEntry(clientData.getDateOfEntry());
-            updated = true;
         }
 
-        if (updated) {
-            clientRepository.save(existingClient);
-            return new ApiResponse(true, "Client updated successfully!", existingClient);
-        } else {
-            return new ApiResponse(false, "No changes detected", existingClient);
-        }
+        clientRepository.save(existingClient);
+        return new ApiResponse(true, "Client updated successfully!", existingClient);
     }
 
     @Override
     public Client getClientByProjectId(Integer projectId) {
         return clientRepository.findClientByProjectId(projectId)
                 .orElseThrow(() -> new RuntimeException("Client not found for projectId: " + projectId));
+    }
+
+    public ApiResponse assignClientsToSales(Map<Integer, List<Integer>> usersToClientsMap) {
+        int totalUpdated = 0;
+        int totalUsers = 0;
+
+        try {
+            for (Integer userId : usersToClientsMap.keySet()) {
+
+                List<Integer> clientIds = usersToClientsMap.get(userId);
+
+                if (clientIds == null || clientIds.isEmpty()) continue;
+
+                int updated = clientRepository.assignClientsToUser(userId, clientIds);
+                totalUpdated += updated;
+                totalUsers ++;
+            }
+
+            return new ApiResponse(true, totalUpdated + " Clients assigned successfully to " + totalUsers + " Sales persons", null);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ApiResponse(false, "Failed to assign clients to users!", null);
+        }
+    }
+
+    public void updateClientToFabricator(Integer clientId) {
+        clientRepository.markAsFabricator(clientId);
     }
 }
 

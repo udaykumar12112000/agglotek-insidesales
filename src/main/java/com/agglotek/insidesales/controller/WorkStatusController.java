@@ -30,13 +30,8 @@ public class WorkStatusController {
 
     @PostMapping(ApiConstants.ADD_WORK_STATUS)
     public ResponseEntity<?> addWorkStatus(@RequestHeader("User-Id") Integer userId, @RequestBody WorkStatus request) {
-        try {
             WorkStatus saved = service.addEntry(request, userId);
-            return ResponseEntity.ok().body(saved);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to save work status entry!");
-        }
+            return ResponseEntity.ok(saved);
     }
 
     @GetMapping(ApiConstants.GET_WORK_STATUS)
