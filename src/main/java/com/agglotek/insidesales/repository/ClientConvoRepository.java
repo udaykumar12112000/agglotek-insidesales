@@ -8,4 +8,5 @@ import java.util.List;
 @Repository
 public interface ClientConvoRepository extends JpaRepository<ClientConvo, Integer> {
     List<ClientConvo> findByClientId(Integer clientId);
+    List<ClientConvo> findByClientIdIn(List<Integer> clientIds);
 }

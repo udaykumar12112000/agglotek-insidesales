@@ -2,6 +2,7 @@ package com.agglotek.insidesales.dto;
 
 import com.agglotek.insidesales.dao.entity.ConnectionEng;
 import com.agglotek.insidesales.dao.entity.Project;
+import com.agglotek.insidesales.dao.entity.PurchaseOrder;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -21,6 +22,7 @@ public class ProjectInfoDTO extends Project {
     private Integer clientId;
     private List<String> filesList;
     private ConnectionEng connectionEng;
+    private PurchaseOrder purchaseOrderDetails;
 
     // Getters and Setters
 
@@ -121,6 +123,14 @@ public class ProjectInfoDTO extends Project {
 
     public void setClientProjectNumber(String clientProjectNumber) {
         this.clientProjectNumber = clientProjectNumber;
+    }
+
+    public PurchaseOrder getPurchaseOrderDetails() {
+        return purchaseOrderDetails;
+    }
+
+    public void setPurchaseOrderDetails(PurchaseOrder purchaseOrderDetails) {
+        this.purchaseOrderDetails = purchaseOrderDetails;
     }
 
     public ProjectInfoDTO(String quotationNumber, Integer quotationId, Integer projectId, String projectNumber, String date,

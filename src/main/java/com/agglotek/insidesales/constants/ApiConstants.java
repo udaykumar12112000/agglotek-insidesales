@@ -131,4 +131,8 @@ public class ApiConstants {
     public static final String GET_SALES_TARGETS = "/getSalesTargets/{year}";
 
     public static final String NOTIFY_UNASSIGNED_PROJECTS_TO_ADMIN = "/unassignedProjects";
+
+    public static final String FILTER_WORK_STATUS_FOR_USER = "/filterWorkStatusByDates";
+
+    public static final String GET_CLIENT_CONVO_BY_USERS = "/getClientConvoForUsers";
 }

@@ -47,4 +47,11 @@ public class WorkStatusController {
         return ResponseEntity.ok(response);
 
     }
+
+    @GetMapping(ApiConstants.FILTER_WORK_STATUS_FOR_USER)
+    public ResponseEntity<List<WorkStatus>> getWorkStatus(@RequestParam Integer userId, @RequestParam String startDate, @RequestParam String endDate) {
+        return ResponseEntity.ok(service.getWorkStatusByUserAndDateRange(userId, startDate, endDate));
+    }
+
+
 }

@@ -158,6 +158,8 @@ public class QuotationServiceImpl implements IQuotationService {
             quotation.setContactPersonName(dto.getContactPersonName());
         if(dto.getContactPersonNumber()!=null)
             quotation.setContactPersonNumber(dto.getContactPersonNumber());
+        if(dto.getEstimatorId()!=null)
+            quotation.setEstimatorId(dto.getEstimatorId());
 
 //      quotation.setDateOfProposal(LocalDate.now());
         quotation.setUpdatedTime(LocalDateTime.now());

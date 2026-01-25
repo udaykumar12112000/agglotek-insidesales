@@ -153,4 +153,8 @@ public class ClientController {
         }
     }
 
+    @PostMapping(ApiConstants.GET_CLIENT_CONVO_BY_USERS)
+    public ResponseEntity<List<ClientConvoDTO>> getConvosByUsers(@RequestBody List<Integer> userIds) {
+        return ResponseEntity.ok(clientConvoService.getClientConvoDataByUserIds(userIds));
+    }
 }

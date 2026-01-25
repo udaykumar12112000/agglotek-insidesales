@@ -12,10 +12,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ClientConvoServiceImpl implements IClientConvoService {
@@ -67,16 +65,20 @@ public class ClientConvoServiceImpl implements IClientConvoService {
     }
 
     public List<ClientConvoDTO> getClientConvoDataByUserId(Integer userId) {
-        List<Client> clients = clientRepository.findByUserId(userId); // userId filter
+//        List<Client> clients = clientRepository.findByUserId(userId); // userId filter
+        List<Client> clients = clientRepository.findByAssignedSalesUserId(userId);
+        System.out.println("JAXX :: clients : "+clients);
         List<ClientConvoDTO> result = new ArrayList<>();
 
         for (Client client : clients) {
             List<ClientConvo> convos = clientConvoRepository.findByClientId(client.getClientId());
-
+            System.out.println("JAXX :: convos : "+convos);
             if (convos.isEmpty()) {
+                System.out.println("JAXX :: convos EMPTY : "+convos);
                 ClientConvoDTO dto = buildClientConvoDTO(client, userId, null);
                 result.add(dto);
             } else {
+                System.out.println("JAXX :: convos NOT EMPTY : "+convos);
                 for (ClientConvo convo : convos) {
                     ClientConvoDTO dto = buildClientConvoDTO(client, convo.getUserId(), convo);
                     result.add(dto);
@@ -154,5 +156,52 @@ public class ClientConvoServiceImpl implements IClientConvoService {
         return new ApiResponse(true, "Client conversation updated successfully!", clientDto);
     }
 
+    public List<ClientConvoDTO> getClientConvoDataByUserIds(List<Integer> userIds) {
+
+        // Fetch all clients for all users (ONE DB CALL)
+        List<Client> clients = clientRepository.findByAssignedSalesUserIdIn(userIds);
+
+        if (clients.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        // Fetch all client IDs
+        List<Integer> clientIds = clients.stream()
+                .map(Client::getClientId)
+                .toList();
+
+        // Fetch all convos in ONE DB CALL
+        List<ClientConvo> allConvos =
+                clientConvoRepository.findByClientIdIn(clientIds);
+
+        // Group convos by clientId
+        Map<Integer, List<ClientConvo>> convoMap =
+                allConvos.stream()
+                        .collect(Collectors.groupingBy(
+                                ClientConvo::getClientId
+                        ));
+
+        // Build response
+        List<ClientConvoDTO> result = new ArrayList<>();
+
+        for (Client client : clients) {
+            List<ClientConvo> convos = convoMap.getOrDefault(client.getClientId(), Collections.emptyList());
+
+            if (convos.isEmpty()) {
+                // fallback (no convo)
+                ClientConvoDTO dto =
+                        buildClientConvoDTO(client, client.getAssignedSalesUserId(), null);
+                result.add(dto);
+            } else {
+                for (ClientConvo convo : convos) {
+                    ClientConvoDTO dto =
+                            buildClientConvoDTO(client, convo.getUserId(), convo);
+                    result.add(dto);
+                }
+            }
+        }
+
+        return result;
+    }
 
 }

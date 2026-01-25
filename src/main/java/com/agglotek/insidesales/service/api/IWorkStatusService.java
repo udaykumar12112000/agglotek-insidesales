@@ -12,4 +12,6 @@ public interface IWorkStatusService {
     public List<WorkStatus> getWorkStatusByUserId(Integer userId);
 
     ApiResponse editWorkStatus(WorkStatus request, Integer editorRoleId);
+
+    List<WorkStatus> getWorkStatusByUserAndDateRange(Integer userId, String startDate, String endDate);
 }

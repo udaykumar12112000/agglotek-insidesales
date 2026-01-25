@@ -1,6 +1,7 @@
 package com.agglotek.insidesales.dao.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -22,6 +23,14 @@ public class WorkStatus {
 
     @Column(name = "remarks", columnDefinition = "TEXT")
     private String remarks;
+
+    @Transient
+    @JsonProperty("month")
+    private String month;
+
+    @Transient
+    @JsonProperty("year")
+    private String year;
 
     private Integer noOfCalls = 0;
     private Integer samplesSend = 0;
@@ -88,6 +97,22 @@ public class WorkStatus {
 
     public void setRemarks(String remarks) {
         this.remarks = remarks;
+    }
+
+    public String getMonth() {
+        return month;
+    }
+
+    public void setMonth(String month) {
+        this.month = month;
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
     }
 
     public void setProjectsReceived(Integer projectsReceived) {

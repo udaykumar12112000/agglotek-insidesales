@@ -254,4 +254,9 @@ public class UserServiceImpl implements IUserService {
         return notifications;
     }
 
+    @Override
+    public List<Integer> getAllSalesPersons() {
+        return usersRepository.findAllSalesPersonIds();
+    }
+
 }

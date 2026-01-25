@@ -181,6 +181,9 @@ public class UserController {
 
             summaryDetails = userService.getCumulativeSalesSummary(salesPersonIds);
 
+        } else if ("ADMIN".equalsIgnoreCase(roleName)) {
+            List<Integer> salesPersonIds = userService.getAllSalesPersons();
+            summaryDetails = userService.getCumulativeSalesSummary(salesPersonIds);
         } else {
             return ResponseEntity.ok(new ApiResponse(false, "Unsupported role for summary", null));
         }

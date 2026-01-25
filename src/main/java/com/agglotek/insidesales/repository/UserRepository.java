@@ -125,4 +125,15 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             nativeQuery = true
     )
     List<User> findAllAdmins();
+
+    @Query("""
+    SELECT u.userId
+    FROM User u
+    WHERE u.roleId = (
+        SELECT r.roleId
+        FROM Role r
+        WHERE r.roleName = 'SALES'
+    )
+    """)
+    List<Integer> findAllSalesPersonIds();
 }

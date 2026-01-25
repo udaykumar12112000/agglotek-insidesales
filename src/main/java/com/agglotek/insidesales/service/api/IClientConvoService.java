@@ -9,8 +9,12 @@ import java.util.List;
 
 public interface IClientConvoService {
     public ClientConvo insertClientConvoData(ClientConvoDTO dto);
+
     public List<ClientConvoDTO> getByClientId(Integer clientId);
+
     public List<ClientConvoDTO> getClientConvoDataByUserId(Integer userId);
 
     ApiResponse editClientConvo(ClientConvoDTO request) throws JsonProcessingException;
+
+    public List<ClientConvoDTO> getClientConvoDataByUserIds(List<Integer> userIds);
 }

@@ -41,4 +41,6 @@ import java.util.Optional;
 
         List<Client> findByAssignedSalesUserIdAndIsFabricatorTrue(Integer userId);
 
+        List<Client> findByAssignedSalesUserIdIn(List<Integer> userIds);
+
     }

@@ -30,4 +30,6 @@ public interface IUserService {
     List<?> getAllUsersWithRole();
 
     public List<NotificationDTO> notifyAdminsForUnassignedProjects();
+
+    List<Integer> getAllSalesPersons();
 }
