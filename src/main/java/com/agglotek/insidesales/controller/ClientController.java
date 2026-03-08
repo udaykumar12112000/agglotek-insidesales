@@ -26,16 +26,17 @@ import java.util.Optional;
 import static com.agglotek.insidesales.constants.AppConstants.ADMIN;
 
 @RestController
-// @CrossOrigin(
-//         origins = "http://localhost:4200",
-//         allowedHeaders = {"Content-Type", "Authorization", "X-Requested-With"},
-//         methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.PATCH, RequestMethod.DELETE, RequestMethod.OPTIONS},
-//         allowCredentials = "false" // set true only if you use cookies
-// )
-@CrossOrigin(
-       origins = {"http://localhost:4200"},
-       allowedHeaders = "*"
-)
+ @CrossOrigin(
+         origins = "http://localhost:4200",
+         allowedHeaders = {"Content-Type", "Authorization", "X-Requested-With"},
+         methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.PATCH, RequestMethod.DELETE, RequestMethod.OPTIONS},
+         allowCredentials = "false" // set true only if you use cookies
+ )
+ /** use for local **/
+//@CrossOrigin(
+//       origins = {"http://localhost:4200"},
+//       allowedHeaders = "*"
+//)
 @RequestMapping(ApiConstants.CLIENT_APIS)
 public class ClientController {
 
