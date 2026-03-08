@@ -86,6 +86,7 @@ public class ApiConstants {
     public static final String UPLOAD_FILES_IN_ZIP = "/uploadFilesZip";
 
     public static final String LIST_FILES = "/listFiles";
+    public static final String DELETE_FILE = "/delete";
 
 
     public static final String DOWNLOAD_FROM_PATH = "/downloadFromPath";

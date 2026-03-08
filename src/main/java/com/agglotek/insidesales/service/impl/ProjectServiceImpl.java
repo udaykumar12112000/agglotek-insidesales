@@ -168,6 +168,9 @@ public class ProjectServiceImpl implements IProjectService {
             if (request.getConnPO() != null)
                 project.setConnPO(request.getConnPO());
 
+            if (request.getProjectValue() != null)
+                project.setProjectValue(request.getProjectValue());
+
             if(request.getProjectManagerId() != null)
                 project.setProjectManagerId(request.getProjectManagerId());
 

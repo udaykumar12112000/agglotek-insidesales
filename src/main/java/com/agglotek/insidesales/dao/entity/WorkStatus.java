@@ -7,7 +7,9 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "work_status")
+@Table(name = "work_status", uniqueConstraints = {
+        @UniqueConstraint(name = "unique_work_status_user_date", columnNames = {"user_id", "date"})
+})
 public class WorkStatus {
 
     @Id

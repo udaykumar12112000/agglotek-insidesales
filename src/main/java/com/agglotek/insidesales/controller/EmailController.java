@@ -22,16 +22,16 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
-//@CrossOrigin(
-//        origins = "http://localhost:4200",
-//        allowedHeaders = {"Content-Type", "Authorization", "X-Requested-With"},
-//        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.PATCH, RequestMethod.DELETE, RequestMethod.OPTIONS},
-//        allowCredentials = "false" // set true only if you use cookies
-//)
+// @CrossOrigin(
+//         origins = "http://localhost:4200",
+//         allowedHeaders = {"Content-Type", "Authorization", "X-Requested-With"},
+//         methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.PATCH, RequestMethod.DELETE, RequestMethod.OPTIONS},
+//         allowCredentials = "false" // set true only if you use cookies
+// )
 
 @CrossOrigin(
-        origins = {"http://localhost:4200"},
-        allowedHeaders = "*"
+       origins = {"http://localhost:4200"},
+       allowedHeaders = "*"
 )
 @RequestMapping(ApiConstants.EMAIL_SENDING)
 public class EmailController {

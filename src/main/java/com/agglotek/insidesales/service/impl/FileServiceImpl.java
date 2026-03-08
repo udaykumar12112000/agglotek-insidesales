@@ -46,11 +46,19 @@ public class FileServiceImpl implements IFileService {
             }
 
             String clientName = clientOpt.get().getName().replaceAll("\\s+", "_");
-            String safeProjectName = projectName.replaceAll("\\s+", "_");
+//            String safeProjectName = projectName.replaceAll("\\s+", "_");
+            String safeProjectName = projectName.replaceAll("\\s+", "_").replaceAll("[\\\\/:*?\"< +>|]", "").replaceAll("_+$", "");
 
             String baseDir = "";
-            String fileName;
+            String typeLabel;
             String folderName = referenceNumber + "_" + safeProjectName;
+
+            // Extract original file extension
+            String originalFilename = file.getOriginalFilename();
+            String extension = "";
+            if (originalFilename != null && originalFilename.contains(".")) {
+                extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+            }
 
             if (referenceNumber.startsWith("PO")) {
                 baseDir = AppConstants.PROJECT_BASE_DIRECTORY;
@@ -61,39 +69,45 @@ public class FileServiceImpl implements IFileService {
             }
 
             if ("po".equalsIgnoreCase(type)) {
-                fileName = "_PO.pdf";
+                typeLabel = "_PO";
             } else if ("scope_of_work".equalsIgnoreCase(type)) {
-                fileName = "_scope_of_work.pdf";
+                typeLabel = "_scope_of_work";
             } else if ("proposal".equalsIgnoreCase(type)) {
-                fileName = "_proposal.pdf";
+                typeLabel = "_proposal";
             } else if ("scope_of_work_cor".equalsIgnoreCase(type)) {
-                fileName = "_scope_of_work_cor.pdf";
+                typeLabel = "_scope_of_work_cor";
             } else if ("proposal_cor".equalsIgnoreCase(type)) {
-                fileName = "_proposal_cor.pdf";
+                typeLabel = "_proposal_cor";
             } else if ("invoice".equalsIgnoreCase(type)) {
-                fileName = "_invoice.pdf";
+                typeLabel = "_invoice";
             } else if ("purchase_order".equalsIgnoreCase(type)) {
-                fileName = "_purchase_order.pdf";
+                typeLabel = "_purchase_order";
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(new ApiResponse(false, "Invalid type! Use 'po' or 'scope_of_work' or 'proposal'"));
+                        .body(new ApiResponse(false, "Invalid type! Use 'po', 'scope_of_work', 'proposal', 'invoice', or 'purchase_order'"));
             }
 
             Path clientDir = Paths.get(baseDir, clientName);
+            System.out.println("JAXX :: clientDir : "+clientDir.toString());
+
             if (Files.notExists(clientDir)) {
                 Files.createDirectories(clientDir);
             }
 
             Path targetDir = clientDir.resolve(folderName);
+            System.out.println("JAXX :: targetDir : "+targetDir.toString());
+
             if (Files.notExists(targetDir)) {
                 Files.createDirectories(targetDir);
             }
 
-            Path targetFile = targetDir.resolve(folderName + fileName);
+            String savedFileName = folderName + typeLabel + extension;
+            System.out.println("JAXX :: savedFileName : "+savedFileName);
+            Path targetFile = targetDir.resolve(savedFileName);
             Files.copy(file.getInputStream(), targetFile, StandardCopyOption.REPLACE_EXISTING);
+            System.out.println("JAXX :: ::: :: ");
 
-            return ResponseEntity.ok(new ApiResponse(true, "PDF uploaded successfully"));
-
+            return ResponseEntity.ok(new ApiResponse(true, "File uploaded successfully"));
 
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -108,7 +122,9 @@ public class FileServiceImpl implements IFileService {
         }
 
         String clientName = client.get().getName().replaceAll("\\s+", "_");
-        String safeProjectName = projectName.replaceAll("\\s+", "_");
+//        String safeProjectName = projectName.replaceAll("\\s+", "_");
+        String safeProjectName = projectName.replaceAll("\\s+", "_").replaceAll("[\\\\/:*?\"< +>|]", "").replaceAll("_+$", "");
+
         String folderName = referenceNumber + "_" + safeProjectName;
 
         String baseDir = "";
@@ -171,7 +187,8 @@ public class FileServiceImpl implements IFileService {
         }
 
         String clientName = clientOpt.get().getName().replaceAll("\\s+", "_");
-        String safeProjectName = projectName.replaceAll("\\s+", "_");
+//        String safeProjectName = projectName.replaceAll("\\s+", "_");
+        String safeProjectName = projectName.replaceAll("\\s+", "_").replaceAll("[\\\\/:*?\"< +>|]", "").replaceAll("_+$", "");
 
         String baseDir = "";
         String folderName = referenceNumber + "_" + safeProjectName;
@@ -239,6 +256,41 @@ public class FileServiceImpl implements IFileService {
         }
 
         return ResponseEntity.ok(new ApiResponse(true, "Files uploaded successfully", fileNames));
+    }
+
+    public ResponseEntity<ApiResponse> deleteFile(Integer clientId, String referenceNumber, String projectName, String fileName) throws IOException {
+        Optional<Client> clientOpt = clientRepository.findById(clientId);
+        if (clientOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiResponse(false, "Invalid clientId"));
+        }
+
+        String clientName = clientOpt.get().getName().replaceAll("\\s+", "_");
+//        String safeProjectName = projectName.replaceAll("\\s+", "_");
+        String safeProjectName = projectName.replaceAll("\\s+", "_").replaceAll("[\\\\/:*?\"< +>|]", "").replaceAll("_+$", "");
+
+        String folderName = referenceNumber + "_" + safeProjectName;
+
+        String baseDir;
+        if (referenceNumber.startsWith("PO")) {
+            baseDir = AppConstants.PROJECT_BASE_DIRECTORY;
+        } else if (referenceNumber.startsWith("QO")) {
+            baseDir = AppConstants.QUOTATION_BASE_DIRECTORY;
+        } else if (referenceNumber.startsWith("INV")) {
+            baseDir = AppConstants.INVOICE_BASE_DIRECTORY;
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiResponse(false, "Invalid referenceNumber. Must start with PO, QO, or INV"));
+        }
+
+        Path targetFile = Paths.get(baseDir, clientName, folderName, fileName);
+        if (!Files.exists(targetFile)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse(false, "File not found: " + fileName));
+        }
+
+        Files.delete(targetFile);
+        return ResponseEntity.ok(new ApiResponse(true, "File deleted successfully"));
     }
 
     public List<String> listFiles(String referenceNumber, String projectName, Integer clientId) throws IOException {

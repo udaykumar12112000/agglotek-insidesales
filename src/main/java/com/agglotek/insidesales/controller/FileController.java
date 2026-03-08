@@ -18,16 +18,16 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 @RestController
-//@CrossOrigin(
-//        origins = "http://localhost:4200",
-//        allowedHeaders = {"Content-Type", "Authorization", "X-Requested-With"},
-//        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.PATCH, RequestMethod.DELETE, RequestMethod.OPTIONS},
-//        allowCredentials = "false" // set true only if you use cookies
-//)
+// @CrossOrigin(
+//         origins = "http://localhost:4200",
+//         allowedHeaders = {"Content-Type", "Authorization", "X-Requested-With"},
+//         methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.PATCH, RequestMethod.DELETE, RequestMethod.OPTIONS},
+//         allowCredentials = "false" // set true only if you use cookies
+// )
 
 @CrossOrigin(
-        origins = {"http://localhost:4200"},
-        allowedHeaders = "*"
+       origins = {"http://localhost:4200"},
+       allowedHeaders = "*"
 )
 @RequestMapping("/api/files")
 public class FileController {
@@ -75,6 +75,19 @@ public class FileController {
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(false, "Upload failed!"));
+        }
+    }
+
+    @DeleteMapping(ApiConstants.DELETE_FILE)
+    public ResponseEntity<ApiResponse> deleteFile(
+            @RequestParam("clientId") Integer clientId,
+            @RequestParam("referenceNumber") String referenceNumber,
+            @RequestParam("projectName") String projectName,
+            @RequestParam("type") String type) {
+        try {
+            return fileService.deleteFile(clientId, referenceNumber, projectName, type);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(false, "Delete failed!"));
         }
     }
 

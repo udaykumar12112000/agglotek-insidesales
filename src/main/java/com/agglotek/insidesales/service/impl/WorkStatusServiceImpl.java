@@ -11,6 +11,9 @@ import com.agglotek.insidesales.service.api.IWorkStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.List;
@@ -19,6 +22,8 @@ import java.util.Optional;
 
 @Service
 public class WorkStatusServiceImpl implements IWorkStatusService {
+
+    private static final Logger log = LoggerFactory.getLogger(WorkStatusServiceImpl.class);
 
     @Autowired
     private WorkStatusRepository repository;
@@ -44,6 +49,14 @@ public class WorkStatusServiceImpl implements IWorkStatusService {
 
     @Override
     public List<WorkStatus> getWorkStatusByUserId(Integer userId) {
+        List<User> userList = userService.getUserByUserId(userId);
+        if (userList != null && !userList.isEmpty()) {
+            String roleName = roleService.getRoleNameById(userList.get(0).getRoleId());
+            log.info("getWorkStatus - userId: {}, roleName: '{}'", userId, roleName);
+            if (AppConstants.ADMIN.equals(roleName)) {
+                return repository.findAll();
+            }
+        }
         return repository.findByUserId(userId);
     }
 

@@ -22,8 +22,8 @@ import java.util.List;
 //        allowCredentials = "false" // set true only if you use cookies
 //)
 @CrossOrigin(
-        origins = {"http://localhost:4200"},
-        allowedHeaders = "*"
+       origins = {"http://localhost:4200"},
+       allowedHeaders = "*"
 )
 @RequestMapping("/api/connectionEng")
 public class ConnectionEngController {

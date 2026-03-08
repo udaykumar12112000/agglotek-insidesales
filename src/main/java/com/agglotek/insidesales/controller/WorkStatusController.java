@@ -12,15 +12,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-//@CrossOrigin(
-//        origins = "http://localhost:4200",
-//        allowedHeaders = {"Content-Type", "Authorization", "X-Requested-With"},
-//        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.PATCH, RequestMethod.DELETE, RequestMethod.OPTIONS},
-//        allowCredentials = "false" // set true only if you use cookies
-//)
+// @CrossOrigin(
+//         origins = "http://localhost:4200",
+//         allowedHeaders = {"Content-Type", "Authorization", "X-Requested-With"},
+//         methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.PATCH, RequestMethod.DELETE, RequestMethod.OPTIONS},
+//         allowCredentials = "false" // set true only if you use cookies
+// )
 @CrossOrigin(
-        origins = {"http://localhost:4200"},
-        allowedHeaders = "*"
+       origins = {"http://localhost:4200"},
+       allowedHeaders = "*"
 )
 @RequestMapping(ApiConstants.WORK_STATUS_APIS)
 public class WorkStatusController {
