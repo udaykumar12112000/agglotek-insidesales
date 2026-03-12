@@ -57,25 +57,27 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     Integer getTotalNewClientsAchievedThisYear(@Param("userId")Integer userId);
 
     @Query(value = "SELECT COUNT(*) " +
-            "FROM quotations " +
-            "WHERE user_id = :userId " +
-            "AND date_of_quotation >= date_trunc('year', CURRENT_DATE) " +
-            "AND date_of_quotation < (date_trunc('year', CURRENT_DATE) + INTERVAL '1 year') " +
+            "FROM projects p " +
+            "JOIN quotations q ON p.quotation_id = q.quotation_id " +
+            "WHERE q.user_id = :userId " +
+            "AND p.updated_time >= date_trunc('year', CURRENT_DATE) " +
+            "AND p.updated_time < (date_trunc('year', CURRENT_DATE) + INTERVAL '1 year') " +
             "AND ( " +
-            "  (:allotted IS NULL OR :allotted = '' AND (quotation_status IS NULL OR quotation_status = '')) " +
-            "  OR (:allotted IS NOT NULL AND :allotted <> '' AND quotation_status = :allotted) " +
+            "  (:allotted IS NULL OR :allotted = '' AND (q.quotation_status IS NULL OR q.quotation_status = '')) " +
+            "  OR (:allotted IS NOT NULL AND :allotted <> '' AND q.quotation_status = :allotted) " +
             ")",
             nativeQuery = true)
     Integer getTotalNumberOfProjectsAllotedThisYear(@Param("userId")Integer userId, @Param("allotted")String allotted);
 
     @Query(value = "SELECT COUNT(*) " +
-            "FROM quotations " +
-            "WHERE user_id = :userId " +
-            "AND date_of_quotation >= date_trunc('month', CURRENT_DATE) " +
-            "AND date_of_quotation < (date_trunc('month', CURRENT_DATE) + INTERVAL '1 month') " +
+            "FROM projects p " +
+            "JOIN quotations q ON p.quotation_id = q.quotation_id " +
+            "WHERE q.user_id = :userId " +
+            "AND p.updated_time >= date_trunc('month', CURRENT_DATE) " +
+            "AND p.updated_time < (date_trunc('month', CURRENT_DATE) + INTERVAL '1 month') " +
             "AND ( " +
-            "  (:allotted IS NULL OR :allotted = '' AND (quotation_status IS NULL OR quotation_status = '')) " +
-            "  OR (:allotted IS NOT NULL AND :allotted <> '' AND quotation_status = :allotted) " +
+            "     (:allotted IS NULL OR :allotted = '') AND COALESCE(q.quotation_status,'') = '' " +
+            "     OR (:allotted IS NOT NULL AND :allotted <> '' AND q.quotation_status = :allotted) " +
             ")",
             nativeQuery = true)
     Integer getTotalNumberOfProjectsAllotedThisMonth(Integer userId, String allotted);

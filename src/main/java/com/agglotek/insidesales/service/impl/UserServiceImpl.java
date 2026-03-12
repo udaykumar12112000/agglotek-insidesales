@@ -100,11 +100,11 @@ public class UserServiceImpl implements IUserService {
 
         summary.put("monthlyTarget", monthlyTarget!=null? monthlyTarget : 0);
         summary.put("monthlyTargetAchieved", monthlyTargetAchieved!=null? monthlyTargetAchieved : 0);
-        summary.put("monthyTargetYetToAchieve", monthyTargetYetToAchieve);
+        summary.put("monthyTargetYetToAchieve", monthyTargetYetToAchieve < 0 ? 0 : monthyTargetYetToAchieve);
 
         summary.put("yearlyTarget", yearlyTarget!=null? yearlyTarget : 0);
         summary.put("yearlyTargetAchieved", yearlyTargetAchieved!=null? yearlyTargetAchieved : 0);
-        summary.put("yearlyYetToAchieveTargets", yearlyYetToAchieveTargets);
+        summary.put("yearlyYetToAchieveTargets", yearlyYetToAchieveTargets < 0 ? 0 : yearlyYetToAchieveTargets);
 
         return summary;
     }
